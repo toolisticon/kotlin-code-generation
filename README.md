@@ -5,6 +5,22 @@
 [![sponsored](https://img.shields.io/badge/sponsoredBy-Holisticon-RED.svg)](https://holisticon.de/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation)
 
+**Usage:**
+
+```xml
+<dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.toolisticon.kotlin.generation</groupId>
+        <artifactId>kotlin-code-generation-bom</artifactId>
+        <version>LATEST_VERSION</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+
 
 ## Roadmap
 
