@@ -1,0 +1,16 @@
+package io.toolisticon.kotlin.generation.builder
+
+import com.squareup.kotlinpoet.TypeAliasSpec
+import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpec
+import io.toolisticon.kotlin.generation.spec.TypeAliasSpecSupplier
+
+@Deprecated("Not implemented yet!")
+class KotlinTypeAliasBuilder internal constructor(delegate: TypeAliasSpec.Builder) : KotlinPoetSpecBuilder<KotlinTypeAliasBuilder, KotlinTypeAliasSpec, TypeAliasSpec, TypeAliasSpec.Builder>(
+  delegate = delegate
+), TypeAliasSpecSupplier {
+  override fun build(): KotlinTypeAliasSpec {
+    TODO("Not yet implemented")
+  }
+
+  override fun get(): TypeAliasSpec = build().get()
+}
