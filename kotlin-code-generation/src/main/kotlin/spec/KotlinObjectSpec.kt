@@ -5,5 +5,6 @@ import com.squareup.kotlinpoet.TypeSpec
 
 
 @JvmInline
-value class KotlinObjectSpec(override val spec: TypeSpec) : KotlinPoetTypeSpec {
+value class KotlinObjectSpec(private val spec: TypeSpec) : KotlinPoetTypeSpec {
+  override fun get(): TypeSpec = spec
 }

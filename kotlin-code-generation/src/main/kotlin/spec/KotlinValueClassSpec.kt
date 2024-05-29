@@ -4,5 +4,6 @@ import com.squareup.kotlinpoet.TypeSpec
 
 @Deprecated("Not implemented yet!")
 @JvmInline
-value class KotlinValueClassSpec(override val spec: TypeSpec) : KotlinPoetTypeSpec {
+value class KotlinValueClassSpec(private val spec: TypeSpec) : KotlinPoetTypeSpec {
+  override fun get(): TypeSpec = spec
 }

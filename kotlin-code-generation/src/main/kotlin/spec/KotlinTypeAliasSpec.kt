@@ -4,6 +4,6 @@ import com.squareup.kotlinpoet.TypeAliasSpec
 
 @Deprecated("Not implemented yet!")
 @JvmInline
-value class KotlinTypeAliasSpec(override val spec: TypeAliasSpec) : KotlinPoetSpec<TypeAliasSpec>, TypeAliasSpecSupplier {
+value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinPoetSpec<TypeAliasSpec>, TypeAliasSpecSupplier {
   override fun get(): TypeAliasSpec = spec
 }

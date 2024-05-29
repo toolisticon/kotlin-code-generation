@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 
 @JvmInline
-value class KotlinFileSpec(override val spec: FileSpec) : KotlinPoetSpec<FileSpec>, FileSpecSupplier {
+value class KotlinFileSpec(private val spec: FileSpec) : KotlinPoetSpec<FileSpec>, FileSpecSupplier {
 
   val packageName: String get() = spec.packageName
   val rootName: String get() = spec.name

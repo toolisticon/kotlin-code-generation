@@ -3,15 +3,12 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.*
 import java.util.function.Supplier
 
-sealed interface KotlinPoetSpec<T : Any> {
-  val spec: T
-
-  val code: String get() = spec.toString()
-
+sealed interface KotlinPoetSpec<T : Any> : Supplier<T> {
+  val code: String get() = get().toString()
 }
 
 sealed interface KotlinPoetTypeSpec : KotlinPoetSpec<TypeSpec>, TypeSpecSupplier {
-  override fun get(): TypeSpec = spec
+  override fun get(): TypeSpec
 }
 
 interface AnnotationSpecSupplier : Supplier<AnnotationSpec>
@@ -24,4 +21,8 @@ interface TypeSpecSupplier : Supplier<TypeSpec>
 interface DataClassSpecSupplier : Supplier<TypeSpec>, TypeSpecSupplier
 
 
+interface KotlinPoetSpecToBuilder<BUILDER> {
+  fun toBuilder(): BUILDER
+}
 
+val TypeSpec.isDataClass : Boolean get() = this.modifiers.contains(KModifier.DATA)

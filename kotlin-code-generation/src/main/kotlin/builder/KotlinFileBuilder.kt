@@ -13,7 +13,7 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
 ), FileSpecSupplier, KotlinAnnotatableBuilder<KotlinFileBuilder> {
 
   @Suppress("ClassName")
-  object builder {
+  object builder : ToKotlinPoetSpecBuilder<KotlinFileSpec, KotlinFileBuilder> {
     operator fun invoke(className: ClassName, block: FileSpecBuilderReceiver = {}) = invoke(
       other = FileSpec.builder(className),
       block = block
@@ -31,13 +31,15 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
     operator fun invoke(dataClass: KotlinDataClassSpec) = invoke(
       className = dataClass.className,
       block = {
-        this.addType(dataClass.spec)
+        this.addType(dataClass.get())
       }
     )
 
     operator fun invoke(dataClassBuilder: KotlinDataClassBuilder) = invoke(
       dataClass = dataClassBuilder.build()
     )
+
+    override fun invoke(spec: KotlinFileSpec) = KotlinFileBuilder(delegate = spec.get().toBuilder())
   }
 
   fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
@@ -48,7 +50,7 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
   override fun get(): FileSpec = build().get()
 
   override fun addAnnotation(annotationSpec: KotlinAnnotationSpec): KotlinFileBuilder = apply {
-    delegate.addAnnotation(annotationSpec.spec)
+    delegate.addAnnotation(annotationSpec.get())
   }
 
   override fun addAnnotation(annotation: ClassName): KotlinFileBuilder = apply {

@@ -1,9 +1,13 @@
 package io.toolisticon.kotlin.generation.spec
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.TypeName
+import io.toolisticon.kotlin.generation.builder.KotlinAnnotationBuilder
 
 @JvmInline
-value class KotlinAnnotationSpec(override val spec: AnnotationSpec) : KotlinPoetSpec<AnnotationSpec>, AnnotationSpecSupplier {
+value class KotlinAnnotationSpec(private val spec: AnnotationSpec) : KotlinPoetSpec<AnnotationSpec>,
+  AnnotationSpecSupplier {
 
   val typeName: TypeName get() = spec.typeName
   val members: List<CodeBlock> get() = spec.members
@@ -13,4 +17,7 @@ value class KotlinAnnotationSpec(override val spec: AnnotationSpec) : KotlinPoet
   override fun toString(): String {
     return "KotlinAnnotationSpec(typeName=$typeName, members=$members)"
   }
+
 }
+
+fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationBuilder.builder(spec = this)

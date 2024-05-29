@@ -11,16 +11,16 @@ class KotlinParameterBuilder internal constructor(delegate: ParameterSpec.Builde
 ), ParameterSpecSupplier, KotlinAnnotatableBuilder<KotlinParameterBuilder> {
 
   @Suppress("ClassName")
-  object builder {
+  object builder : ToKotlinPoetSpecBuilder<KotlinParameterSpec,KotlinParameterBuilder> {
     operator fun invoke(name: String, type: KClass<*>) = invoke(name, type.asTypeName())
     operator fun invoke(name: String, type: TypeName) = KotlinParameterBuilder(
       delegate = ParameterSpec.builder(name, type)
     )
+
+    override fun invoke(spec: KotlinParameterSpec): KotlinParameterBuilder = KotlinParameterBuilder(delegate = spec.get().toBuilder())
   }
 
-  override fun build(): KotlinParameterSpec {
-    return KotlinParameterSpec(delegate.build())
-  }
+  override fun build(): KotlinParameterSpec = KotlinParameterSpec(spec = delegate.build())
 
   override fun get(): ParameterSpec = build().get()
 

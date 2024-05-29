@@ -9,10 +9,12 @@ class KotlinDataClassBuilder internal constructor(delegate: TypeSpec.Builder) : 
 ), DataClassSpecSupplier {
 
   @Suppress("ClassName")
-  object builder {
+  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder>{
     operator fun invoke(className: ClassName): KotlinDataClassBuilder = with(KotlinDataClassBuilder(delegate = TypeSpec.classBuilder(className))) {
       className(className)
     }
+
+    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassBuilder = KotlinDataClassBuilder(spec.get().toBuilder())
   }
 
   lateinit var className: ClassName

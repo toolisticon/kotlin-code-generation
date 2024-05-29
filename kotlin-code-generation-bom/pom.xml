@@ -14,7 +14,7 @@
 
   <properties>
     <kotlin-poet.version>1.17.0</kotlin-poet.version>
-    <kotlin-compile-testing.version>0.5.0-alpha07</kotlin-compile-testing.version>
+    <kotlin-compile-testing.version>0.5.0-alpha08</kotlin-compile-testing.version>
   </properties>
 
   <dependencyManagement>

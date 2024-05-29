@@ -69,6 +69,14 @@ typealias PropertySpecBuilderReceiver = PropertySpec.Builder.() -> Unit
 typealias TypeAliasSpecBuilderReceiver = TypeAliasSpec.Builder.() -> Unit
 typealias TypeSpecBuilderReceiver = TypeSpec.Builder.() -> Unit
 
+interface ToKotlinPoetSpecBuilder<SPEC, BUILDER> {
+  operator fun invoke(spec: SPEC): BUILDER
+}
+
+interface ToKotlinPoetTypeSpecBuilder<SPEC : KotlinPoetTypeSpec, BUILDER> {
+  operator fun invoke(spec: SPEC, kind: TypeSpec.Kind = spec.get().kind, name: String? = spec.get().name): BUILDER
+}
+
 interface KotlinAnnotatableBuilder<SELF> {
 
   fun addAnnotation(annotationSpec: KotlinAnnotationSpec): SELF
