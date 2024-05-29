@@ -12,11 +12,6 @@
   <artifactId>kotlin-code-generation-test</artifactId>
   <description>Tools for testing generated classes. This lib exposes testing libraries and is supposed to be included with `scope=test`</description>
 
-  <properties>
-    <mockito.version>5.3.1</mockito.version>
-    <assertj.version>3.25.3</assertj.version>
-  </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -61,28 +56,28 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>2.0.12</version>
+      <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mockito.kotlin</groupId>
-      <artifactId>mockito-kotlin</artifactId>
-      <version>${mockito.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-test-junit5</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
@@ -92,13 +87,7 @@
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-test</artifactId>
-      <version>${kotlin.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.squareup</groupId>
-      <artifactId>kotlinpoet-jvm</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 
@@ -107,6 +96,10 @@
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
