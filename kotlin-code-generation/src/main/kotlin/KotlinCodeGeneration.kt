@@ -1,15 +1,15 @@
 package io.toolisticon.kotlin.generation
 
-import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationBuilder
-import kotlinx.serialization.Serializable
 
 object KotlinCodeGeneration {
 
   val annotationBuilder = KotlinAnnotationBuilder.builder
-
 
 
   internal object Supressions {
@@ -23,6 +23,15 @@ object KotlinCodeGeneration {
 //      .addMember("with = %T::class", serializerClass)
 //      .build()
 
+  }
+
+  @Suppress(CLASS_NAME)
+  object typeSpec {
+
+    fun TypeSpec.hasModifier(modifier: KModifier) = this.modifiers.contains(modifier)
+
+    val TypeSpec.isDataClass: Boolean get() = hasModifier(KModifier.DATA)
+    val TypeSpec.isValueClass: Boolean get() = hasModifier(KModifier.VALUE)
   }
 
 }

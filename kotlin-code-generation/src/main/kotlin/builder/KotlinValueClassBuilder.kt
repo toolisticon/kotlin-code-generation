@@ -1,21 +1,35 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
+import io.toolisticon.kotlin.generation.spec.ParameterSpecSupplier
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
-@Deprecated("Not implemented yet!")
-class KotlinValueClassBuilder internal constructor(delegate: TypeSpec.Builder) : KotlinPoetTypeSpecBuilder<KotlinValueClassSpec>(
+class KotlinValueClassBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinValueClassSpec>(
+  className = className,
   delegate = delegate
 ), TypeSpecSupplier {
 
+  lateinit var constructorParameter: ParameterSpecSupplier
+
   @Suppress(CLASS_NAME)
   object builder : ToKotlinPoetTypeSpecBuilder<KotlinValueClassSpec, KotlinValueClassBuilder> {
-    override fun invoke(spec: KotlinValueClassSpec, kind: TypeSpec.Kind, name: String?): KotlinValueClassBuilder = KotlinValueClassBuilder(spec.get().toBuilder(kind,name))
 
+    override fun invoke(spec: KotlinValueClassSpec, kind: TypeSpec.Kind, name: String?): KotlinValueClassBuilder = TODO() // FIXME KotlinValueClassBuilder(spec.get().toBuilder())
   }
 
-  override fun build() = KotlinValueClassSpec(spec = delegate.build())
+  fun constructorParameter(constructorParameter: ParameterSpecSupplier) = apply {
+    this.constructorParameter = constructorParameter
+  }
+
+  override fun build(): KotlinValueClassSpec {
+
+    return KotlinValueClassSpec(
+      className = className,
+      spec = delegate.build()
+    )
+  }
+
 }

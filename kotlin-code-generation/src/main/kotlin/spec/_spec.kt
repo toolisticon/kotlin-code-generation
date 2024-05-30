@@ -9,7 +9,11 @@ sealed interface KotlinPoetSpec<T : Any> : Supplier<T> {
 
 sealed interface KotlinPoetTypeSpec : KotlinPoetSpec<TypeSpec>, TypeSpecSupplier {
   override fun get(): TypeSpec
+
+  val annotations: List<KotlinAnnotationSpec> get() = KotlinAnnotationSpec.of(get().annotations)
 }
+
+sealed interface KotlinPoetNamedTypeSpec : KotlinPoetTypeSpec, WithClassName
 
 interface AnnotationSpecSupplier : Supplier<AnnotationSpec>
 interface FileSpecSupplier : Supplier<FileSpec>
@@ -25,4 +29,3 @@ interface KotlinPoetSpecToBuilder<BUILDER> {
   fun toBuilder(): BUILDER
 }
 
-val TypeSpec.isDataClass : Boolean get() = this.modifiers.contains(KModifier.DATA)

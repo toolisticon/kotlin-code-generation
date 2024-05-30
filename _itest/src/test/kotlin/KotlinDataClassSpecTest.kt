@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.builder.KotlinDataClassBuilder
 import io.toolisticon.kotlin.generation.builder.KotlinParameterBuilder
+import io.toolisticon.kotlin.generation.spec.toFileSpec
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand

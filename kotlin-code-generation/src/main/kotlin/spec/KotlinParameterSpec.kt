@@ -4,10 +4,12 @@ import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeName
 
 @JvmInline
-value class KotlinParameterSpec(private val spec: ParameterSpec) : KotlinPoetSpec<ParameterSpec>, ParameterSpecSupplier {
+value class KotlinParameterSpec(private val spec: ParameterSpec) : KotlinPoetSpec<ParameterSpec>, ParameterSpecSupplier, WithName {
 
-  val name: String get() = spec.name
+  override val name: String get() = spec.name
+
   val type: TypeName get() = spec.type
 
   override fun get(): ParameterSpec = this.spec
 }
+

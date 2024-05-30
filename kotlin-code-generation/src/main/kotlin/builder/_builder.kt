@@ -1,10 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
-import io.toolisticon.kotlin.generation.spec.KotlinPoetSpec
-import io.toolisticon.kotlin.generation.spec.KotlinPoetTypeSpec
-import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
 /**
@@ -15,16 +12,16 @@ import kotlin.reflect.KClass
  * @param SELF concrete instance of this builder to return in implementing classes.
  * @param PRODUCT the [KotlinPoetSpec] type returned by this builder.
  * @param SPEC the kotlin poet spec the [PRODUCT] refers to.
- * @param BUILDER the specific kotlin poet builder used to modify [PRODUCT].
+ * @param SPEC_BUILDER the specific kotlin poet builder used to modify [PRODUCT].
  * @param delegate provide an instance of the specific builder
  */
 sealed class KotlinPoetSpecBuilder<
-  SELF : KotlinPoetSpecBuilder<SELF, PRODUCT, SPEC, BUILDER>,
+  SELF : KotlinPoetSpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>,
   PRODUCT : KotlinPoetSpec<SPEC>,
   SPEC : Any,
-  BUILDER : Any
+  SPEC_BUILDER : Any
   >(
-  protected val delegate: BUILDER
+  protected val delegate: SPEC_BUILDER
 ) {
 
   @Suppress("UNCHECKED_CAST")
@@ -35,7 +32,7 @@ sealed class KotlinPoetSpecBuilder<
   /**
    * Directly invoke underlying builder to support all build-in features.
    */
-  operator fun invoke(block: BUILDER.() -> Unit): SELF = applySelf {
+  operator fun invoke(block: SPEC_BUILDER.() -> Unit): SELF = applySelf {
     delegate.block()
   }
 
@@ -59,6 +56,13 @@ sealed class KotlinPoetTypeSpecBuilder<T : KotlinPoetTypeSpec>(
   override fun get(): TypeSpec = build().get()
 }
 
+
+sealed class KotlinPoetNamedTypeSpecBuilder<T : KotlinPoetNamedTypeSpec>(
+  protected val className: ClassName,
+  delegate: TypeSpec.Builder
+) : KotlinPoetTypeSpecBuilder<T>(
+  delegate = delegate
+), TypeSpecSupplier
 
 typealias AnnotationSpecBuilderReceiver = AnnotationSpec.Builder.() -> Unit
 typealias CodeBlockBuilderReceiver = CodeBlock.Builder.() -> Unit

@@ -7,9 +7,13 @@ import io.toolisticon.kotlin.generation.builder.KotlinAnnotationBuilder
 
 @JvmInline
 value class KotlinAnnotationSpec(private val spec: AnnotationSpec) : KotlinPoetSpec<AnnotationSpec>,
-  AnnotationSpecSupplier {
+  AnnotationSpecSupplier, WithTypeName {
 
-  val typeName: TypeName get() = spec.typeName
+  companion object {
+    fun of(annotations: List<AnnotationSpec>): List<KotlinAnnotationSpec> = annotations.map { KotlinAnnotationSpec(it) }
+  }
+
+  override val typeName: TypeName get() = spec.typeName
   val members: List<CodeBlock> get() = spec.members
 
   override fun get(): AnnotationSpec = spec

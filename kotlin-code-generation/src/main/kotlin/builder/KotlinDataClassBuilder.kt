@@ -4,29 +4,25 @@ import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
-class KotlinDataClassBuilder internal constructor(delegate: TypeSpec.Builder) : KotlinPoetTypeSpecBuilder<KotlinDataClassSpec>(
+class KotlinDataClassBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinDataClassSpec>(
+  className = className,
   delegate = delegate.addModifiers(KModifier.DATA)
 ), DataClassSpecSupplier {
 
   @Suppress("ClassName")
-  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder>{
-    operator fun invoke(className: ClassName): KotlinDataClassBuilder = with(KotlinDataClassBuilder(delegate = TypeSpec.classBuilder(className))) {
-      className(className)
-    }
+  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder> {
+    operator fun invoke(className: ClassName): KotlinDataClassBuilder = KotlinDataClassBuilder(
+      className = className,
+      delegate = TypeSpec.classBuilder(className)
+    )
 
-    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassBuilder = KotlinDataClassBuilder(spec.get().toBuilder())
+    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassBuilder = KotlinDataClassBuilder(
+      className = spec.className,
+      delegate = spec.get().toBuilder()
+    )
   }
 
-  lateinit var className: ClassName
   private val parameterSpecs = mutableListOf<ParameterSpecSupplier>()
-
-  init {
-    delegate.addModifiers(KModifier.DATA)
-  }
-
-  fun className(className: ClassName): KotlinDataClassBuilder = apply {
-    this.className = className
-  }
 
   fun addKdoc(kdoc: CodeBlock) = apply {
     delegate.addKdoc(kdoc)
@@ -52,6 +48,8 @@ class KotlinDataClassBuilder internal constructor(delegate: TypeSpec.Builder) : 
    * * backs parameters with properties.
    */
   override fun build(): KotlinDataClassSpec {
+    check(parameterSpecs.isNotEmpty())
+
     val parameters = parameterSpecs.map(ParameterSpecSupplier::get)
 
     val constructor = FunSpec.constructorBuilder()

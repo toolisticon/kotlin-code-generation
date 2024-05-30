@@ -4,6 +4,8 @@ import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.asClassName
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
@@ -12,12 +14,13 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
   delegate = delegate
 ), FileSpecSupplier, KotlinAnnotatableBuilder<KotlinFileBuilder> {
 
-  @Suppress("ClassName")
+  @Suppress(CLASS_NAME)
   object builder : ToKotlinPoetSpecBuilder<KotlinFileSpec, KotlinFileBuilder> {
     operator fun invoke(className: ClassName, block: FileSpecBuilderReceiver = {}) = invoke(
       other = FileSpec.builder(className),
       block = block
     )
+
 
     operator fun invoke(packageName: String, fileName: String, block: FileSpecBuilderReceiver = {}) = invoke(
       className = ClassName(packageName, fileName),
