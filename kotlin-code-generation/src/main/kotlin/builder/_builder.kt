@@ -4,6 +4,10 @@ import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
+fun interface Builder<T> {
+  fun build(): T
+}
+
 /**
  * Self-Type implementation of the root Spec builder. This is needed, because: a) we want implementing builders
  * to return an instance of themselves, so we can type-safe and fluently build products.
@@ -22,7 +26,7 @@ sealed class KotlinPoetSpecBuilder<
   SPEC_BUILDER : Any
   >(
   protected val delegate: SPEC_BUILDER
-) {
+) : Builder<PRODUCT> {
 
   @Suppress("UNCHECKED_CAST")
   protected fun applySelf(block: SELF.() -> Unit): SELF = (this as SELF).apply {
@@ -36,20 +40,16 @@ sealed class KotlinPoetSpecBuilder<
     delegate.block()
   }
 
-  abstract fun build(): PRODUCT
+  abstract override fun build(): PRODUCT
 }
 
 sealed class KotlinPoetTypeSpecBuilder<T : KotlinPoetTypeSpec>(
   delegate: TypeSpec.Builder
 ) : KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>(
   delegate = delegate
-), TypeSpecSupplier {
+), TypeSpecSupplier, KotlinAnnotatableBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>> {
 
-  fun addAnnotation(annotationSpec: AnnotationSpec) = applySelf {
-    delegate.addAnnotation(annotationSpec)
-  }
-
-  fun addAnnotation(annotationSpec: KClass<*>) = applySelf {
+  override fun addAnnotation(annotationSpec: AnnotationSpec) = applySelf {
     delegate.addAnnotation(annotationSpec)
   }
 
@@ -78,22 +78,21 @@ interface ToKotlinPoetSpecBuilder<SPEC, BUILDER> {
 }
 
 interface ToKotlinPoetTypeSpecBuilder<SPEC : KotlinPoetTypeSpec, BUILDER> {
+
   operator fun invoke(spec: SPEC, kind: TypeSpec.Kind = spec.get().kind, name: String? = spec.get().name): BUILDER
 }
 
 interface KotlinAnnotatableBuilder<SELF> {
 
-  fun addAnnotation(annotationSpec: KotlinAnnotationSpec): SELF
+  fun addAnnotation(annotationSpec: AnnotationSpec): SELF
 
-  fun addAnnotation(annotationSpec: AnnotationSpec): SELF = addAnnotation(KotlinAnnotationSpec(annotationSpec))
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): SELF = addAnnotation(annotationSpec.get())
 
-  fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>): SELF
+  fun addAnnotation(annotation: ClassName): SELF = addAnnotation(AnnotationSpec.builder(annotation).build())
 
-  fun addAnnotation(annotation: ClassName): SELF
+  fun addAnnotation(annotation: KClass<out Annotation>): SELF = addAnnotation(annotation.asClassName())
 
-  fun addAnnotation(annotation: KClass<*>): SELF
-
-  fun removeAnnotation(annotation: KClass<*>): SELF
+  //fun removeAnnotation(annotation: KClass<*>): SELF
 
 //  fun <T : Annotation> TypeSpec.Builder.removeAnnotation(annotation: KClass<T>) = apply {
 //    this.annotations.removeIf {

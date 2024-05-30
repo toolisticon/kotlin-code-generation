@@ -17,6 +17,10 @@ interface WithName {
   val name: String
 }
 
+interface WithType {
+  val type: TypeName
+}
+
 interface WithTypeName {
   val typeName: TypeName
 }

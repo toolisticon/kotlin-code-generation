@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
+import io.toolisticon.kotlin.generation.spec.ParameterSpecSupplier
 import io.toolisticon.kotlin.generation.spec.PropertySpecSupplier
 
 class KotlinPropertyBuilder internal constructor(
@@ -13,10 +15,9 @@ class KotlinPropertyBuilder internal constructor(
   delegate: PropertySpec.Builder
 ) : KotlinPoetSpecBuilder<KotlinPropertyBuilder, KotlinPropertySpec,
   PropertySpec,
-  PropertySpec
-  .Builder>(
+  PropertySpec.Builder>(
   delegate = delegate
-), PropertySpecSupplier {
+), PropertySpecSupplier, KotlinAnnotatableBuilder<KotlinPropertyBuilder> {
 
   @Suppress(CLASS_NAME)
   object builder : ToKotlinPoetSpecBuilder<KotlinPropertySpec, KotlinPropertyBuilder> {
@@ -34,12 +35,20 @@ class KotlinPropertyBuilder internal constructor(
     )
   }
 
+  override fun addAnnotation(annotationSpec: AnnotationSpec): KotlinPropertyBuilder = invoke {
+    addAnnotation(annotationSpec)
+  }
+
   fun makePrivate() = invoke {
     addModifiers(KModifier.PRIVATE)
   }
 
   fun makeFinal() = invoke {
     addModifiers(KModifier.PRIVATE)
+  }
+
+  fun initializer(parameter: ParameterSpecSupplier) = invoke {
+    initializer("%N", parameter.get())
   }
 
   override fun build(): KotlinPropertySpec = KotlinPropertySpec(spec = delegate.build())

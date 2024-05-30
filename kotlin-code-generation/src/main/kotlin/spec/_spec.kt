@@ -23,6 +23,7 @@ interface PropertySpecSupplier : Supplier<PropertySpec>
 interface TypeAliasSpecSupplier : Supplier<TypeAliasSpec>
 interface TypeSpecSupplier : Supplier<TypeSpec>
 interface DataClassSpecSupplier : Supplier<TypeSpec>, TypeSpecSupplier
+interface ConstructorPropertySupplier : Supplier<KotlinConstructorProperty>, WithName
 
 
 interface KotlinPoetSpecToBuilder<BUILDER> {

@@ -1,20 +1,25 @@
 package io.toolisticon.kotlin.generation.spec
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.builder.KotlinPropertyBuilder
 
 @JvmInline
-value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<PropertySpec>, PropertySpecSupplier, WithName {
+value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<PropertySpec>,
+  PropertySpecSupplier,
+  WithName,
+  WithAnnotationSpecs {
   override val name: String get() = spec.name
 
   val type: TypeName get() = spec.type
 
   val mutable: Boolean get() = spec.mutable
 
+
   override fun get(): PropertySpec = spec
+  override val annotations: List<KotlinAnnotationSpec> get() = KotlinAnnotationSpec.of(spec.annotations)
 
 //  override val kdoc: CodeBlock = builder.kdoc.build()
-//  override val annotations: List<AnnotationSpec> = builder.annotations.toImmutableList()
 //  public val modifiers: Set<KModifier> = builder.modifiers.toImmutableSet()
 //  public val typeVariables: List<TypeVariableName> = builder.typeVariables.toImmutableList()
 //  public val initializer: CodeBlock? = builder.initializer

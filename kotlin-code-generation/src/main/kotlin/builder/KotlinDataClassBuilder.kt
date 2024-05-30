@@ -1,8 +1,10 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.spec.*
-import kotlin.reflect.KClass
+import io.toolisticon.kotlin.generation.spec.ConstructorPropertySupplier
+import io.toolisticon.kotlin.generation.spec.DataClassSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
 class KotlinDataClassBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinDataClassSpec>(
   className = className,
@@ -11,6 +13,9 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
 
   @Suppress("ClassName")
   object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder> {
+
+    operator fun invoke(packageName: String, name: String): KotlinDataClassBuilder = invoke(ClassName(packageName, name))
+
     operator fun invoke(className: ClassName): KotlinDataClassBuilder = KotlinDataClassBuilder(
       className = className,
       delegate = TypeSpec.classBuilder(className)
@@ -22,7 +27,7 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
     )
   }
 
-  private val parameterSpecs = mutableListOf<ParameterSpecSupplier>()
+  private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
 
   fun addKdoc(kdoc: CodeBlock) = apply {
     delegate.addKdoc(kdoc)
@@ -32,14 +37,9 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
     delegate.addType(typeSpecSupplier.get())
   }
 
-  fun parameter(parameterSpec: ParameterSpecSupplier): KotlinDataClassBuilder = apply {
-    this.parameterSpecs.add(parameterSpec)
+  fun addConstructorProperty(constructorProperty: ConstructorPropertySupplier) = apply {
+    constructorProperties.put(constructorProperty.name, constructorProperty)
   }
-
-  fun parameter(name: String, type: TypeName): KotlinDataClassBuilder = apply {
-    this.parameterSpecs.add(KotlinParameterBuilder.builder(name, type))
-  }
-
 
   /**
    * Finalize a data class based on its primary constructor parameters.
@@ -48,39 +48,22 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
    * * backs parameters with properties.
    */
   override fun build(): KotlinDataClassSpec {
-    check(parameterSpecs.isNotEmpty())
-
-    val parameters = parameterSpecs.map(ParameterSpecSupplier::get)
+    check(constructorProperties.isNotEmpty()) { "Data class must have at least one property." }
 
     val constructor = FunSpec.constructorBuilder()
-      .addParameters(parameters)
-      .build()
-    val properties = parameters.map {
-      PropertySpec.builder(it.name, it.type)
-        .initializer("%N", it)
-        .build()
+
+    constructorProperties.values.map(ConstructorPropertySupplier::get).forEach {
+      constructor.addParameter(it.parameter.get())
+      delegate.addProperty(it.property.get())
     }
 
-    delegate.primaryConstructor(constructor)
-      .addProperties(properties)
+    delegate.primaryConstructor(constructor.build())
 
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
-  fun addAnnotation(annotationSpec: KotlinAnnotationSpec): KotlinDataClassBuilder = apply {
-    delegate.addAnnotation(annotationSpec.get())
-  }
-
-  fun addAnnotation(annotation: ClassName): KotlinDataClassBuilder = apply {
+  override fun addAnnotation(annotation: ClassName): KotlinDataClassBuilder = apply {
     delegate.addAnnotation(annotation)
   }
 
-
-  fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>): KotlinDataClassBuilder = apply {
-    annotationSpecs.forEach(::addAnnotation)
-  }
-
-  fun removeAnnotation(annotation: KClass<*>): KotlinDataClassBuilder = apply {
-    TODO("Not yet implemented")
-  }
 }

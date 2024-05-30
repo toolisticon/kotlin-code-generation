@@ -3,11 +3,11 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.asClassName
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
-import io.toolisticon.kotlin.generation.spec.*
-import kotlin.reflect.KClass
+import io.toolisticon.kotlin.generation.spec.FileSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
+import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
 
 class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : KotlinPoetSpecBuilder<KotlinFileBuilder, KotlinFileSpec, FileSpec, FileSpec.Builder>(
@@ -52,25 +52,7 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
   override fun build(): KotlinFileSpec = KotlinFileSpec(delegate.build())
   override fun get(): FileSpec = build().get()
 
-  override fun addAnnotation(annotationSpec: KotlinAnnotationSpec): KotlinFileBuilder = apply {
-    delegate.addAnnotation(annotationSpec.get())
-  }
-
-  override fun addAnnotation(annotation: ClassName): KotlinFileBuilder = apply {
-    delegate.addAnnotation(annotation)
-  }
-
-  override fun addAnnotation(annotation: KClass<*>): KotlinFileBuilder = apply {
-    delegate.addAnnotation(annotation)
-  }
-
-  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>): KotlinFileBuilder = apply {
-    annotationSpecs.forEach(::addAnnotation)
-  }
-
-  override fun removeAnnotation(annotation: KClass<*>): KotlinFileBuilder = apply {
-    delegate.annotations.removeIf {
-      it.typeName == annotation.asClassName()
-    }
+  override fun addAnnotation(annotationSpec: AnnotationSpec): KotlinFileBuilder = invoke {
+    addAnnotation(annotationSpec)
   }
 }

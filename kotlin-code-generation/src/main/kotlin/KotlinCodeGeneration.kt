@@ -1,16 +1,18 @@
 package io.toolisticon.kotlin.generation
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
-import io.toolisticon.kotlin.generation.builder.KotlinAnnotationBuilder
+import io.toolisticon.kotlin.generation.builder.*
 
 object KotlinCodeGeneration {
 
   val annotationBuilder = KotlinAnnotationBuilder.builder
-
+  val constructorPropertyBuilder = KotlinConstructorPropertyBuilder.builder
+  val dataClassBuilder = KotlinDataClassBuilder.builder
+  val parameterBuilder = KotlinParameterBuilder.builder
+  val propertyBuilder = KotlinPropertyBuilder.builder
+  val valueClassBuilder = KotlinValueClassBuilder.builder
 
   internal object Supressions {
     const val CLASS_NAME = "ClassName"
