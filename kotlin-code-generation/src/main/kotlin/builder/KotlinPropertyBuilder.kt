@@ -47,10 +47,6 @@ class KotlinPropertyBuilder internal constructor(
     addModifiers(KModifier.PRIVATE)
   }
 
-  fun initializer(parameter: ParameterSpecSupplier) = invoke {
-    initializer("%N", parameter.get())
-  }
-
   override fun build(): KotlinPropertySpec = KotlinPropertySpec(spec = delegate.build())
 
   override fun get(): PropertySpec = build().get()

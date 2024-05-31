@@ -46,7 +46,9 @@ class KotlinConstructorPropertyBuilder internal constructor(
 
   override fun build(): KotlinConstructorProperty {
     val parameter = parameterBuilder.build()
-    val property = propertyBuilder.initializer(parameter).build()
+    val property = propertyBuilder {
+      initializer(parameter.name)
+    }.build()
 
     return KotlinConstructorProperty(parameter = parameter, property = property)
   }
