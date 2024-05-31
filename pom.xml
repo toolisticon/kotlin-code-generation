@@ -22,7 +22,6 @@
     <module>_bom</module>
     <module>kotlin-code-generation-test</module>
     <module>kotlin-code-generation</module>
-    <module>_itest</module>
   </modules>
 
   <properties/>
@@ -100,4 +99,18 @@
       <organizationUrl>https://holisticon.de</organizationUrl>
     </developer>
   </developers>
+
+  <profiles>
+    <profile>
+      <id>itest</id>
+      <activation>
+        <property>
+          <name>!skipItest</name>
+        </property>
+      </activation>
+      <modules>
+        <module>_itest</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
