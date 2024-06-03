@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.builder.KotlinPropertyBuilder
@@ -8,7 +9,8 @@ import io.toolisticon.kotlin.generation.builder.KotlinPropertyBuilder
 value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<PropertySpec>,
   PropertySpecSupplier,
   WithName,
-  WithAnnotationSpecs {
+  WithAnnotationSpecs,
+  Documentable by spec {
   override val name: String get() = spec.name
 
   val type: TypeName get() = spec.type

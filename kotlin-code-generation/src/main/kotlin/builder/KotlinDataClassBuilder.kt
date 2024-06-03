@@ -1,37 +1,35 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.spec.ConstructorPropertySupplier
 import io.toolisticon.kotlin.generation.spec.DataClassSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
+import mu.KLogging
 
 class KotlinDataClassBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinDataClassSpec>(
   className = className,
   delegate = delegate.addModifiers(KModifier.DATA)
 ), DataClassSpecSupplier {
 
-  @Suppress("ClassName")
-  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder> {
+  companion object : KLogging() {
 
-    operator fun invoke(packageName: String, name: String): KotlinDataClassBuilder = invoke(ClassName(packageName, name))
+    fun builder(className: ClassName) = KotlinDataClassBuilder(className = className)
 
-    operator fun invoke(className: ClassName): KotlinDataClassBuilder = KotlinDataClassBuilder(
-      className = className,
-      delegate = TypeSpec.classBuilder(className)
-    )
+    fun builder(packageName: String, name: String) = builder(ClassName(packageName,name))
 
-    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassBuilder = KotlinDataClassBuilder(
-      className = spec.className,
-      delegate = spec.get().toBuilder()
+    fun from(spec: KotlinDataClassSpec, name : String = spec.className.simpleName) = KotlinDataClassBuilder(
+      className = ClassName(packageName = spec.className.packageName, name),
+      delegate = spec.get().toBuilder(name = name)
     )
   }
+
+  internal constructor(className: ClassName) : this(className = className, delegate = TypeSpec.classBuilder(className))
 
   private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
-
-  fun addKdoc(kdoc: CodeBlock) = apply {
-    delegate.addKdoc(kdoc)
-  }
 
   fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
     delegate.addType(typeSpecSupplier.get())

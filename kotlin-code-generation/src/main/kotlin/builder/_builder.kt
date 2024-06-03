@@ -4,9 +4,62 @@ import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
+
 fun interface Builder<T> {
   fun build(): T
 }
+
+sealed interface BuilderAdapter<SPEC_TYPE, SPEC_BUILDER_TYPE> : Builder<SPEC_TYPE> {
+
+  @JvmInline
+  value class AnnotationAdapter(val builder: AnnotationSpec.Builder) : BuilderAdapter<AnnotationSpec, AnnotationSpec.Builder> {
+    override fun build(): AnnotationSpec = builder.build()
+  }
+
+  @JvmInline
+  value class CodeblockAdapter(val builder: CodeBlock.Builder) : BuilderAdapter<CodeBlock, CodeBlock.Builder> {
+    override fun build(): CodeBlock = builder.build()
+  }
+
+  @JvmInline
+  value class FileAdapter(val builder: FileSpec.Builder) : BuilderAdapter<FileSpec, FileSpec.Builder> {
+    override fun build(): FileSpec = builder.build()
+  }
+
+  @JvmInline
+  value class FunAdapter(val builder: FunSpec.Builder) : BuilderAdapter<FunSpec, FunSpec.Builder> {
+    override fun build(): FunSpec = builder.build()
+  }
+
+  @JvmInline
+  value class ParameterAdapter(val builder: ParameterSpec.Builder) : BuilderAdapter<ParameterSpec, ParameterSpec.Builder> {
+    override fun build(): ParameterSpec = builder.build()
+  }
+
+  @JvmInline
+  value class PropertyAdapter(val builder: PropertySpec.Builder) : BuilderAdapter<PropertySpec, PropertySpec.Builder> {
+    override fun build(): PropertySpec = builder.build()
+  }
+
+  @JvmInline
+  value class TypeAdapter(val builder: TypeSpec.Builder) : BuilderAdapter<TypeSpec, TypeSpec.Builder> {
+    override fun build(): TypeSpec = builder.build()
+  }
+}
+
+sealed interface Foo<PRODUCT : SpecSupplier<SPEC>, SPEC> : Builder<PRODUCT>
+
+interface FooBuilder : Foo<KotlinAnnotationSpec, AnnotationSpec>
+
+sealed interface SpecBuilder<SELF : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>, PRODUCT : SpecSupplier<SPEC>, SPEC, SPEC_BUILDER> : Builder<PRODUCT>
+
+interface AnnotatableSpecBuilder<SELF, PRODUCT : SpecSupplier<SPEC>, SPEC : Annotatable, SPEC_BUILDER : Annotatable.Builder<SPEC_BUILDER>> : Builder<PRODUCT>
+
+interface DocumentableSpecBuilder<
+  SELF : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>,
+  PRODUCT : SpecSupplier<SPEC>,
+  SPEC : Documentable,
+  SPEC_BUILDER : Documentable.Builder<SPEC_BUILDER>> : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>
 
 /**
  * Self-Type implementation of the root Spec builder. This is needed, because: a) we want implementing builders
@@ -26,7 +79,7 @@ sealed class KotlinPoetSpecBuilder<
   SPEC_BUILDER : Any
   >(
   protected val delegate: SPEC_BUILDER
-) : Builder<PRODUCT> {
+) : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER> {
 
   @Suppress("UNCHECKED_CAST")
   protected fun applySelf(block: SELF.() -> Unit): SELF = (this as SELF).apply {
@@ -47,10 +100,19 @@ sealed class KotlinPoetTypeSpecBuilder<T : KotlinPoetTypeSpec>(
   delegate: TypeSpec.Builder
 ) : KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>(
   delegate = delegate
-), TypeSpecSupplier, KotlinAnnotatableBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>> {
+), TypeSpecSupplier
+//  AnnotatableSpecBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>, T, TypeSpec, TypeSpec.Builder>,
+  //, DocumentableSpecBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>, T, TypeSpec, TypeSpec.Builder>
+{
 
-  override fun addAnnotation(annotationSpec: AnnotationSpec) = applySelf {
+
+
+  fun addAnnotation(annotationSpec: AnnotationSpec) = applySelf {
     delegate.addAnnotation(annotationSpec)
+  }
+
+  fun addKdoc(block: CodeBlock) = applySelf {
+    delegate.addKdoc(block)
   }
 
   override fun get(): TypeSpec = build().get()
@@ -106,4 +168,27 @@ interface KotlinAnnotatableBuilder<SELF> {
 //    }
 //  }
 
+}
+
+
+//sealed class KotlinPoetSpecBuilder<
+//  SELF : KotlinPoetSpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>,
+//  PRODUCT : KotlinPoetSpec<SPEC>,
+//  SPEC : Any,
+//  SPEC_BUILDER : Any
+//  >(
+//  protected val delegate: SPEC_BUILDER
+//) : Builder<PRODUCT> {
+
+//KotlinPoetSpecBuilder<KotlinAnnotationBuilder, KotlinAnnotationSpec, AnnotationSpec, Builder>
+//class KotlinParameterBuilder internal constructor(delegate: ParameterSpec.Builder) : KotlinPoetSpecBuilder<KotlinParameterBuilder, KotlinParameterSpec, ParameterSpec, ParameterSpec.Builder>(
+//interface KDBuilder: KotlinPoetSpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>, PRODUCT, SPEC, SPEC_BUILDER> {}
+
+//SELF : KotlinPoetSpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>
+//KotlinPoetSpecBuilder<KotlinTypeAliasBuilder, KotlinTypeAliasSpec, TypeAliasSpec, TypeAliasSpec.Builder>
+interface KotlinDocumentableBuilder<SELF> {
+
+  fun addKdoc(format: String, vararg args: Any): SELF = addKdoc(CodeBlock.of(format, *args))
+
+  fun addKdoc(block: CodeBlock): SELF
 }

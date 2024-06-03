@@ -1,6 +1,5 @@
 package io.toolisticon.kotlin.generation
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asClassName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.constructorPropertyBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.valueClassBuilder

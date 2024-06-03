@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isValueClass
 import io.toolisticon.kotlin.generation.builder.KotlinValueClassBuilder
@@ -8,7 +9,7 @@ import io.toolisticon.kotlin.generation.builder.KotlinValueClassBuilder
 data class KotlinValueClassSpec(
   override val className: ClassName,
   private val spec: TypeSpec
-) : KotlinPoetNamedTypeSpec {
+) : KotlinPoetNamedTypeSpec, Documentable by spec {
 
   init {
     require(spec.isValueClass) { "Not a valueClass spec: $spec." }

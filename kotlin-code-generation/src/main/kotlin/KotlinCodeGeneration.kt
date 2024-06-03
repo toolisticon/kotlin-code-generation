@@ -1,15 +1,23 @@
 package io.toolisticon.kotlin.generation
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.buildCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.builder.*
+import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 
 object KotlinCodeGeneration {
 
+  fun x() {
+    buildCodeBlock {  }
+  }
+
+  inline fun buildDataClass(className: ClassName, receiver: KotlinDataClassBuilder.() -> Unit): KotlinDataClassSpec = KotlinDataClassBuilder.builder(className).also(receiver).build()
+
   val annotationBuilder = KotlinAnnotationBuilder.builder
   val constructorPropertyBuilder = KotlinConstructorPropertyBuilder.builder
-  val dataClassBuilder = KotlinDataClassBuilder.builder
   val parameterBuilder = KotlinParameterBuilder.builder
   val propertyBuilder = KotlinPropertyBuilder.builder
   val valueClassBuilder = KotlinValueClassBuilder.builder

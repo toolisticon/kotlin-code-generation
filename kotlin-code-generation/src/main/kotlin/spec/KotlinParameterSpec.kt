@@ -1,10 +1,11 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeName
 
 @JvmInline
-value class KotlinParameterSpec(private val spec: ParameterSpec) : KotlinPoetSpec<ParameterSpec>, ParameterSpecSupplier, WithName {
+value class KotlinParameterSpec(private val spec: ParameterSpec) : KotlinPoetSpec<ParameterSpec>, ParameterSpecSupplier, WithName, Documentable by spec  {
 
   override val name: String get() = spec.name
 

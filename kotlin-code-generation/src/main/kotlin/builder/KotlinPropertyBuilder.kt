@@ -6,7 +6,6 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
-import io.toolisticon.kotlin.generation.spec.ParameterSpecSupplier
 import io.toolisticon.kotlin.generation.spec.PropertySpecSupplier
 
 class KotlinPropertyBuilder internal constructor(

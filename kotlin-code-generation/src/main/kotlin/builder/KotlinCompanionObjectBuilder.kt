@@ -2,7 +2,6 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinCompanionObjectSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
