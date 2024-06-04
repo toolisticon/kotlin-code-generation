@@ -60,7 +60,7 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
-  override fun addAnnotation(annotation: ClassName): KotlinDataClassBuilder = apply {
+  fun addAnnotation(annotation: ClassName): KotlinDataClassBuilder = apply {
     delegate.addAnnotation(annotation)
   }
 

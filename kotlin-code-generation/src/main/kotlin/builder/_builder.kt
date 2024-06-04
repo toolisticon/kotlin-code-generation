@@ -1,6 +1,8 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget
+import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget.FILE
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
@@ -9,43 +11,6 @@ fun interface Builder<T> {
   fun build(): T
 }
 
-sealed interface BuilderAdapter<SPEC_TYPE, SPEC_BUILDER_TYPE> : Builder<SPEC_TYPE> {
-
-  @JvmInline
-  value class AnnotationAdapter(val builder: AnnotationSpec.Builder) : BuilderAdapter<AnnotationSpec, AnnotationSpec.Builder> {
-    override fun build(): AnnotationSpec = builder.build()
-  }
-
-  @JvmInline
-  value class CodeblockAdapter(val builder: CodeBlock.Builder) : BuilderAdapter<CodeBlock, CodeBlock.Builder> {
-    override fun build(): CodeBlock = builder.build()
-  }
-
-  @JvmInline
-  value class FileAdapter(val builder: FileSpec.Builder) : BuilderAdapter<FileSpec, FileSpec.Builder> {
-    override fun build(): FileSpec = builder.build()
-  }
-
-  @JvmInline
-  value class FunAdapter(val builder: FunSpec.Builder) : BuilderAdapter<FunSpec, FunSpec.Builder> {
-    override fun build(): FunSpec = builder.build()
-  }
-
-  @JvmInline
-  value class ParameterAdapter(val builder: ParameterSpec.Builder) : BuilderAdapter<ParameterSpec, ParameterSpec.Builder> {
-    override fun build(): ParameterSpec = builder.build()
-  }
-
-  @JvmInline
-  value class PropertyAdapter(val builder: PropertySpec.Builder) : BuilderAdapter<PropertySpec, PropertySpec.Builder> {
-    override fun build(): PropertySpec = builder.build()
-  }
-
-  @JvmInline
-  value class TypeAdapter(val builder: TypeSpec.Builder) : BuilderAdapter<TypeSpec, TypeSpec.Builder> {
-    override fun build(): TypeSpec = builder.build()
-  }
-}
 
 sealed interface Foo<PRODUCT : SpecSupplier<SPEC>, SPEC> : Builder<PRODUCT>
 
@@ -102,9 +67,8 @@ sealed class KotlinPoetTypeSpecBuilder<T : KotlinPoetTypeSpec>(
   delegate = delegate
 ), TypeSpecSupplier
 //  AnnotatableSpecBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>, T, TypeSpec, TypeSpec.Builder>,
-  //, DocumentableSpecBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>, T, TypeSpec, TypeSpec.Builder>
+//, DocumentableSpecBuilder<KotlinPoetSpecBuilder<KotlinPoetTypeSpecBuilder<T>, T, TypeSpec, TypeSpec.Builder>, T, TypeSpec, TypeSpec.Builder>
 {
-
 
 
   fun addAnnotation(annotationSpec: AnnotationSpec) = applySelf {
