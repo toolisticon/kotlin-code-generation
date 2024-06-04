@@ -7,6 +7,7 @@ import io.toolisticon.kotlin.generation.BuilderSupplier
 @JvmInline
 value class CodeBlockBuilder(private val builder: CodeBlock.Builder) : BuilderSupplier<CodeBlock, Builder> {
 
+
   fun isEmpty(): Boolean = builder.isEmpty()
 
   fun isNotEmpty(): Boolean = builder.isNotEmpty()
