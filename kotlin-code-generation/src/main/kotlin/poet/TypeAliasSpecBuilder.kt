@@ -1,11 +1,12 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeAliasSpec
 import com.squareup.kotlinpoet.TypeVariableName
+import io.toolisticon.kotlin.generation.BuilderSupplier
 
 @JvmInline
-value class TypeAliasSpecBuilder(private val builder: TypeAliasSpec.Builder) : KotlinPoetBuilderSupplier<TypeAliasSpec, TypeAliasSpec.Builder>,
+value class TypeAliasSpecBuilder(private val builder: TypeAliasSpec.Builder) : BuilderSupplier<TypeAliasSpec, TypeAliasSpec.Builder>,
   AnnotatableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder>,
   DocumentableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder>,
   TaggableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder> {

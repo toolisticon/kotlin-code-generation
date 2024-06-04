@@ -1,11 +1,12 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterSpec
+import io.toolisticon.kotlin.generation.BuilderSupplier
 
 @JvmInline
-value class ParameterSpecBuilder(private val builder: ParameterSpec.Builder) : KotlinPoetBuilderSupplier<ParameterSpec, ParameterSpec.Builder>,
+value class ParameterSpecBuilder(private val builder: ParameterSpec.Builder) : BuilderSupplier<ParameterSpec, ParameterSpec.Builder>,
   AnnotatableBuilder<ParameterSpecBuilder, ParameterSpec, ParameterSpec.Builder>,
   DocumentableBuilder<ParameterSpecBuilder, ParameterSpec, ParameterSpec.Builder>,
   TaggableBuilder<ParameterSpecBuilder, ParameterSpec, ParameterSpec.Builder> {

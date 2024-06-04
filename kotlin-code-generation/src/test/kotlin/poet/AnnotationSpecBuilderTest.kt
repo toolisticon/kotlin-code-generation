@@ -1,6 +1,7 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.AnnotationSpec
+import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import org.junit.jupiter.api.Test
 
 internal class AnnotationSpecBuilderTest {

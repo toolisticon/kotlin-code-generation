@@ -3,13 +3,11 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget
 import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget.FILE
+import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
 
-fun interface Builder<T> {
-  fun build(): T
-}
 
 sealed interface SpecBuilder<SELF : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>, PRODUCT : SpecSupplier<SPEC>, SPEC, SPEC_BUILDER> : Builder<PRODUCT>
 

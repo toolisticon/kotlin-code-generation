@@ -1,13 +1,14 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.BuilderSupplier
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 @JvmInline
-value class FunSpecBuilder(private val builder: FunSpec.Builder) : KotlinPoetBuilderSupplier<FunSpec, FunSpec.Builder>,
+value class FunSpecBuilder(private val builder: FunSpec.Builder) : BuilderSupplier<FunSpec, FunSpec.Builder>,
   AnnotatableBuilder<FunSpecBuilder, FunSpec, FunSpec.Builder>,
   ContextReceivableBuilder<FunSpecBuilder, FunSpec, FunSpec.Builder>,
   DocumentableBuilder<FunSpecBuilder, FunSpec, FunSpec.Builder>,

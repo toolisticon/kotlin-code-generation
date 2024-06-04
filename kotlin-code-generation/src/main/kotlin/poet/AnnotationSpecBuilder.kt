@@ -1,11 +1,12 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget
 import com.squareup.kotlinpoet.CodeBlock
+import io.toolisticon.kotlin.generation.BuilderSupplier
 
 @JvmInline
-value class AnnotationSpecBuilder(val builder: AnnotationSpec.Builder) : KotlinPoetBuilderSupplier<AnnotationSpec, AnnotationSpec.Builder>,
+value class AnnotationSpecBuilder(val builder: AnnotationSpec.Builder) : BuilderSupplier<AnnotationSpec, AnnotationSpec.Builder>,
   TaggableBuilder<AnnotationSpecBuilder, AnnotationSpec, AnnotationSpec.Builder> {
 
   val members: MutableList<CodeBlock> get() = get().members

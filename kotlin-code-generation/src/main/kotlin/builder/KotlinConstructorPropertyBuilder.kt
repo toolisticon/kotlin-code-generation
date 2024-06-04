@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asClassName
+import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.parameterBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.propertyBuilder

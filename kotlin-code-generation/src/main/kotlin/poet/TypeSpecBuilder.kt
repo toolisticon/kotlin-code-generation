@@ -1,10 +1,11 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.BuilderSupplier
 
 @JvmInline
 @ExperimentalKotlinPoetApi
-value class TypeSpecBuilder(private val builder: TypeSpec.Builder) : KotlinPoetBuilderSupplier<TypeSpec, TypeSpec.Builder>,
+value class TypeSpecBuilder(private val builder: TypeSpec.Builder) : BuilderSupplier<TypeSpec, TypeSpec.Builder>,
   AnnotatableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
   ContextReceivableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
   DocumentableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,

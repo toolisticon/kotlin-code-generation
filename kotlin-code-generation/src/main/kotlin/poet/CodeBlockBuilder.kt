@@ -1,10 +1,11 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.CodeBlock.Builder
+import io.toolisticon.kotlin.generation.BuilderSupplier
 
 @JvmInline
-value class CodeBlockBuilder(private val builder: CodeBlock.Builder) : KotlinPoetBuilderSupplier<CodeBlock, CodeBlock.Builder> {
+value class CodeBlockBuilder(private val builder: CodeBlock.Builder) : BuilderSupplier<CodeBlock, Builder> {
 
   fun isEmpty(): Boolean = builder.isEmpty()
 

@@ -1,10 +1,11 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.BuilderSupplier
 import kotlin.reflect.KClass
 
 @JvmInline
-value class FileSpecBuilder(private val builder: FileSpec.Builder) : KotlinPoetBuilderSupplier<FileSpec, FileSpec.Builder>,
+value class FileSpecBuilder(private val builder: FileSpec.Builder) : BuilderSupplier<FileSpec, FileSpec.Builder>,
   AnnotatableBuilder<FileSpecBuilder, FileSpec, FileSpec.Builder>,
   MemberSpecHolderBuilder<FileSpecBuilder, FileSpec, FileSpec.Builder>,
   TaggableBuilder<FileSpecBuilder, FileSpec, FileSpec.Builder>,

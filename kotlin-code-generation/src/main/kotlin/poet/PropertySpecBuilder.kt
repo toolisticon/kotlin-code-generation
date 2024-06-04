@@ -1,16 +1,17 @@
-package io.toolisticon.kotlin.generation.builder.poet
+package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.BuilderSupplier
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 @JvmInline
-value class PropertySpecBuilder(private val builder: PropertySpec.Builder) : KotlinPoetBuilderSupplier<PropertySpec, PropertySpec.Builder>,
-  AnnotatableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
-  ContextReceivableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
-  DocumentableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
-  TaggableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
-  OriginatingElementsHolderBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder> {
+value class PropertySpecBuilder(private val builder: PropertySpec.Builder) : BuilderSupplier<PropertySpec, PropertySpec.Builder>,
+  AnnotatableBuilder<PropertySpecBuilder, PropertySpec, PropertySpec.Builder>,
+  ContextReceivableBuilder<PropertySpecBuilder, PropertySpec, PropertySpec.Builder>,
+  DocumentableBuilder<PropertySpecBuilder, PropertySpec, PropertySpec.Builder>,
+  TaggableBuilder<PropertySpecBuilder, PropertySpec, PropertySpec.Builder>,
+  OriginatingElementsHolderBuilder<PropertySpecBuilder, PropertySpec, PropertySpec.Builder> {
 
   val modifiers: MutableList<KModifier> get() = builder.modifiers
   val typeVariables: MutableList<TypeVariableName> get() = builder.typeVariables
