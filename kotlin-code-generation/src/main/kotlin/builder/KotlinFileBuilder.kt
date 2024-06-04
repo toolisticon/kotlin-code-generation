@@ -21,7 +21,6 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
       block = block
     )
 
-
     operator fun invoke(packageName: String, fileName: String, block: FileSpecBuilderReceiver = {}) = invoke(
       className = ClassName(packageName, fileName),
       block = block

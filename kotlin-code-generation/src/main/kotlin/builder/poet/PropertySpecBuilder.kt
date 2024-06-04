@@ -3,61 +3,68 @@ package io.toolisticon.kotlin.generation.builder.poet
 import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 @JvmInline
-value class PropertySpecBuilder(private val builder: PropertySpec.Builder) : KotlinPoetBuilderSupplier<PropertySpec, PropertySpec.Builder> {
+value class PropertySpecBuilder(private val builder: PropertySpec.Builder) : KotlinPoetBuilderSupplier<PropertySpec, PropertySpec.Builder>,
+  AnnotatableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
+  ContextReceivableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
+  DocumentableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
+  TaggableBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder>,
+  OriginatingElementsHolderBuilder<PropertySpecBuilder,PropertySpec,PropertySpec.Builder> {
 
-  val modifiers: MutableList<KModifier> get() = get().modifiers
-  val typeVariables: MutableList<TypeVariableName> get() = get().typeVariables
+  val modifiers: MutableList<KModifier> get() = builder.modifiers
+  val typeVariables: MutableList<TypeVariableName> get() = builder.typeVariables
 
   fun mutable(mutable: Boolean = true): PropertySpecBuilder = apply {
-    get().mutable(mutable)
+    builder.mutable(mutable)
   }
 
   fun addModifiers(vararg modifiers: KModifier): PropertySpecBuilder = apply {
-    get().addModifiers(*modifiers)
+    builder.addModifiers(*modifiers)
   }
 
   fun addModifiers(modifiers: Iterable<KModifier>): PropertySpecBuilder = apply {
-    get().addModifiers(modifiers)
+    builder.addModifiers(modifiers)
   }
 
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): PropertySpecBuilder = apply {
-    get().addTypeVariables(typeVariables)
+    builder.addTypeVariables(typeVariables)
   }
 
   fun addTypeVariable(typeVariable: TypeVariableName): PropertySpecBuilder = apply {
-    get().addTypeVariable(typeVariable)
+    builder.addTypeVariable(typeVariable)
   }
 
   fun initializer(format: String, vararg args: Any?): PropertySpecBuilder =
     initializer(CodeBlock.of(format, *args))
 
   fun initializer(codeBlock: CodeBlock?): PropertySpecBuilder = apply {
-    get().initializer(codeBlock)
+    builder.initializer(codeBlock)
   }
 
   fun delegate(format: String, vararg args: Any?): PropertySpecBuilder =
     delegate(CodeBlock.of(format, *args))
 
   fun delegate(codeBlock: CodeBlock): PropertySpecBuilder = apply {
-    get().delegate(codeBlock)
+    builder.delegate(codeBlock)
   }
 
   fun getter(getter: FunSpec?): PropertySpecBuilder = apply {
-    get().getter(getter)
+    builder.getter(getter)
   }
 
   fun setter(setter: FunSpec?): PropertySpecBuilder = apply {
-    get().setter(setter)
+    builder.setter(setter)
   }
 
   fun receiver(receiverType: TypeName?): PropertySpecBuilder = apply {
-    get().receiver(receiverType)
+    builder.receiver(receiverType)
   }
 
   fun receiver(receiverType: KClass<*>): PropertySpecBuilder = receiver(receiverType.asTypeName())
 
-  override fun build(): PropertySpec = get().build()
+  override fun build(): PropertySpec = builder.build()
 
   override fun get(): PropertySpec.Builder = builder
 }
+

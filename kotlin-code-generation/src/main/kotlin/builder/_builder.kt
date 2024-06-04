@@ -11,11 +11,6 @@ fun interface Builder<T> {
   fun build(): T
 }
 
-
-sealed interface Foo<PRODUCT : SpecSupplier<SPEC>, SPEC> : Builder<PRODUCT>
-
-interface FooBuilder : Foo<KotlinAnnotationSpec, AnnotationSpec>
-
 sealed interface SpecBuilder<SELF : SpecBuilder<SELF, PRODUCT, SPEC, SPEC_BUILDER>, PRODUCT : SpecSupplier<SPEC>, SPEC, SPEC_BUILDER> : Builder<PRODUCT>
 
 interface AnnotatableSpecBuilder<SELF, PRODUCT : SpecSupplier<SPEC>, SPEC : Annotatable, SPEC_BUILDER : Annotatable.Builder<SPEC_BUILDER>> : Builder<PRODUCT>

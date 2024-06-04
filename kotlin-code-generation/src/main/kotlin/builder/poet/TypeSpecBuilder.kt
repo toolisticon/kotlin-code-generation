@@ -5,13 +5,13 @@ import com.squareup.kotlinpoet.*
 @JvmInline
 @ExperimentalKotlinPoetApi
 value class TypeSpecBuilder(private val builder: TypeSpec.Builder) : KotlinPoetBuilderSupplier<TypeSpec, TypeSpec.Builder>,
-  AnnotatableBuilder<TypeSpec, TypeSpec.Builder>,
-  ContextReceivableBuilder<TypeSpec, TypeSpec.Builder>,
-  DocumentableBuilder<TypeSpec, TypeSpec.Builder>,
-  MemberSpecHolderBuilder<TypeSpec, TypeSpec.Builder>,
-  OriginatingElementsHolderBuilder<TypeSpec, TypeSpec.Builder>,
-  TaggableBuilder<TypeSpec, TypeSpec.Builder>,
-  TypeSpecHolderBuilder<TypeSpec, TypeSpec.Builder> {
+  AnnotatableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  ContextReceivableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  DocumentableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  MemberSpecHolderBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  OriginatingElementsHolderBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  TaggableBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder>,
+  TypeSpecHolderBuilder<TypeSpecBuilder, TypeSpec, TypeSpec.Builder> {
 
   val enumConstants: MutableMap<String, TypeSpec> get() = builder.enumConstants
   val funSpecs: MutableList<FunSpec> get() = builder.funSpecs
