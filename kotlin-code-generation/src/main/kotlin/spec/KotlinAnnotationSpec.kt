@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.TypeName
+import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 
 @JvmInline
 value class KotlinAnnotationSpec(private val spec: AnnotationSpec) : KotlinPoetSpec<AnnotationSpec>,
@@ -23,4 +24,4 @@ value class KotlinAnnotationSpec(private val spec: AnnotationSpec) : KotlinPoetS
 
 }
 
-// TODO fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationBuilder.builder(spec = this)
+fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)

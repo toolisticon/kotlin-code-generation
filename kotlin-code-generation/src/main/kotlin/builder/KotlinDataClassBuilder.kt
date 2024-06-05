@@ -1,9 +1,8 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.Builder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.spec.ConstructorPropertySupplier
 import io.toolisticon.kotlin.generation.spec.DataClassSpecSupplier
@@ -18,6 +17,7 @@ class KotlinDataClassBuilder internal constructor(
 
   companion object : KLogging() {
 
+
     fun builder(className: ClassName) = KotlinDataClassBuilder(className = className)
 
     fun builder(packageName: String, name: String) = builder(ClassName(packageName, name))
@@ -26,8 +26,11 @@ class KotlinDataClassBuilder internal constructor(
 
   internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder.classBuilder(className))
 
-  private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
+  init {
+      delegate.get().addModifiers(KModifier.DATA)
+  }
 
+  private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
 
   operator fun invoke(block: TypeSpecBuilder.() -> Unit): KotlinDataClassBuilder = apply {
     delegate.block()
@@ -37,8 +40,12 @@ class KotlinDataClassBuilder internal constructor(
     delegate.addType(typeSpecSupplier.get())
   }
 
+  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertyBuilder.() -> Unit = {}) = apply {
+    constructorProperties[name] = buildConstructorProperty(name, type, block)
+  }
+
   fun addConstructorProperty(constructorProperty: ConstructorPropertySupplier) = apply {
-    constructorProperties.put(constructorProperty.name, constructorProperty)
+    constructorProperties[constructorProperty.name] = constructorProperty
   }
 
   /**

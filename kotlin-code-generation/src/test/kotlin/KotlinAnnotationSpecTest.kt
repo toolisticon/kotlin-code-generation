@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation
 
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
+import io.toolisticon.kotlin.generation.spec.toBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -43,9 +44,9 @@ class KotlinAnnotationSpecTest {
 
     assertThat(spec.members).hasSize(1)
 
-//    spec = spec.toBuilder()
-//      .addMember("type", Int::class)
-//      .build()
+    spec = spec.toBuilder()
+      .addMember("type", Int::class)
+      .build()
 
     assertThat(spec.members).hasSize(2)
   }

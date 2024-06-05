@@ -3,7 +3,6 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
-import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
 import io.toolisticon.kotlin.generation.spec.ConstructorPropertySupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorProperty
 
@@ -12,7 +11,7 @@ class KotlinConstructorPropertyBuilder internal constructor(
   private val type: TypeName,
   private val propertyBuilder: KotlinPropertySpecBuilder,
   private val parameterBuilder: KotlinParameterSpecBuilder
-) : Builder<KotlinConstructorProperty> , ConstructorPropertySupplier{
+) : Builder<KotlinConstructorProperty>, ConstructorPropertySupplier {
 
   companion object {
     fun builder(name: String, type: TypeName): KotlinConstructorPropertyBuilder = KotlinConstructorPropertyBuilder(

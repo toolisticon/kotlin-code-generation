@@ -16,8 +16,6 @@ data class KotlinDataClassSpec(
     require(spec.isDataClass) { "Not a dataClass spec: $spec." }
   }
 
-
-
   override fun get(): TypeSpec = spec
 }
 

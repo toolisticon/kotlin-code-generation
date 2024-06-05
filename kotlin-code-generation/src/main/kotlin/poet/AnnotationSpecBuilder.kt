@@ -15,7 +15,7 @@ typealias AnnotationSpecBuilderReceiver = AnnotationSpecBuilder.() -> Unit
 value class AnnotationSpecBuilder(val builder: Builder) : BuilderSupplier<AnnotationSpec, Builder>,
   TaggableBuilder<AnnotationSpecBuilder, AnnotationSpec, Builder> {
   companion object {
-    private fun Builder.wrap() = AnnotationSpecBuilder(this)
+    internal fun Builder.wrap() = AnnotationSpecBuilder(this)
     fun builder(type: ClassName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
     fun builder(type: ParameterizedTypeName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
     fun builder(type: KClass<out Annotation>): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()

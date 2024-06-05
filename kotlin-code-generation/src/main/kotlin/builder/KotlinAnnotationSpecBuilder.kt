@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.ParameterizedTypeName
 import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
+import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.spec.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import kotlin.reflect.KClass
@@ -17,6 +18,8 @@ class KotlinAnnotationSpecBuilder internal constructor(
     fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.builder(type))
     fun builder(type: ParameterizedTypeName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.Companion.builder(type))
     fun builder(type: KClass<out Annotation>): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.builder(type))
+
+    fun from(spec: KotlinAnnotationSpec) = KotlinAnnotationSpecBuilder(delegate = spec.get().toBuilder().wrap())
   }
 
   operator fun invoke(block: AnnotationSpecBuilder.() -> Unit): KotlinAnnotationSpecBuilder = apply {
