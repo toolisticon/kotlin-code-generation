@@ -1,6 +1,6 @@
 package io.toolisticon.kotlin.generation
 
-import io.toolisticon.kotlin.generation.spec.toBuilder
+import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -15,7 +15,7 @@ class KotlinAnnotationSpecTest {
 
   @Test
   fun `create Foo annotation`() {
-    val spec = KotlinCodeGeneration.annotationBuilder(Foo::class)
+    val spec = KotlinAnnotationSpecBuilder.builder(Foo::class)
       .addMember("bar = %S", "hello world")
       .addStringMember("x", "foo")
       .addKClassMember("type", Long::class)
@@ -37,15 +37,15 @@ class KotlinAnnotationSpecTest {
 
   @Test
   fun `use toBuilder to add members`() {
-    var spec = KotlinCodeGeneration.annotationBuilder(Foo::class)
+    var spec = KotlinAnnotationSpecBuilder.builder(Foo::class)
       .addMember("bar", "hello")
       .build()
 
     assertThat(spec.members).hasSize(1)
 
-    spec = spec.toBuilder()
-      .addMember("type", Int::class)
-      .build()
+//    spec = spec.toBuilder()
+//      .addMember("type", Int::class)
+//      .build()
 
     assertThat(spec.members).hasSize(2)
   }

@@ -3,7 +3,6 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
-import io.toolisticon.kotlin.generation.builder.KotlinPropertyBuilder
 
 @JvmInline
 value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<PropertySpec>,
@@ -31,4 +30,4 @@ value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<
 //  public val receiverType: TypeName? = builder.receiverType
 }
 
-fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)
+// TODO fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)

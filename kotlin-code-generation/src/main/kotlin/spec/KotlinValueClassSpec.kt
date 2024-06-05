@@ -4,7 +4,6 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isValueClass
-import io.toolisticon.kotlin.generation.builder.KotlinValueClassBuilder
 
 data class KotlinValueClassSpec(
   override val className: ClassName,
@@ -19,4 +18,4 @@ data class KotlinValueClassSpec(
 
 }
 
-fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
+// fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)

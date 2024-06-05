@@ -2,7 +2,6 @@ package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ClassName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.constructorPropertyBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,8 +12,8 @@ internal class KotlinDataClassSpecTest {
     val className = ClassName("test","Foo")
 
     val spec = buildDataClass(className) {
-      addConstructorProperty(constructorPropertyBuilder("x", Int::class))
-      addConstructorProperty(constructorPropertyBuilder("y", Long::class))
+//      addConstructorProperty(constructorPropertyBuilder("x", Int::class))
+//      addConstructorProperty(constructorPropertyBuilder("y", Long::class))
     }
 
     assertThat(spec.code.trim()).isEqualTo("""

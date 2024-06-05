@@ -2,21 +2,26 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
+import io.toolisticon.kotlin.generation.builder.bak.ToKotlinPoetTypeSpecBuilder
+import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.spec.KotlinObjectSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
-class KotlinObjectBuilder internal constructor(delegate: TypeSpec.Builder) : KotlinPoetTypeSpecBuilder<KotlinObjectSpec>(
-  delegate = delegate
-), TypeSpecSupplier {
+class KotlinObjectBuilder internal constructor(
+  private val delegate: TypeSpecBuilder
+) : Builder<KotlinObjectSpec>, TypeSpecSupplier {
 
+  companion object {
+    fun builder(className: ClassName) = KotlinObjectBuilder(
+      delegate = TypeSpecBuilder.objectBuilder(className)
+    )
+  }
 
-  @Suppress(CLASS_NAME)
-  object builder : ToKotlinPoetTypeSpecBuilder<KotlinObjectSpec, KotlinObjectBuilder> {
-
-    operator fun invoke(className: ClassName) = KotlinObjectBuilder(delegate = TypeSpec.objectBuilder(className))
-
-    override fun invoke(spec: KotlinObjectSpec, kind: TypeSpec.Kind, name: String?): KotlinObjectBuilder = KotlinObjectBuilder(spec.get().toBuilder(kind, name))
+  operator fun invoke(block: TypeSpecBuilder.() -> Unit): KotlinObjectBuilder = apply {
+    delegate.block()
   }
 
   fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
@@ -28,4 +33,5 @@ class KotlinObjectBuilder internal constructor(delegate: TypeSpec.Builder) : Kot
   }
 
   override fun build(): KotlinObjectSpec = KotlinObjectSpec(spec = delegate.build())
+  override fun get(): TypeSpec = build().get()
 }

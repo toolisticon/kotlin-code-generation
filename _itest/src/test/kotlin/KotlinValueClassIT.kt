@@ -53,12 +53,6 @@ internal class KotlinValueClassIT {
 
   @Test
   fun `generate value class wrapping string`() {
-    val builder = KotlinCodeGeneration.valueClassBuilder("Foo") {
-
-      //primaryConstructor(FUns)
-
-    }
-
-    println(builder.build().code)
+    TODO()
   }
 }

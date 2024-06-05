@@ -1,20 +1,26 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
+import io.toolisticon.kotlin.generation.builder.bak.ToKotlinPoetTypeSpecBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.spec.KotlinCompanionObjectSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
-@Deprecated("Not implemented yet!")
-class KotlinCompanionObjectBuilder internal constructor(delegate: TypeSpec.Builder) : KotlinPoetTypeSpecBuilder<KotlinCompanionObjectSpec>(
-  delegate = delegate
-), TypeSpecSupplier {
+class KotlinCompanionObjectBuilder internal constructor(
+  private val delegate: TypeSpecBuilder
+) : Builder<KotlinCompanionObjectSpec>, TypeSpecSupplier {
 
-
-  @Suppress(CLASS_NAME)
-  object builder : ToKotlinPoetTypeSpecBuilder<KotlinCompanionObjectSpec, KotlinCompanionObjectBuilder> {
-    override fun invoke(spec: KotlinCompanionObjectSpec, kind: TypeSpec.Kind, name: String?): KotlinCompanionObjectBuilder = KotlinCompanionObjectBuilder(spec.get().toBuilder(kind,name))
+  companion object {
+    fun builder(name: String? = null) = KotlinCompanionObjectBuilder(
+      delegate = TypeSpecBuilder.companionObjectBuilder(name)
+    )
+  }
+  operator fun invoke(block: TypeSpecBuilder.() -> Unit): KotlinCompanionObjectBuilder = apply {
+    delegate.block()
   }
 
   override fun build(): KotlinCompanionObjectSpec = KotlinCompanionObjectSpec(spec = delegate.build())
+  override fun get(): TypeSpec = build().get()
 }

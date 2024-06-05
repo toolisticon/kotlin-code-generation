@@ -1,7 +1,7 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
-import io.toolisticon.kotlin.generation.builder.KotlinFileBuilder
+import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
 import org.junit.jupiter.api.Test
 
 internal class KotlinFileSpecTest {
@@ -11,7 +11,7 @@ internal class KotlinFileSpecTest {
 
   @Test
   fun `build filespec`() {
-    val builder: KotlinFileBuilder = KotlinFileBuilder.builder(ClassName("foo", "Bar")) {
+    val builder: KotlinFileSpecBuilder = KotlinFileSpecBuilder.builder(ClassName("foo", "Bar")).invoke {
       addFileComment("%L", "this is a comment.")
     }
 

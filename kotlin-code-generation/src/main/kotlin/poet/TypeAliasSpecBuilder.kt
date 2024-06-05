@@ -1,35 +1,28 @@
 package io.toolisticon.kotlin.generation.poet
 
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeAliasSpec
-import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.TypeAliasSpec.Builder
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import kotlin.reflect.KClass
+
+typealias TypeAliasSpecBuilderReceiver = TypeAliasSpecBuilder.() -> Unit
 
 @JvmInline
-value class TypeAliasSpecBuilder(private val builder: TypeAliasSpec.Builder) : BuilderSupplier<TypeAliasSpec, TypeAliasSpec.Builder>,
-  AnnotatableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder>,
-  DocumentableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder>,
-  TaggableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, TypeAliasSpec.Builder> {
-
-  val modifiers: MutableSet<KModifier> get() = builder.modifiers
-  val typeVariables: MutableSet<TypeVariableName> get() = builder.typeVariables
-
-  fun addModifiers(vararg modifiers: KModifier): TypeAliasSpecBuilder = apply {
-    builder.addModifiers(*modifiers)
+value class TypeAliasSpecBuilder(private val builder: Builder) : BuilderSupplier<TypeAliasSpec, Builder>,
+  AnnotatableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, Builder>,
+  DocumentableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, Builder>,
+  KModifierHolderBuilder<TypeAliasSpecBuilder, TypeAliasSpec, Builder>,
+  TaggableBuilder<TypeAliasSpecBuilder, TypeAliasSpec, Builder>,
+  TypeVariableHolderBuilder<TypeAliasSpecBuilder, TypeAliasSpec, Builder> {
+  companion object {
+    private fun Builder.wrap() = TypeAliasSpecBuilder(this)
+    fun builder(name: String, type: TypeName): TypeAliasSpecBuilder = TypeAliasSpec.builder(name, type).wrap()
+    fun builder(name: String, type: KClass<*>): TypeAliasSpecBuilder = builder(name, type.asTypeName())
   }
 
-  fun addModifiers(modifiers: Iterable<KModifier>): TypeAliasSpecBuilder = apply {
-    builder.addModifiers(modifiers)
-  }
-
-  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): TypeAliasSpecBuilder = apply {
-    builder.addTypeVariables(typeVariables)
-  }
-
-  fun addTypeVariable(typeVariable: TypeVariableName): TypeAliasSpecBuilder = apply {
-    builder.addTypeVariable(typeVariable)
-  }
+  override val modifiers: MutableList<KModifier> get() = builder.modifiers.toMutableList()
+  override val typeVariables: MutableList<TypeVariableName> get() = builder.typeVariables.toMutableList()
 
   override fun build(): TypeAliasSpec = builder.build()
-  override fun get(): TypeAliasSpec.Builder = builder
+  override fun get(): Builder = builder
 }
