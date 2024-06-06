@@ -38,7 +38,7 @@ class KotlinFileBuilder internal constructor(delegate: FileSpec.Builder) : Kotli
       }
     )
 
-    operator fun invoke(dataClassBuilder: KotlinDataClassBuilder) = invoke(
+    operator fun invoke(dataClassBuilder: KotlinDataClassSpecBuilder) = invoke(
       dataClass = dataClassBuilder.build()
     )
 

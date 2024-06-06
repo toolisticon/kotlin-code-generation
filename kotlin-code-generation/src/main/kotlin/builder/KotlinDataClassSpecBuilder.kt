@@ -6,22 +6,22 @@ import io.toolisticon.kotlin.generation.spec.DataClassSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
-class KotlinDataClassBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinDataClassSpec>(
+class KotlinDataClassSpecBuilder internal constructor(className: ClassName, delegate: TypeSpec.Builder) : KotlinPoetNamedTypeSpecBuilder<KotlinDataClassSpec>(
   className = className,
   delegate = delegate.addModifiers(KModifier.DATA)
-), DataClassSpecSupplier {
+), DataClassSpecSupplier, IDataClassSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec> {
 
   @Suppress("ClassName")
-  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassBuilder> {
+  object builder : ToKotlinPoetSpecBuilder<KotlinDataClassSpec, KotlinDataClassSpecBuilder> {
 
-    operator fun invoke(packageName: String, name: String): KotlinDataClassBuilder = invoke(ClassName(packageName, name))
+    operator fun invoke(packageName: String, name: String): KotlinDataClassSpecBuilder = invoke(ClassName(packageName, name))
 
-    operator fun invoke(className: ClassName): KotlinDataClassBuilder = KotlinDataClassBuilder(
+    operator fun invoke(className: ClassName): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
       className = className,
       delegate = TypeSpec.classBuilder(className)
     )
 
-    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassBuilder = KotlinDataClassBuilder(
+    override fun invoke(spec: KotlinDataClassSpec): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
       className = spec.className,
       delegate = spec.get().toBuilder()
     )
@@ -29,7 +29,7 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
 
   private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
 
-  fun addKdoc(kdoc: CodeBlock) = apply {
+  override fun addKdoc(kdoc: CodeBlock) = apply {
     delegate.addKdoc(kdoc)
   }
 
@@ -62,7 +62,7 @@ class KotlinDataClassBuilder internal constructor(className: ClassName, delegate
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
-  override fun addAnnotation(annotation: ClassName): KotlinDataClassBuilder = apply {
+  override fun addAnnotation(annotation: ClassName): KotlinDataClassSpecBuilder = apply {
     delegate.addAnnotation(annotation)
   }
 

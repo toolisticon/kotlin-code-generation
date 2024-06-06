@@ -2,16 +2,13 @@ package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
 import com.tschuchort.compiletesting.KotlinCompilation
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.constructorPropertyBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.dataClassBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinDataClassBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinParameterBuilder
+import io.toolisticon.kotlin.generation.builder.KotlinDataClassSpecBuilder
 import io.toolisticon.kotlin.generation.spec.toFileSpec
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
@@ -23,7 +20,7 @@ internal class KotlinDataClassSpecTest {
   @Test
   fun `create simple data class`() {
     val className = ClassName("foo.bar", "Bar")
-    val builder: KotlinDataClassBuilder = dataClassBuilder(className)
+    val builder: KotlinDataClassSpecBuilder = dataClassBuilder(className)
       .addConstructorProperty(constructorPropertyBuilder("name", String::class))
       .addConstructorProperty(constructorPropertyBuilder("age", Int::class))
 

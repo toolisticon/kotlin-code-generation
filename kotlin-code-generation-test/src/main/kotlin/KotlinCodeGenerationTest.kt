@@ -1,6 +1,5 @@
 package io.toolisticon.kotlin.generation.test
 
-import com.squareup.kotlinpoet.FileSpec
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
@@ -29,7 +28,7 @@ import java.io.ByteArrayOutputStream
  *     }.compile()
  *  ```
  */
-@ExperimentalCompilerApi
+@OptIn(ExperimentalCompilerApi::class)
 object KotlinCodeGenerationTest {
 
   @JvmStatic

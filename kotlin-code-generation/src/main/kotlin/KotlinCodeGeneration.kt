@@ -9,7 +9,7 @@ object KotlinCodeGeneration {
 
   val annotationBuilder = KotlinAnnotationBuilder.builder
   val constructorPropertyBuilder = KotlinConstructorPropertyBuilder.builder
-  val dataClassBuilder = KotlinDataClassBuilder.builder
+  val dataClassBuilder = KotlinDataClassSpecBuilder.builder
   val parameterBuilder = KotlinParameterBuilder.builder
   val propertyBuilder = KotlinPropertyBuilder.builder
   val valueClassBuilder = KotlinValueClassBuilder.builder
