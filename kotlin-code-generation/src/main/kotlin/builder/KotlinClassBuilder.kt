@@ -6,7 +6,6 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
 import io.toolisticon.kotlin.generation.spec.TypeSpecSupplier
 
-@Deprecated("Not implemented yet!")
 class KotlinClassBuilder internal constructor(delegate: TypeSpec.Builder) : KotlinPoetTypeSpecBuilder<KotlinClassSpec>(
   delegate = delegate
 ), TypeSpecSupplier {
