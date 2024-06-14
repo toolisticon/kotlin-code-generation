@@ -9,7 +9,7 @@ import io.toolisticon.kotlin.generation.builder.KotlinDataClassSpecBuilder
 import io.toolisticon.kotlin.generation.builder.KotlinFileBuilder
 
 data class KotlinDataClassSpec(
-  override val className: ClassName,
+  val className: ClassName,
   private val spec: TypeSpec
 ) : TypeSpecSupplier {
 
@@ -20,7 +20,7 @@ data class KotlinDataClassSpec(
   override fun get(): TypeSpec = spec
 }
 
-fun KotlinDataClassSpec.toBuilder() = KotlinDataClassSpecBuilder.builder(spec = this)
-fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
+//fun KotlinDataClassSpec.toBuilder() = KotlinDataClassSpecBuilder.builder(spec = this)
+//fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
 // TODO fun KotlinDataClassSpec.toBuilder() = KotlinDataClassBuilder.from(spec = this)
 // TODO fun KotlinDataClassSpec.toFileSpec() = KotlinFileSpecBuilder.builder(this).build()

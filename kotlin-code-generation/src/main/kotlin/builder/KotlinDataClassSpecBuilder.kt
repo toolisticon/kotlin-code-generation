@@ -9,7 +9,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import mu.KLogging
 
 
-class KotlinDataClassBuilder internal constructor(
+class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, TypeSpecSupplier {
