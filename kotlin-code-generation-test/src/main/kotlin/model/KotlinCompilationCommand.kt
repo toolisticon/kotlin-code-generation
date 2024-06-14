@@ -1,8 +1,7 @@
 package io.toolisticon.kotlin.generation.test.model
 
-import com.squareup.kotlinpoet.FileSpec
 import com.tschuchort.compiletesting.SourceFile
-import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
+import io.toolisticon.kotlin.generation._BAK.KotlinFileSpec
 
 data class KotlinCompilationCommand(
   val fileSpec: KotlinFileSpec

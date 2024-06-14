@@ -1,10 +1,11 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.TypeSpecSupplier
 
 
-
-@JvmInline
-value class KotlinObjectSpec(private val spec: TypeSpec) : KotlinPoetTypeSpec {
+data class KotlinObjectSpec(
+  private val spec: TypeSpec
+) : TypeSpecSupplier {
   override fun get(): TypeSpec = spec
 }

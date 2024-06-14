@@ -6,7 +6,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.tschuchort.compiletesting.KotlinCompilation
-import io.toolisticon.kotlin.generation.builder.KotlinFileBuilder
+import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
@@ -30,7 +30,7 @@ internal class HelloWorldExampleTest {
       )
       .build()
 
-    val file = KotlinFileBuilder.builder(name).invoke {
+    val file = KotlinFileSpecBuilder.builder(name).invoke {
       addType(type)
     }.build()
 

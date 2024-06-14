@@ -20,19 +20,25 @@
 
   <modules>
     <module>_bom</module>
-    <module>kotlin-code-generation-test</module>
+<!--    <module>kotlin-code-generation-test</module>-->
     <module>kotlin-code-generation</module>
   </modules>
 
   <properties/>
 
-  <!-- this is the maven root, all dependencies have to be declared in the concrete modules, using avro-kotlin-parent -->
+  <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>3.26.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.5.6</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

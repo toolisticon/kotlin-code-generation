@@ -2,14 +2,10 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
-import io.toolisticon.kotlin.generation.builder.KotlinPropertyBuilder
+import io.toolisticon.kotlin.generation.PropertySpecSupplier
 
-@JvmInline
-value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<PropertySpec>,
-  PropertySpecSupplier,
-  WithName,
-  WithAnnotationSpecs {
-  override val name: String get() = spec.name
+data class KotlinPropertySpec(private val spec: PropertySpec) : PropertySpecSupplier {
+  val name: String get() = spec.name
 
   val type: TypeName get() = spec.type
 
@@ -17,7 +13,7 @@ value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<
 
 
   override fun get(): PropertySpec = spec
-  override val annotations: List<KotlinAnnotationSpec> get() = KotlinAnnotationSpec.of(spec.annotations)
+  //override val annotations: List<KotlinAnnotationSpec> get() = KotlinAnnotationSpec.of(spec.annotations)
 
 //  override val kdoc: CodeBlock = builder.kdoc.build()
 //  public val modifiers: Set<KModifier> = builder.modifiers.toImmutableSet()
@@ -29,4 +25,4 @@ value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinPoetSpec<
 //  public val receiverType: TypeName? = builder.receiverType
 }
 
-fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)
+// TODO fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)
