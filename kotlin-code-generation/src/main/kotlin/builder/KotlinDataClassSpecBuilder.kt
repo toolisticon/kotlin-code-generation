@@ -12,13 +12,17 @@ import mu.KLogging
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, TypeSpecSupplier {
+) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, TypeSpecSupplier, DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
   companion object : KLogging() {}
 
   internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder(TypeSpec.classBuilder(className)))
 
   init {
     delegate { addModifiers(KModifier.DATA) }
+  }
+
+  override fun builder(block: TypeSpecBuilderReceiver) = apply {
+    delegate.builder.block()
   }
 
   override fun build(): KotlinDataClassSpec {

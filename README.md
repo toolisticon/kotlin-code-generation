@@ -25,13 +25,23 @@
 
 * see [kotlin-poet](https://square.github.io/kotlinpoet/) 
 
+## Features
+
+* KotlinAnnotationSpec
+  * KotlinAnnotationSpecBuilder
+* KotlinFileSpec
+  * KotlinFileSpecBuilder
+* KotlinFunSpec
+  * KotlinFunSpecBuilder
+* KotlinFunSpec
+  * KotlinFunSpecBuilder
+
+
 
 ## Roadmap
 
 ### Specs to support
 
-* com/squareup/kotlinpoet/AnnotationSpec
-* com/squareup/kotlinpoet/FileSpec
 * com/squareup/kotlinpoet/FunSpec
 * com/squareup/kotlinpoet/ParameterSpec
 * com/squareup/kotlinpoet/PropertySpec
