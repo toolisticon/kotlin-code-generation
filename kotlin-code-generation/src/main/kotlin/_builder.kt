@@ -1,6 +1,8 @@
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation._BAK.KotlinConstructorProperty
+import java.beans.ConstructorProperties
 import java.util.function.Supplier
 
 fun interface Builder<P : Any> {
@@ -11,6 +13,7 @@ interface BuilderSupplier<P : Any, B : Any> : Builder<P>, Supplier<B>
 
 interface SpecSupplier<T> : Supplier<T>
 interface AnnotationSpecSupplier : SpecSupplier<AnnotationSpec>
+interface ConstructorPropertySupplier : SpecSupplier<KotlinConstructorProperty>
 interface FileSpecSupplier : SpecSupplier<FileSpec>
 interface FunSpecSupplier : SpecSupplier<FunSpec>
 interface ParameterSpecSupplier : SpecSupplier<ParameterSpec>

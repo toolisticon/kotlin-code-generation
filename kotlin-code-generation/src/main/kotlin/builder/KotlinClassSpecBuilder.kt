@@ -1,13 +1,10 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
-import mu.KLogging
 
 
 class KotlinClassSpecBuilder internal constructor(
@@ -25,7 +22,10 @@ class KotlinClassSpecBuilder internal constructor(
     delegate.builder.block()
   }
 
-  override fun build(): KotlinClassSpec = KotlinClassSpec(spec = delegate.build())
+  override fun build(): KotlinClassSpec = KotlinClassSpec(
+    className = className,
+    spec = delegate.build()
+  )
   override fun get(): TypeSpec = build().get()
 
 //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =

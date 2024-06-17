@@ -33,8 +33,10 @@
   * KotlinFileSpecBuilder
 * KotlinFunSpec
   * KotlinFunSpecBuilder
-* KotlinFunSpec
-  * KotlinFunSpecBuilder
+* KotlinParameterSpec
+  * KotlinParameterSpecBuilder
+* KotlinPropertySpec
+  * KotlinPropertySpecBuilder
 
 
 
@@ -42,9 +44,6 @@
 
 ### Specs to support
 
-* com/squareup/kotlinpoet/FunSpec
-* com/squareup/kotlinpoet/ParameterSpec
-* com/squareup/kotlinpoet/PropertySpec
 * com/squareup/kotlinpoet/TypeAliasSpec
 * com/squareup/kotlinpoet/TypeSpec
 

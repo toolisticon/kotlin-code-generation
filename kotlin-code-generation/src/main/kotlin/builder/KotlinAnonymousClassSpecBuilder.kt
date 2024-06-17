@@ -6,9 +6,9 @@ import io.toolisticon.kotlin.generation.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpec
 
 
-class KotlinAnonymousClassBuilder internal constructor(
+class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinAnonymousClassSpec, TypeSpec>, TypeSpecSupplier, DelegatingBuilder<KotlinAnonymousClassBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinAnonymousClassSpec, TypeSpec>, TypeSpecSupplier, DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
 
   override fun build(): KotlinAnonymousClassSpec = KotlinAnonymousClassSpec(delegate.build())
 

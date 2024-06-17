@@ -1,12 +1,12 @@
-package io.toolisticon.kotlin.generation._BAK
+package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.TypeSpecSupplier
 
 data class KotlinAnnotationClassSpec(
-  override val className: ClassName,
+  val className: ClassName,
   private val spec: TypeSpec,
-) : KotlinPoetNamedTypeSpec, Documentable by spec {
+) : TypeSpecSupplier {
   override fun get(): TypeSpec = spec
 }
