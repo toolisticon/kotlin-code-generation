@@ -5,11 +5,11 @@ import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinObjectSpec
 
-class KotlinObjectBuilder internal constructor(
+class KotlinObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinObjectSpec, TypeSpec>,
   TypeSpecSupplier,
-  DelegatingBuilder<KotlinObjectBuilder, TypeSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinObjectSpecBuilder, TypeSpecBuilderReceiver> {
 
 //  companion object {
 //    fun builder(className: ClassName) = KotlinObjectBuilder(
@@ -26,7 +26,7 @@ class KotlinObjectBuilder internal constructor(
 //  fun addTypes(typeSpecSupplier: Iterable<TypeSpecSupplier>) = apply {
 //    typeSpecSupplier.forEach(::addType)
 //  }
-  override fun builder(block: TypeSpecBuilderReceiver): KotlinObjectBuilder = apply {
+  override fun builder(block: TypeSpecBuilderReceiver): KotlinObjectSpecBuilder = apply {
     delegate { block() }
   }
 
