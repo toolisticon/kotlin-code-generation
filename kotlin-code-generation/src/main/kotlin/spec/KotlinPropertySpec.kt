@@ -2,16 +2,18 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
-import io.toolisticon.kotlin.generation.PropertySpecSupplier
+import io.toolisticon.kotlin.generation.poet.PropertySpecSupplier
 
-data class KotlinPropertySpec(private val spec: PropertySpec) : PropertySpecSupplier {
+data class KotlinPropertySpec(
+  private val spec: PropertySpec
+) : KotlinGeneratorSpec<KotlinPropertySpec, PropertySpec, PropertySpecSupplier>, KotlinPropertySpecSupplier {
   val name: String get() = spec.name
 
   val type: TypeName get() = spec.type
 
   val mutable: Boolean get() = spec.mutable
 
-
+  override fun spec(): KotlinPropertySpec = this
   override fun get(): PropertySpec = spec
   //override val annotations: List<KotlinAnnotationSpec> get() = KotlinAnnotationSpec.of(spec.annotations)
 

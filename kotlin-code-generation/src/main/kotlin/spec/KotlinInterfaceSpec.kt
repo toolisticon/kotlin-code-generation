@@ -1,10 +1,11 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.TypeSpec
-import io.toolisticon.kotlin.generation.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
 data class KotlinInterfaceSpec(
   private val spec: TypeSpec
-) : TypeSpecSupplier {
+) : KotlinGeneratorTypeSpec<KotlinInterfaceSpec>, KotlinInterfaceSpecSupplier {
+  override fun spec(): KotlinInterfaceSpec = this
   override fun get(): TypeSpec = spec
 }

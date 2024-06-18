@@ -4,15 +4,17 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpecSupplier
 import mu.KLogging
 
 
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, TypeSpecSupplier, DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, KotlinDataClassSpecSupplier, DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
   companion object : KLogging() {}
 
   internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder(TypeSpec.classBuilder(className)))
@@ -29,6 +31,7 @@ class KotlinDataClassSpecBuilder internal constructor(
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
+  override fun spec(): KotlinDataClassSpec = build()
   override fun get(): TypeSpec = build().get()
 
 //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =

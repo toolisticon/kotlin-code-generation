@@ -2,17 +2,18 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
-import io.toolisticon.kotlin.generation.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
 data class KotlinClassSpec(
   val className: ClassName,
   private val spec: TypeSpec
-) : TypeSpecSupplier {
+) : KotlinGeneratorTypeSpec<KotlinClassSpec>, KotlinClassSpecSupplier {
 
   init {
     //require(spec.is) { "Not a dataClass spec: $spec." }
   }
 
+  override fun spec(): KotlinClassSpec = this
   override fun get(): TypeSpec = spec
 }
 

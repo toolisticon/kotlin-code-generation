@@ -1,18 +1,16 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinClassSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinCompanionObjectSpec
+import io.toolisticon.kotlin.generation.spec.KotlinCompanionObjectSpecSupplier
 
 
-class KotlinClassSpecBuilder internal constructor(
-  private val className: ClassName,
+class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinClassSpec, TypeSpec>, KotlinClassSpecSupplier, DelegatingBuilder<KotlinClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinCompanionObjectSpec, TypeSpec>, KotlinCompanionObjectSpecSupplier, DelegatingBuilder<KotlinCompanionObjectSpecBuilder, TypeSpecBuilderReceiver> {
 
 //  companion object {
 //    fun builder(className: ClassName) = KotlinClassBuilder(
@@ -24,12 +22,11 @@ class KotlinClassSpecBuilder internal constructor(
     delegate.builder.block()
   }
 
-  override fun build(): KotlinClassSpec = KotlinClassSpec(
-    className = className,
+  override fun build(): KotlinCompanionObjectSpec = KotlinCompanionObjectSpec(
     spec = delegate.build()
   )
 
-  override fun spec(): KotlinClassSpec = build()
+  override fun spec(): KotlinCompanionObjectSpec = build()
   override fun get(): TypeSpec = build().get()
 
 //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =

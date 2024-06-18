@@ -2,12 +2,14 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinEnumClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinEnumClassSpecSupplier
 
 class KotlinEnumClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinEnumClassSpec, TypeSpec>, TypeSpecSupplier, DelegatingBuilder<KotlinEnumClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinEnumClassSpec, TypeSpec>, KotlinEnumClassSpecSupplier, DelegatingBuilder<KotlinEnumClassSpecBuilder, TypeSpecBuilderReceiver> {
 
 //  companion object :KLogging() {
 //    fun builder(className: ClassName) = KotlinEnumClassSpecBuilder(
@@ -34,6 +36,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   }
 
   override fun build(): KotlinEnumClassSpec = KotlinEnumClassSpec(delegate.build())
+  override fun spec(): KotlinEnumClassSpec = build()
   override fun get(): TypeSpec = build().get()
 
 }
