@@ -13,14 +13,19 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationClassSpec, TypeSpec>, KotlinAnnotationClassSpecSupplier, DelegatingBuilder<KotlinAnnotationClassSpecBuilder, TypeSpecBuilderReceiver> {
 
-//  companion object {
-//    fun builder(className: ClassName) = KotlinAnnotationClassBuilder(
-//      className = className,
-//      delegate = TypeSpecBuilder.annotationBuilder(className)
-//    )
-//  }
+  companion object {
 
-  override fun builder(block: TypeSpecBuilderReceiver) = apply{
+    @JvmStatic
+    fun annotationBuilder(name: String): KotlinAnnotationClassSpecBuilder = annotationBuilder(ClassName("", name))
+
+    @JvmStatic
+    fun annotationBuilder(className: ClassName): KotlinAnnotationClassSpecBuilder = KotlinAnnotationClassSpecBuilder(
+      className = className,
+      delegate = TypeSpecBuilder.annotationBuilder(className.simpleName)
+    )
+  }
+
+  override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()
   }
 

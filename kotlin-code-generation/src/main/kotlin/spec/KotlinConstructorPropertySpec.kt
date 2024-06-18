@@ -2,13 +2,12 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.TypeName
 
-data class KotlinConstructorProperty(
+data class KotlinConstructorPropertySpec(
   val property: KotlinPropertySpec,
   val parameter: KotlinParameterSpec,
-) { // TODO}: ConstructorPropertySupplier {
+) : KotlinConstructorPropertySpecSupplier {
 
   val name: String = property.name
   val type: TypeName = property.type
-
-  // TODO override fun get(): KotlinConstructorProperty = this
+  override fun spec(): KotlinConstructorPropertySpec = this
 }

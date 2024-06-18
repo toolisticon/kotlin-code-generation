@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.MemberName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
@@ -13,9 +14,36 @@ class KotlinFunSpecBuilder internal constructor(
   KotlinFunSpecSupplier,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver> {
 
-//companion object {
-//    fun builder(name: String) = KotlinFunSpecBuilder(FunSpecBuilder.builder(name))
-//  }
+  companion object {
+    @JvmStatic
+    fun builder(
+      name: String
+    ): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+      delegate = FunSpecBuilder.builder(name)
+    )
+
+    @JvmStatic
+    fun builder(
+      memberName: MemberName
+    ): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+      delegate = FunSpecBuilder.builder(memberName)
+    )
+
+    @JvmStatic
+    fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+      delegate = FunSpecBuilder.constructorBuilder()
+    )
+
+    @JvmStatic
+    fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+      delegate = FunSpecBuilder.getterBuilder()
+    )
+
+    @JvmStatic
+    fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+      delegate = FunSpecBuilder.setterBuilder()
+    )
+  }
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {
     delegate { block() }

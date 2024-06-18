@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
@@ -12,6 +13,15 @@ class KotlinObjectSpecBuilder internal constructor(
 ) : BuilderSupplier<KotlinObjectSpec, TypeSpec>,
   KotlinObjectSpecSupplier,
   DelegatingBuilder<KotlinObjectSpecBuilder, TypeSpecBuilderReceiver> {
+  companion object {
+    @JvmStatic
+    fun objectBuilder(name: String): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(
+      delegate = TypeSpecBuilder.objectBuilder(name)
+    )
+
+    @JvmStatic
+    fun objectBuilder(className: ClassName): KotlinObjectSpecBuilder = objectBuilder(className.simpleName)
+  }
 
 //  companion object {
 //    fun builder(className: ClassName) = KotlinObjectBuilder(

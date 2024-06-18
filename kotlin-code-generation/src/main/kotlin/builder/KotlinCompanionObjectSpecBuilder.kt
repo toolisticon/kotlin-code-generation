@@ -12,11 +12,13 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinCompanionObjectSpec, TypeSpec>, KotlinCompanionObjectSpecSupplier, DelegatingBuilder<KotlinCompanionObjectSpecBuilder, TypeSpecBuilderReceiver> {
 
-//  companion object {
-//    fun builder(className: ClassName) = KotlinClassBuilder(
-//      delegate = TypeSpecBuilder.classBuilder(className)
-//    )
-//  }
+  companion object {
+    @JvmStatic
+    @JvmOverloads
+    fun companionObjectBuilder(name: String? = null): KotlinCompanionObjectSpecBuilder = KotlinCompanionObjectSpecBuilder(
+      delegate = TypeSpecBuilder.companionObjectBuilder(name)
+    )
+  }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()

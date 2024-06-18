@@ -12,6 +12,13 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinAnonymousClassSpec, TypeSpec>, KotlinAnonymousClassSpecSupplier, DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
 
+  companion object {
+    @JvmStatic
+    fun anonymousClassBuilder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder(
+      delegate = TypeSpecBuilder.anonymousClassBuilder()
+    )
+  }
+
   override fun build(): KotlinAnonymousClassSpec = KotlinAnonymousClassSpec(delegate.build())
   override fun get(): TypeSpec = build().get()
   override fun spec(): KotlinAnonymousClassSpec = build()

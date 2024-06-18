@@ -1,7 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.AnnotationSpec
-import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilderReceiver
@@ -13,13 +12,26 @@ import kotlin.reflect.KClass
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>, KotlinAnnotationSpecSupplier, DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
-//  companion object {
-//    fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.builder(type))
-//    fun builder(type: ParameterizedTypeName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.Companion.builder(type))
-//    fun builder(type: KClass<out Annotation>): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(AnnotationSpecBuilder.builder(type))
-//
-//    fun from(spec: KotlinAnnotationSpec) = KotlinAnnotationSpecBuilder(delegate = spec.get().toBuilder().wrap())
-//  }
+  companion object {
+    @JvmStatic
+    fun builder(
+      type: ClassName
+    ): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
+      delegate = AnnotationSpecBuilder.builder(type)
+    )
+
+    @JvmStatic
+    fun builder(
+      type: ParameterizedTypeName
+    ): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
+      delegate = AnnotationSpecBuilder.builder(type)
+    )
+
+    @JvmStatic
+    fun builder(
+      type: KClass<out Annotation>
+    ): KotlinAnnotationSpecBuilder = builder(type.asClassName())
+  }
 
   fun addMember(format: String, vararg args: Any): KotlinAnnotationSpecBuilder = apply {
     TODO() //delegate.addMember(format, *args)

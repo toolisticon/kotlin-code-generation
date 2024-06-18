@@ -33,3 +33,5 @@ interface KotlinEnumClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinEnumCl
 interface KotlinInterfaceSpecSupplier : KotlinGeneratorSpecSupplier<KotlinInterfaceSpec>, TypeSpecSupplier
 interface KotlinObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinObjectSpec>, TypeSpecSupplier
 interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, TypeSpecSupplier
+
+interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinConstructorPropertySpec>

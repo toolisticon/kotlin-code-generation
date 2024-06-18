@@ -2,15 +2,15 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
-import io.toolisticon.kotlin.generation.ConstructorPropertySupplier
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorProperty
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 
-class KotlinConstructorPropertyBuilder internal constructor(
+class KotlinConstructorPropertySpecBuilder internal constructor(
   val name: String,
   private val type: TypeName,
   private val propertyBuilder: KotlinPropertySpecBuilder,
   private val parameterBuilder: KotlinParameterSpecBuilder
-) : Builder<KotlinConstructorProperty>, ConstructorPropertySupplier {
+) : Builder<KotlinConstructorPropertySpec>, KotlinConstructorPropertySpecSupplier {
 
 //  companion object {
 //    fun builder(name: String, type: TypeName): KotlinConstructorPropertyBuilder = KotlinConstructorPropertyBuilder(
@@ -32,7 +32,7 @@ class KotlinConstructorPropertyBuilder internal constructor(
 //    }
 //  }
 
-  override fun build(): KotlinConstructorProperty {
+  override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()
     val property = propertyBuilder
       .builder {
@@ -40,8 +40,8 @@ class KotlinConstructorPropertyBuilder internal constructor(
       }
       .build()
 
-    return KotlinConstructorProperty(parameter = parameter, property = property)
+    return KotlinConstructorPropertySpec(parameter = parameter, property = property)
   }
 
-  override fun get(): KotlinConstructorProperty = build().get()
+  override fun spec(): KotlinConstructorPropertySpec = build()
 }

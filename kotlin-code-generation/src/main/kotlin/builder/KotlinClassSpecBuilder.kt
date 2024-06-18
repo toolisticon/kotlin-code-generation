@@ -14,11 +14,20 @@ class KotlinClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinClassSpec, TypeSpec>, KotlinClassSpecSupplier, DelegatingBuilder<KotlinClassSpecBuilder, TypeSpecBuilderReceiver> {
 
-//  companion object {
-//    fun builder(className: ClassName) = KotlinClassBuilder(
-//      delegate = TypeSpecBuilder.classBuilder(className)
-//    )
-//  }
+  companion object {
+    @JvmStatic
+    fun classBuilder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
+      className = ClassName("", name),
+      delegate = TypeSpecBuilder.classBuilder(name)
+    )
+
+    @JvmStatic
+    fun classBuilder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
+      className = className,
+      delegate = TypeSpecBuilder.classBuilder(className.simpleName)
+    )
+
+  }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()

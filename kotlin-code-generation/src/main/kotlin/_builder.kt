@@ -1,14 +1,14 @@
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorProperty
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import java.util.function.Supplier
 
 interface BuilderSupplier<P : Any, B : Any> : Builder<P>, Supplier<B>
 
 interface SpecSupplier<T> : Supplier<T>
 interface AnnotationSpecSupplier1 : SpecSupplier<AnnotationSpec>
-interface ConstructorPropertySupplier1 : SpecSupplier<KotlinConstructorProperty>
+interface ConstructorPropertySupplier1 : SpecSupplier<KotlinConstructorPropertySpec>
 interface FileSpecSupplier1 : SpecSupplier<FileSpec>
 interface FunSpecSupplier1 : SpecSupplier<FunSpec>
 interface ParameterSpecSupplier1 : SpecSupplier<ParameterSpec>

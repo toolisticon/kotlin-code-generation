@@ -1,8 +1,10 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinEnumClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinEnumClassSpecSupplier
@@ -10,6 +12,17 @@ import io.toolisticon.kotlin.generation.spec.KotlinEnumClassSpecSupplier
 class KotlinEnumClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinEnumClassSpec, TypeSpec>, KotlinEnumClassSpecSupplier, DelegatingBuilder<KotlinEnumClassSpecBuilder, TypeSpecBuilderReceiver> {
+
+  companion object {
+    @JvmStatic
+    fun enumBuilder(name: String): KotlinEnumClassSpecBuilder = KotlinEnumClassSpecBuilder(
+      delegate = TypeSpecBuilder.enumBuilder(name)
+    )
+
+    @JvmStatic
+    fun enumBuilder(className: ClassName): KotlinEnumClassSpecBuilder = enumBuilder(className.simpleName)
+
+  }
 
 //  companion object :KLogging() {
 //    fun builder(className: ClassName) = KotlinEnumClassSpecBuilder(

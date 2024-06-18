@@ -10,14 +10,26 @@ import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpecSupplier
 import mu.KLogging
 
-
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, KotlinDataClassSpecSupplier, DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
-  companion object : KLogging() {}
+  companion object : KLogging() {
 
-  internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder(TypeSpec.classBuilder(className)))
+    @JvmStatic
+    fun builder(name: String): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
+      className = ClassName("", name),
+      delegate = TypeSpecBuilder.classBuilder(name)
+    )
+
+    @JvmStatic
+    fun builder(className: ClassName): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(className)
+  }
+
+  internal constructor(className: ClassName) : this(
+    className = className,
+    delegate = TypeSpecBuilder.classBuilder(className)
+  )
 
   init {
     delegate { addModifiers(KModifier.DATA) }
