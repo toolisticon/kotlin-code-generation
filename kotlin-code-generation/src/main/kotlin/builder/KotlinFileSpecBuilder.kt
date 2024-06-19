@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.MemberName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilder
+import io.toolisticon.kotlin.generation.poet.FileSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
@@ -43,6 +45,12 @@ class KotlinFileSpecBuilder internal constructor(
     ): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.scriptBuilder(fileName, packageName)
     )
+
+    @JvmStatic
+    fun builder(spec: KotlinFileSpec) = builder(spec.get())
+
+    @JvmStatic
+    fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   override fun builder(block: FileSpecBuilderReceiver) = apply {
@@ -53,6 +61,10 @@ class KotlinFileSpecBuilder internal constructor(
     delegate {
       addType(typeSpecSupplier.get())
     }
+  }
+
+  fun addAnnotation(annotationSpec: AnnotationSpec): KotlinFileSpecBuilder = builder {
+    addAnnotation(annotationSpec)
   }
 
   override fun build(): KotlinFileSpec {

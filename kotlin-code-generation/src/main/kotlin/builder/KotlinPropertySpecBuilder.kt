@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder
+import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
@@ -64,6 +65,12 @@ class KotlinPropertySpecBuilder internal constructor(
     ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
+
+    @JvmStatic
+    fun builder(spec: KotlinPropertySpec) = builder(spec.get())
+
+    @JvmStatic
+    fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   override fun builder(block: PropertySpecBuilderReceiver) = apply {

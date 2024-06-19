@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.MemberName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
+import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
@@ -43,6 +44,13 @@ class KotlinFunSpecBuilder internal constructor(
     fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.setterBuilder()
     )
+
+
+    @JvmStatic
+    fun builder(spec: KotlinFunSpec) = builder(spec.get())
+
+    @JvmStatic
+    fun builder(spec: FunSpec) = KotlinFunSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {

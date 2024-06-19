@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
+import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
@@ -70,6 +71,13 @@ class KotlinParameterSpecBuilder internal constructor(
     ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
+
+
+    @JvmStatic
+    fun builder(spec: KotlinParameterSpec) = builder(spec.get())
+
+    @JvmStatic
+    fun builder(spec: ParameterSpec) = KotlinParameterSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   override fun builder(block: ParameterSpecBuilderReceiver) = apply {
