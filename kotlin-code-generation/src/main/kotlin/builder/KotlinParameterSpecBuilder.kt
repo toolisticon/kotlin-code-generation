@@ -8,6 +8,7 @@ import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 import java.lang.reflect.Type
@@ -85,9 +86,9 @@ class KotlinParameterSpecBuilder internal constructor(
   }
 
 
-//  fun addAnnotation(annotationSpec: AnnotationSpec): KotlinParameterSpecBuilder = invoke {
-//    addAnnotation(annotationSpec)
-//  }
+  fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier): KotlinParameterSpecBuilder = builder {
+    addAnnotation(annotationSpec.get())
+  }
 
   override fun build(): KotlinParameterSpec = KotlinParameterSpec(spec = delegate.build())
   override fun spec(): KotlinParameterSpec = build()

@@ -53,3 +53,5 @@ class KotlinAnnotationSpecBuilder internal constructor(
   override fun spec(): KotlinAnnotationSpec = build()
   override fun get(): AnnotationSpec = build().get()
 }
+
+typealias KotlinAnnotationSpecBuilderReceiver = KotlinAnnotationSpecBuilder.() -> Unit

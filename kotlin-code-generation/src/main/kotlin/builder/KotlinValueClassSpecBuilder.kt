@@ -3,9 +3,12 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpecSupplier
 
@@ -26,6 +29,9 @@ class KotlinValueClassSpecBuilder internal constructor(
     fun builder(className: ClassName): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(className)
   }
 
+  lateinit var constructorProperty: KotlinConstructorPropertySpec
+
+
   internal constructor(className: ClassName) : this(
     className = className,
     delegate = TypeSpecBuilder.classBuilder(className)
@@ -34,14 +40,30 @@ class KotlinValueClassSpecBuilder internal constructor(
   init {
     delegate {
       addModifiers(KModifier.VALUE)
+      jvmInline()
     }
   }
 
+  fun primaryConstructor(constructorPropertySupplier: KotlinConstructorPropertySpecSupplier) = apply {
+    this.constructorProperty = constructorPropertySupplier.spec()
+
+    val constructor = KotlinFunSpecBuilder.constructorBuilder()
+      .addParameter(this.constructorProperty.parameter)
+      .build()
+
+    delegate {
+      addProperty(constructorProperty.property.get())
+    }
+    delegate.builder.primaryConstructor(constructor.get())
+  }
+
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   override fun build(): KotlinValueClassSpec {
+    check(::constructorProperty.isInitialized) { "Value class must have exactly one property." }
+
     val spec = delegate.build()
     return KotlinValueClassSpec(className = className, spec = spec)
   }
@@ -49,3 +71,6 @@ class KotlinValueClassSpecBuilder internal constructor(
   override fun spec(): KotlinValueClassSpec = build()
   override fun get(): TypeSpec = build().get()
 }
+
+typealias KotlinValueClassSpecBuilderReceiver = KotlinValueClassSpecBuilder.() -> Unit
+

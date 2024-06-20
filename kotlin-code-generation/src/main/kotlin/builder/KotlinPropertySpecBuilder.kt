@@ -73,6 +73,9 @@ class KotlinPropertySpecBuilder internal constructor(
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
+
+
+
   override fun builder(block: PropertySpecBuilderReceiver) = apply {
     delegate { block() }
   }

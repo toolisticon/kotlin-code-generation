@@ -1,7 +1,9 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 
@@ -12,21 +14,24 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   private val parameterBuilder: KotlinParameterSpecBuilder
 ) : Builder<KotlinConstructorPropertySpec>, KotlinConstructorPropertySpecSupplier {
 
-//  companion object {
-//    fun builder(name: String, type: TypeName): KotlinConstructorPropertyBuilder = KotlinConstructorPropertyBuilder(
-//      name = name,
-//      type = type,
-//      propertyBuilder = KotlinPropertySpecBuilder.builder(name = name, type = type),
-//      parameterBuilder = KotlinParameterSpecBuilder.builder(name = name, type = type)
-//    )
-//  }
+  companion object {
+    fun builder(name: String, type: TypeName): KotlinConstructorPropertySpecBuilder = KotlinConstructorPropertySpecBuilder(
+      name = name,
+      type = type,
+      propertyBuilder = KotlinPropertySpecBuilder.builder(name = name, type = type),
+      parameterBuilder = KotlinParameterSpecBuilder.builder(name = name, type = type)
+    )
+  }
 
-//
-//  fun makePrivate() = apply {
-//    propertyBuilder.makePrivate()
-//  }
-//
-//  fun addAnnotation(annotationSpec: AnnotationSpec): KotlinConstructorPropertyBuilder = apply {
+  fun makePrivate() = apply {
+    propertyBuilder.builder {
+      addModifiers(KModifier.PRIVATE)
+    }
+  }
+
+  fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier) = apply {
+    parameterBuilder.addAnnotation(annotationSpec)
+  }
 //    parameterBuilder {
 //      addAnnotation(annotationSpec)
 //    }
@@ -45,3 +50,6 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
   override fun spec(): KotlinConstructorPropertySpec = build()
 }
+
+
+typealias KotlinConstructorPropertySpecBuilderReceiver = KotlinConstructorPropertySpecBuilder.() -> Unit

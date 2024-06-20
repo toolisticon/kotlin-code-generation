@@ -1,13 +1,40 @@
 package io.toolisticon.kotlin.generation
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
+import io.toolisticon.kotlin.generation.builder.*
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
+import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
+import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpecSupplier
+import kotlin.reflect.KClass
 
 object KotlinCodeGeneration {
 
+  @JvmStatic
+  fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
+
+  @JvmStatic
+  fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+
+  @JvmStatic
+  fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
+
+  @JvmStatic
+  fun buildAnnotation(kclass: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(kclass.asClassName(), block)
+
+  @JvmStatic
+  fun buildAnnotation(className: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = annotationBuilder(className).also(block).build()
+
+  @JvmStatic
+  fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
+
+  @JvmStatic
+  fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
+
+  fun toFileSpec(spec: KotlinValueClassSpecSupplier): KotlinFileSpec = spec.spec().let {
+    KotlinFileSpecBuilder.builder(it.className).addType(it).build()
+  }
 //  val annotationBuilder = KotlinAnnotationBuilder.builder
 //  val constructorPropertyBuilder = KotlinConstructorPropertyBuilder.builder
 //  val dataClassBuilder = KotlinDataClassSpecBuilder.builder

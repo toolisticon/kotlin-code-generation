@@ -8,6 +8,8 @@ import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
+import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
@@ -51,6 +53,12 @@ class KotlinFunSpecBuilder internal constructor(
 
     @JvmStatic
     fun builder(spec: FunSpec) = KotlinFunSpecBuilder(delegate = spec.toBuilder().wrap())
+  }
+
+  fun addParameter(parameter: KotlinParameterSpecSupplier) = apply {
+    builder {
+      addParameter(parameter.get());
+    }
   }
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {

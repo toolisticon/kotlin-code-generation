@@ -75,3 +75,5 @@ class KotlinFileSpecBuilder internal constructor(
   override fun spec(): KotlinFileSpec = build()
   override fun get(): FileSpec = build().get()
 }
+
+typealias KotlinFileSpecBuilderReceiver = KotlinFileSpecBuilder.() -> Unit

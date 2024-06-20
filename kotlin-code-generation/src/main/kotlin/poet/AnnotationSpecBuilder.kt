@@ -1,9 +1,7 @@
 package io.toolisticon.kotlin.generation.poet
 
-import com.squareup.kotlinpoet.AnnotationSpec
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.ParameterizedTypeName
-import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget
 import kotlin.reflect.KClass
 
 class AnnotationSpecBuilder(
@@ -23,6 +21,14 @@ class AnnotationSpecBuilder(
     fun builder(type: KClass<out Annotation>): AnnotationSpecBuilder = builder(type.asClassName())
   }
 
+  // Taggable
+  fun tag(type: KClass<*>, tag: Any?) = invoke { tag(type, tag) }
+
+  // Annotatable
+  fun addMember(format: String, vararg args: Any) = invoke { addMember(CodeBlock.of(format, *args)) }
+  fun addMember(codeBlock: CodeBlock) = invoke { addMember(codeBlock) }
+  fun useSiteTarget(useSiteTarget: UseSiteTarget?) = invoke { useSiteTarget(useSiteTarget) }
+
   override fun invoke(block: AnnotationSpecBuilderReceiver): AnnotationSpecBuilder = apply {
     builder.block()
   }
@@ -30,4 +36,5 @@ class AnnotationSpecBuilder(
   override fun build(): AnnotationSpec = builder.build()
 }
 
+interface AnnotationSpecSupplier : PoetSpecSupplier<AnnotationSpec>
 typealias AnnotationSpecBuilderReceiver = AnnotationSpec.Builder.() -> Unit

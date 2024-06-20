@@ -1,15 +1,14 @@
 package io.toolisticon.kotlin.generation.poet
 
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.asTypeName
+import com.squareup.kotlinpoet.*
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 class ParameterSpecBuilder(
   override val builder: ParameterSpec.Builder
-) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier> {
+) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier>,
+  AnnotatableBuilder<ParameterSpecBuilder>,
+  DocumentableBuilder<ParameterSpecBuilder> {
   companion object {
     fun ParameterSpec.Builder.wrap() = ParameterSpecBuilder(this)
 
@@ -60,6 +59,19 @@ class ParameterSpecBuilder(
   }
 
 
+  // AnnotatableBuilder
+  override fun addAnnotation(annotationSpec: AnnotationSpec) = invoke { addAnnotation(annotationSpec) }
+  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = invoke { addAnnotations(annotationSpecs) }
+
+  // DocumentableBuilder
+  override fun addKdoc(format: String, vararg args: Any) = invoke { addKdoc(format, *args) }
+  override fun addKdoc(block: CodeBlock) = invoke { addKdoc(block) }
+
+  fun addModifiers(vararg modifiers: KModifier): ParameterSpecBuilder = invoke { addModifiers(*modifiers) }
+  fun addModifiers(modifiers: Iterable<KModifier>): ParameterSpecBuilder = invoke { addModifiers(modifiers) }
+  fun defaultValue(format: String, vararg args: Any?): ParameterSpecBuilder = invoke { defaultValue(format, *args) }
+  fun defaultValue(codeBlock: CodeBlock?): ParameterSpecBuilder = invoke { defaultValue(codeBlock) }
+
   override fun invoke(block: ParameterSpecBuilderReceiver): ParameterSpecBuilder = apply {
     builder.block()
   }
@@ -67,5 +79,6 @@ class ParameterSpecBuilder(
   override fun build(): ParameterSpec = builder.build()
 }
 
+interface ParameterSpecSupplier : PoetSpecSupplier<ParameterSpec>
 typealias ParameterSpecBuilderReceiver = ParameterSpec.Builder.() -> Unit
 
