@@ -19,18 +19,8 @@ internal class KotlinValueClassTest {
         addAnnotation(TestFixtures.myAnnotationSpec)
       })
     }
-    //val builder = valueClassBuilder_BAK("test","Foo")
-//      .primaryConstructor(
-//        constructorPropertyBuilder("bar", String::class.asClassName())
-//          .addAnnotation(TestFixtures.myAnnotationSpec)
-//      )
 
-    print(toFileSpec(valueClass).get().toString())
-
-
-    //val spec = builder.build()
-
-    assertThat(toFileSpec(valueClass).get().toString().trim()).isEqualTo(
+    assertThat(toFileSpec(valueClass).code.trim()).isEqualTo(
       """package test
 
 import io.toolisticon.kotlin.generation.TestFixtures

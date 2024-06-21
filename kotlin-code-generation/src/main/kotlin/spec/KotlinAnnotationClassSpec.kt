@@ -11,4 +11,5 @@ data class KotlinAnnotationClassSpec(
 
   override fun spec(): KotlinAnnotationClassSpec = this
   override fun get(): TypeSpec = spec
+
 }

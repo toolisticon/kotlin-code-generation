@@ -8,7 +8,6 @@ import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 
 class KotlinFunSpecBuilder internal constructor(
@@ -62,7 +61,7 @@ class KotlinFunSpecBuilder internal constructor(
   }
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())

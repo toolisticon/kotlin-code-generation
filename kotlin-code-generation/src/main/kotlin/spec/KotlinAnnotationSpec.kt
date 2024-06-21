@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.TypeName
+import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 
 data class KotlinAnnotationSpec(
@@ -25,4 +26,4 @@ data class KotlinAnnotationSpec(
 
 }
 
-// TODO fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)
+fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)

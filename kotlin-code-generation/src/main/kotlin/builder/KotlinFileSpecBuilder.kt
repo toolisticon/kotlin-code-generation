@@ -54,13 +54,11 @@ class KotlinFileSpecBuilder internal constructor(
   }
 
   override fun builder(block: FileSpecBuilderReceiver) = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
-    delegate {
-      addType(typeSpecSupplier.get())
-    }
+    delegate.addType(typeSpecSupplier.get())
   }
 
   fun addAnnotation(annotationSpec: AnnotationSpec): KotlinFileSpecBuilder = builder {

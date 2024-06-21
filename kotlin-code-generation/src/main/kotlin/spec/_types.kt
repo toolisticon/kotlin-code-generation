@@ -7,10 +7,9 @@ interface KotlinGeneratorSpecSupplier<GENERATOR_SPEC> {
   fun spec() : GENERATOR_SPEC
 }
 
-
-
 interface KotlinGeneratorSpec<SELF : KotlinGeneratorSpec<SELF, SPEC, SUPPLIER>, SPEC : PoetSpec, SUPPLIER : PoetSpecSupplier<SPEC>> : PoetSpecSupplier<SPEC>, KotlinGeneratorSpecSupplier<SELF> {
   override fun spec(): SELF
+  val code : String get() = get().toString()
 }
 
 interface KotlinGeneratorTypeSpec<SELF : KotlinGeneratorTypeSpec<SELF>> : KotlinGeneratorSpec<SELF, TypeSpec, TypeSpecSupplier> {

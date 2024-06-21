@@ -33,7 +33,7 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   }
 
   override fun builder(block: TypeAliasSpecBuilderReceiver) = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   override fun build() = KotlinTypeAliasSpec(spec = delegate.build())

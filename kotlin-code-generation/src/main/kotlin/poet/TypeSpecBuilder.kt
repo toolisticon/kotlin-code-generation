@@ -26,6 +26,7 @@ class TypeSpecBuilder(
   MemberSpecHolderBuilder<TypeSpecBuilder>,
   OriginatingElementsHolderBuilder<TypeSpecBuilder>,
   TypeSpecHolderBuilder<TypeSpecBuilder> {
+
   companion object {
     fun TypeSpec.Builder.wrap() = TypeSpecBuilder(builder = this)
 
@@ -75,59 +76,55 @@ class TypeSpecBuilder(
 
 
   // AnnotatableBuilder
-  override fun addAnnotation(annotationSpec: AnnotationSpec) = invoke { addAnnotation(annotationSpec) }
-  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = invoke { addAnnotations(annotationSpecs) }
+  override fun addAnnotation(annotationSpec: AnnotationSpec) = apply { builder.addAnnotation(annotationSpec) }
+  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = apply { builder.addAnnotations(annotationSpecs) }
 
   // DocumentableBuilder
-  override fun addKdoc(format: String, vararg args: Any) = invoke { addKdoc(format, *args) }
-  override fun addKdoc(block: CodeBlock) = invoke { addKdoc(block) }
+  override fun addKdoc(format: String, vararg args: Any) = apply { builder.addKdoc(format, *args) }
+  override fun addKdoc(block: CodeBlock) = apply { builder.addKdoc(block) }
 
   // ContextReceiverBuilder
   @ExperimentalKotlinPoetApi
-  override fun contextReceivers(receiverTypes: Iterable<TypeName>) = invoke { contextReceivers(receiverTypes) }
+  override fun contextReceivers(receiverTypes: Iterable<TypeName>) = apply { builder.contextReceivers(receiverTypes) }
 
   @ExperimentalKotlinPoetApi
-  override fun contextReceivers(vararg receiverTypes: TypeName) = invoke { contextReceivers(*receiverTypes) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = apply { builder.contextReceivers(*receiverTypes) }
 
   // MemberSpecHolderBuilder
-  override fun addFunction(funSpec: FunSpec) = invoke { addFunction(funSpec) }
-  override fun addFunctions(funSpecs: Iterable<FunSpec>) = invoke { addFunctions(funSpecs) }
-  override fun addProperty(propertySpec: PropertySpec) = invoke { addProperty(propertySpec) }
-  override fun addProperties(propertySpecs: Iterable<PropertySpec>) = invoke { addProperties(propertySpecs) }
+  override fun addFunction(funSpec: FunSpec) = apply { builder.addFunction(funSpec) }
+  override fun addFunctions(funSpecs: Iterable<FunSpec>) = apply { builder.addFunctions(funSpecs) }
+  override fun addProperty(propertySpec: PropertySpec) = apply { builder.addProperty(propertySpec) }
+  override fun addProperties(propertySpecs: Iterable<PropertySpec>) = apply { builder.addProperties(propertySpecs) }
 
   // OriginatingElementBuilder
-  override fun addOriginatingElement(originatingElement: Element) = invoke { addOriginatingElement(originatingElement) }
+  override fun addOriginatingElement(originatingElement: Element) = apply { builder.addOriginatingElement(originatingElement) }
 
   // TypeSpecHolderBuilder
-  override fun addType(typeSpec: TypeSpec) = invoke { addType(typeSpec) }
-  override fun addTypes(typeSpecs: Iterable<TypeSpec>) = invoke { addTypes(typeSpecs) }
+  override fun addType(typeSpec: TypeSpec) = apply { builder.addType(typeSpec) }
+  override fun addTypes(typeSpecs: Iterable<TypeSpec>) = apply { builder.addTypes(typeSpecs) }
 
 
-  fun addModifiers(vararg modifiers: KModifier): TypeSpecBuilder = invoke { addModifiers(*modifiers) }
-  fun addModifiers(modifiers: Iterable<KModifier>): TypeSpecBuilder = invoke { addModifiers(modifiers) }
-  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): TypeSpecBuilder = invoke { addTypeVariables(typeVariables) }
-  fun addTypeVariable(typeVariable: TypeVariableName): TypeSpecBuilder = invoke { addTypeVariable(typeVariable) }
-  fun primaryConstructor(primaryConstructor: FunSpec?): TypeSpecBuilder = invoke { primaryConstructor(primaryConstructor) }
-  fun superclass(superclass: TypeName): TypeSpecBuilder = invoke { superclass(superclass) }
-  fun superclass(superclass: KClass<*>): TypeSpecBuilder = invoke { superclass(superclass) }
+  fun addModifiers(vararg modifiers: KModifier): TypeSpecBuilder = apply { builder.addModifiers(*modifiers) }
+  fun addModifiers(modifiers: Iterable<KModifier>): TypeSpecBuilder = apply { builder.addModifiers(modifiers) }
+  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): TypeSpecBuilder = apply { builder.addTypeVariables(typeVariables) }
+  fun addTypeVariable(typeVariable: TypeVariableName): TypeSpecBuilder = apply { builder.addTypeVariable(typeVariable) }
+  fun primaryConstructor(primaryConstructor: FunSpec?): TypeSpecBuilder = apply { builder.primaryConstructor(primaryConstructor) }
+  fun superclass(superclass: TypeName): TypeSpecBuilder = apply { builder.superclass(superclass) }
+  fun superclass(superclass: KClass<*>): TypeSpecBuilder = apply { builder.superclass(superclass) }
 
-  fun addSuperclassConstructorParameter(format: String, vararg args: Any): TypeSpecBuilder = invoke { addSuperclassConstructorParameter(format, *args) }
-  fun addSuperclassConstructorParameter(codeBlock: CodeBlock): TypeSpecBuilder = invoke { addSuperclassConstructorParameter(codeBlock) }
+  fun addSuperclassConstructorParameter(format: String, vararg args: Any): TypeSpecBuilder = apply { builder.addSuperclassConstructorParameter(format, *args) }
+  fun addSuperclassConstructorParameter(codeBlock: CodeBlock): TypeSpecBuilder = apply { builder.addSuperclassConstructorParameter(codeBlock) }
 
-  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>): TypeSpecBuilder = invoke { addSuperinterfaces(superinterfaces) }
-  fun addSuperinterface(superinterface: TypeName): TypeSpecBuilder = invoke { addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock): TypeSpecBuilder = invoke { addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>): TypeSpecBuilder = invoke { addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock): TypeSpecBuilder = invoke { addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String): TypeSpecBuilder = invoke { addSuperinterface(superinterface, constructorParameterName) }
-  fun addSuperinterface(superinterface: TypeName, constructorParameter: String): TypeSpecBuilder = invoke { addSuperinterface(superinterface, constructorParameter) }
+  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>): TypeSpecBuilder = apply { builder.addSuperinterfaces(superinterfaces) }
+  fun addSuperinterface(superinterface: TypeName): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface) }
+  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface, delegate) }
+  fun addSuperinterface(superinterface: KClass<*>): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface) }
+  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface, delegate) }
+  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface, constructorParameterName) }
+  fun addSuperinterface(superinterface: TypeName, constructorParameter: String): TypeSpecBuilder = apply { builder.addSuperinterface(superinterface, constructorParameter) }
 
-  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): TypeSpecBuilder = invoke { addEnumConstant(name, typeSpec) }
-  fun addInitializerBlock(block: CodeBlock): TypeSpecBuilder = invoke { addInitializerBlock(block) }
-
-  override fun invoke(block: TypeSpecBuilderReceiver): TypeSpecBuilder = apply {
-    builder.block()
-  }
+  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): TypeSpecBuilder = apply { builder.addEnumConstant(name, typeSpec) }
+  fun addInitializerBlock(block: CodeBlock): TypeSpecBuilder = apply { builder.addInitializerBlock(block) }
 
   override fun build(): TypeSpec = builder.build()
 }

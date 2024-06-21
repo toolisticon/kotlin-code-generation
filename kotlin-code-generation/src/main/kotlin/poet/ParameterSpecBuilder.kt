@@ -60,21 +60,17 @@ class ParameterSpecBuilder(
 
 
   // AnnotatableBuilder
-  override fun addAnnotation(annotationSpec: AnnotationSpec) = invoke { addAnnotation(annotationSpec) }
-  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = invoke { addAnnotations(annotationSpecs) }
+  override fun addAnnotation(annotationSpec: AnnotationSpec) = apply { builder.addAnnotation(annotationSpec) }
+  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = apply { builder.addAnnotations(annotationSpecs) }
 
   // DocumentableBuilder
-  override fun addKdoc(format: String, vararg args: Any) = invoke { addKdoc(format, *args) }
-  override fun addKdoc(block: CodeBlock) = invoke { addKdoc(block) }
+  override fun addKdoc(format: String, vararg args: Any) = apply { builder.addKdoc(format, *args) }
+  override fun addKdoc(block: CodeBlock) = apply { builder.addKdoc(block) }
 
-  fun addModifiers(vararg modifiers: KModifier): ParameterSpecBuilder = invoke { addModifiers(*modifiers) }
-  fun addModifiers(modifiers: Iterable<KModifier>): ParameterSpecBuilder = invoke { addModifiers(modifiers) }
-  fun defaultValue(format: String, vararg args: Any?): ParameterSpecBuilder = invoke { defaultValue(format, *args) }
-  fun defaultValue(codeBlock: CodeBlock?): ParameterSpecBuilder = invoke { defaultValue(codeBlock) }
-
-  override fun invoke(block: ParameterSpecBuilderReceiver): ParameterSpecBuilder = apply {
-    builder.block()
-  }
+  fun addModifiers(vararg modifiers: KModifier): ParameterSpecBuilder = apply { builder.addModifiers(*modifiers) }
+  fun addModifiers(modifiers: Iterable<KModifier>): ParameterSpecBuilder = apply { builder.addModifiers(modifiers) }
+  fun defaultValue(format: String, vararg args: Any?): ParameterSpecBuilder = apply { builder.defaultValue(format, *args) }
+  fun defaultValue(codeBlock: CodeBlock?): ParameterSpecBuilder = apply { builder.defaultValue(codeBlock) }
 
   override fun build(): ParameterSpec = builder.build()
 }

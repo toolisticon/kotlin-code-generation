@@ -77,7 +77,7 @@ class KotlinPropertySpecBuilder internal constructor(
 
 
   override fun builder(block: PropertySpecBuilderReceiver) = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   override fun build(): KotlinPropertySpec {

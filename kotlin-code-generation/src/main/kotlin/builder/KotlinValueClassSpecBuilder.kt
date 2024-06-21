@@ -38,10 +38,8 @@ class KotlinValueClassSpecBuilder internal constructor(
   )
 
   init {
-    delegate {
-      addModifiers(KModifier.VALUE)
-      jvmInline()
-    }
+    delegate.addModifiers(KModifier.VALUE)
+    delegate.builder.jvmInline()
   }
 
   fun primaryConstructor(constructorPropertySupplier: KotlinConstructorPropertySpecSupplier) = apply {
@@ -51,9 +49,7 @@ class KotlinValueClassSpecBuilder internal constructor(
       .addParameter(this.constructorProperty.parameter)
       .build()
 
-    delegate {
-      addProperty(constructorProperty.property.get())
-    }
+    delegate.addProperty(constructorProperty.property.get())
     delegate.builder.primaryConstructor(constructor.get())
   }
 

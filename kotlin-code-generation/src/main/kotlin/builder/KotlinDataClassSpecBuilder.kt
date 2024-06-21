@@ -2,10 +2,12 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpecSupplier
 import mu.KLogging
@@ -32,8 +34,10 @@ class KotlinDataClassSpecBuilder internal constructor(
   )
 
   init {
-    delegate { addModifiers(KModifier.DATA) }
+    delegate.addModifiers(KModifier.DATA)
   }
+
+  private val constructorProperties = LinkedHashMap<String, KotlinConstructorPropertySpecSupplier>()
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()
@@ -43,18 +47,20 @@ class KotlinDataClassSpecBuilder internal constructor(
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
+
   override fun spec(): KotlinDataClassSpec = build()
   override fun get(): TypeSpec = build().get()
 
-//  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
+  //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
 //    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder(
 //      className = spec.className,
 //      delegate = spec.get().toBuilder()
 //    )
 //}
 //
-//private val constructorProperties = LinkedHashMap<String, ConstructorPropertySupplier>()
-//
+
+
+  //
 //operator fun invoke(block: TypeSpecBuilder.() -> Unit): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder = apply {
 //  delegate.block()
 //  override fun addKdoc(kdoc: CodeBlock) = apply {
@@ -65,9 +71,9 @@ class KotlinDataClassSpecBuilder internal constructor(
 //    delegate.addType(typeSpecSupplier.get())
 //  }
 //
-//  fun addConstructorProperty(name: String, type: TypeName, block: _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinConstructorPropertyBuilder.() -> Unit = {}) = apply {
-//    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.constructorProperties[name] = buildConstructorProperty(name, type, block)
-//  }
+  fun addConstructorProperty(name: String, type: TypeName, spec: KotlinConstructorPropertySpecSupplier) = apply {
+    this.constructorProperties[name] = spec
+  }
 //
 //  fun addConstructorProperty(constructorProperty: ConstructorPropertySupplier) = apply {
 //    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.constructorProperties[constructorProperty.name] = constructorProperty

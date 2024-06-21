@@ -33,80 +33,76 @@ class FunSpecBuilder(
   }
 
   // AnnotatableBuilder
-  override fun addAnnotation(annotationSpec: AnnotationSpec) = invoke { addAnnotation(annotationSpec) }
-  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = invoke { addAnnotations(annotationSpecs) }
+  override fun addAnnotation(annotationSpec: AnnotationSpec) = apply { builder.addAnnotation(annotationSpec) }
+  override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = apply { builder.addAnnotations(annotationSpecs) }
 
   // ContextReceiverBuilder
   @ExperimentalKotlinPoetApi
-  override fun contextReceivers(receiverTypes: Iterable<TypeName>) = invoke { contextReceivers(receiverTypes) }
+  override fun contextReceivers(receiverTypes: Iterable<TypeName>) = apply { builder.contextReceivers(receiverTypes) }
 
   @ExperimentalKotlinPoetApi
-  override fun contextReceivers(vararg receiverTypes: TypeName) = invoke { contextReceivers(*receiverTypes) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = apply { builder.contextReceivers(*receiverTypes) }
 
   // DocumentableBuilder
-  override fun addKdoc(format: String, vararg args: Any) = invoke { addKdoc(format, *args) }
-  override fun addKdoc(block: CodeBlock) = invoke { addKdoc(block) }
+  override fun addKdoc(format: String, vararg args: Any) = apply { builder.addKdoc(format, *args) }
+  override fun addKdoc(block: CodeBlock) = apply { builder.addKdoc(block) }
 
   // OriginatingElementBuilder
-  override fun addOriginatingElement(originatingElement: Element) = invoke { addOriginatingElement(originatingElement) }
+  override fun addOriginatingElement(originatingElement: Element) = apply { builder.addOriginatingElement(originatingElement) }
 
   // FunSpecBuilder
 
-  fun addModifiers(vararg modifiers: KModifier): FunSpecBuilder = invoke { addModifiers(*modifiers) }
-  fun addModifiers(modifiers: Iterable<KModifier>): FunSpecBuilder = invoke { addModifiers(modifiers) }
+  fun addModifiers(vararg modifiers: KModifier): FunSpecBuilder = apply { builder.addModifiers(*modifiers) }
+  fun addModifiers(modifiers: Iterable<KModifier>): FunSpecBuilder = apply { builder.addModifiers(modifiers) }
 
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder.jvmModifiers(modifiers)
 
-  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): FunSpecBuilder = invoke { addTypeVariables(typeVariables) }
+  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): FunSpecBuilder = apply { builder.addTypeVariables(typeVariables) }
 
-  fun addTypeVariable(typeVariable: TypeVariableName): FunSpecBuilder = invoke { addTypeVariable(typeVariable) }
+  fun addTypeVariable(typeVariable: TypeVariableName): FunSpecBuilder = apply { builder.addTypeVariable(typeVariable) }
 
-  fun receiver(receiverType: TypeName): FunSpecBuilder = invoke { receiver(receiverType) }
-  fun receiver(receiverType: TypeName, kdoc: CodeBlock): FunSpecBuilder = invoke { receiver(receiverType, kdoc) }
+  fun receiver(receiverType: TypeName): FunSpecBuilder = apply { builder.receiver(receiverType) }
+  fun receiver(receiverType: TypeName, kdoc: CodeBlock): FunSpecBuilder = apply { builder.receiver(receiverType, kdoc) }
 
-  fun receiver(receiverType: KClass<*>): FunSpecBuilder = invoke { receiver(receiverType) }
-  fun receiver(receiverType: KClass<*>, kdoc: CodeBlock): FunSpecBuilder = invoke { receiver(receiverType, kdoc) }
+  fun receiver(receiverType: KClass<*>): FunSpecBuilder = apply { builder.receiver(receiverType) }
+  fun receiver(receiverType: KClass<*>, kdoc: CodeBlock): FunSpecBuilder = apply { builder.receiver(receiverType, kdoc) }
 
-  fun receiver(receiverType: KClass<*>, kdoc: String, vararg args: Any): FunSpecBuilder = invoke { receiver(receiverType, kdoc, *args) }
+  fun receiver(receiverType: KClass<*>, kdoc: String, vararg args: Any): FunSpecBuilder = apply { builder.receiver(receiverType, kdoc, *args) }
 
-  fun returns(returnType: TypeName): FunSpecBuilder = invoke { returns(returnType) }
-  fun returns(returnType: TypeName, kdoc: CodeBlock): FunSpecBuilder = invoke { returns(returnType, kdoc) }
+  fun returns(returnType: TypeName): FunSpecBuilder = apply { builder.returns(returnType) }
+  fun returns(returnType: TypeName, kdoc: CodeBlock): FunSpecBuilder = apply { builder.returns(returnType, kdoc) }
 
-  fun returns(returnType: KClass<*>): FunSpecBuilder = invoke { returns(returnType) }
-  fun returns(returnType: KClass<*>, kdoc: CodeBlock): FunSpecBuilder = invoke { returns(returnType, kdoc) }
+  fun returns(returnType: KClass<*>): FunSpecBuilder = apply { builder.returns(returnType) }
+  fun returns(returnType: KClass<*>, kdoc: CodeBlock): FunSpecBuilder = apply { builder.returns(returnType, kdoc) }
 
-  fun returns(returnType: KClass<*>, kdoc: String, vararg args: Any): FunSpecBuilder = invoke { returns(returnType, kdoc, *args) }
+  fun returns(returnType: KClass<*>, kdoc: String, vararg args: Any): FunSpecBuilder = apply { builder.returns(returnType, kdoc, *args) }
 
-  fun addParameters(parameterSpecs: Iterable<ParameterSpec>): FunSpecBuilder = invoke { addParameters(parameterSpecs) }
-  fun addParameter(parameterSpec: ParameterSpec): FunSpecBuilder = invoke { addParameter(parameterSpec) }
-  fun callThisConstructor(args: List<CodeBlock>): FunSpecBuilder = invoke { callThisConstructor(args) }
+  fun addParameters(parameterSpecs: Iterable<ParameterSpec>): FunSpecBuilder = apply { builder.addParameters(parameterSpecs) }
+  fun addParameter(parameterSpec: ParameterSpec): FunSpecBuilder = apply { builder.addParameter(parameterSpec) }
+  fun callThisConstructor(args: List<CodeBlock>): FunSpecBuilder = apply { builder.callThisConstructor(args) }
 
-  fun callThisConstructor(args: Iterable<CodeBlock>): FunSpecBuilder = invoke { callThisConstructor(args) }
-  fun callThisConstructor(vararg args: String): FunSpecBuilder = invoke { callThisConstructor(*args) }
-  fun callThisConstructor(vararg args: CodeBlock = emptyArray()): FunSpecBuilder = invoke { callThisConstructor(*args) }
-  fun callSuperConstructor(args: Iterable<CodeBlock>): FunSpecBuilder = invoke { callSuperConstructor(args) }
-  fun callSuperConstructor(args: List<CodeBlock>): FunSpecBuilder = invoke { callSuperConstructor(args) }
-  fun callSuperConstructor(vararg args: String): FunSpecBuilder = invoke { callSuperConstructor(*args) }
-  fun callSuperConstructor(vararg args: CodeBlock = emptyArray()): FunSpecBuilder = invoke { callSuperConstructor(*args) }
-  fun addParameter(name: String, type: TypeName, vararg modifiers: KModifier): FunSpecBuilder = invoke { addParameter(name, type, *modifiers) }
-  fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier): FunSpecBuilder = invoke { addParameter(name, type, *modifiers) }
-  fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>): FunSpecBuilder = invoke { addParameter(name, type, modifiers) }
-  fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): FunSpecBuilder = invoke { addParameter(name, type, modifiers) }
-  fun addCode(format: String, vararg args: Any?): FunSpecBuilder = invoke { addCode(format, *args) }
-  fun addNamedCode(format: String, args: Map<String, *>): FunSpecBuilder = invoke { addNamedCode(format, args) }
-  fun addCode(codeBlock: CodeBlock): FunSpecBuilder = invoke { addCode(codeBlock) }
-  fun addComment(format: String, vararg args: Any): FunSpecBuilder = invoke { addComment(format, *args) }
+  fun callThisConstructor(args: Iterable<CodeBlock>): FunSpecBuilder = apply { builder.callThisConstructor(args) }
+  fun callThisConstructor(vararg args: String): FunSpecBuilder = apply { builder.callThisConstructor(*args) }
+  fun callThisConstructor(vararg args: CodeBlock = emptyArray()): FunSpecBuilder = apply { builder.callThisConstructor(*args) }
+  fun callSuperConstructor(args: Iterable<CodeBlock>): FunSpecBuilder = apply { builder.callSuperConstructor(args) }
+  fun callSuperConstructor(args: List<CodeBlock>): FunSpecBuilder = apply { builder.callSuperConstructor(args) }
+  fun callSuperConstructor(vararg args: String): FunSpecBuilder = apply { builder.callSuperConstructor(*args) }
+  fun callSuperConstructor(vararg args: CodeBlock = emptyArray()): FunSpecBuilder = apply { builder.callSuperConstructor(*args) }
+  fun addParameter(name: String, type: TypeName, vararg modifiers: KModifier): FunSpecBuilder = apply { builder.addParameter(name, type, *modifiers) }
+  fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier): FunSpecBuilder = apply { builder.addParameter(name, type, *modifiers) }
+  fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>): FunSpecBuilder = apply { builder.addParameter(name, type, modifiers) }
+  fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): FunSpecBuilder = apply { builder.addParameter(name, type, modifiers) }
+  fun addCode(format: String, vararg args: Any?): FunSpecBuilder = apply { builder.addCode(format, *args) }
+  fun addNamedCode(format: String, args: Map<String, *>): FunSpecBuilder = apply { builder.addNamedCode(format, args) }
+  fun addCode(codeBlock: CodeBlock): FunSpecBuilder = apply { builder.addCode(codeBlock) }
+  fun addComment(format: String, vararg args: Any): FunSpecBuilder = apply { builder.addComment(format, *args) }
 
-  fun beginControlFlow(controlFlow: String, vararg args: Any): FunSpecBuilder = invoke { beginControlFlow(controlFlow, *args) }
-  fun nextControlFlow(controlFlow: String, vararg args: Any): FunSpecBuilder = invoke { nextControlFlow(controlFlow, *args) }
-  fun endControlFlow(): FunSpecBuilder = invoke { endControlFlow() }
-  fun addStatement(format: String, vararg args: Any): FunSpecBuilder = invoke { addStatement(format, *args) }
+  fun beginControlFlow(controlFlow: String, vararg args: Any): FunSpecBuilder = apply { builder.beginControlFlow(controlFlow, *args) }
+  fun nextControlFlow(controlFlow: String, vararg args: Any): FunSpecBuilder = apply { builder.nextControlFlow(controlFlow, *args) }
+  fun endControlFlow(): FunSpecBuilder = apply { builder.endControlFlow() }
+  fun addStatement(format: String, vararg args: Any): FunSpecBuilder = apply { builder.addStatement(format, *args) }
 
-  fun clearBody(): FunSpecBuilder = invoke { clearBody() }
-
-  override fun invoke(block: FunSpecBuilderReceiver): FunSpecBuilder = apply {
-    builder.block()
-  }
+  fun clearBody(): FunSpecBuilder = apply { builder.clearBody() }
 
   override fun build(): FunSpec = builder.build()
 }

@@ -43,9 +43,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   }
 
   fun addEnumConstant(name: String) = apply {
-    delegate {
-      addEnumConstant(name)
-    }
+    delegate.addEnumConstant(name)
   }
 
   override fun build(): KotlinEnumClassSpec = KotlinEnumClassSpec(delegate.build())

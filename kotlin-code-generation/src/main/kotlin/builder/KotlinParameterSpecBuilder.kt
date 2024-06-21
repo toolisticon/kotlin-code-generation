@@ -82,9 +82,8 @@ class KotlinParameterSpecBuilder internal constructor(
   }
 
   override fun builder(block: ParameterSpecBuilderReceiver) = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
-
 
   fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier): KotlinParameterSpecBuilder = builder {
     addAnnotation(annotationSpec.get())

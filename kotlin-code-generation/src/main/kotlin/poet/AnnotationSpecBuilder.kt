@@ -22,16 +22,13 @@ class AnnotationSpecBuilder(
   }
 
   // Taggable
-  fun tag(type: KClass<*>, tag: Any?) = invoke { tag(type, tag) }
+  fun tag(type: KClass<*>, tag: Any?) = apply { builder.tag(type, tag) }
 
   // Annotatable
-  fun addMember(format: String, vararg args: Any) = invoke { addMember(CodeBlock.of(format, *args)) }
-  fun addMember(codeBlock: CodeBlock) = invoke { addMember(codeBlock) }
-  fun useSiteTarget(useSiteTarget: UseSiteTarget?) = invoke { useSiteTarget(useSiteTarget) }
+  fun addMember(format: String, vararg args: Any) = apply { builder.addMember(CodeBlock.of(format, *args)) }
+  fun addMember(codeBlock: CodeBlock) = apply { builder. addMember(codeBlock) }
+  fun useSiteTarget(useSiteTarget: UseSiteTarget?) = apply { builder. useSiteTarget(useSiteTarget) }
 
-  override fun invoke(block: AnnotationSpecBuilderReceiver): AnnotationSpecBuilder = apply {
-    builder.block()
-  }
 
   override fun build(): AnnotationSpec = builder.build()
 }

@@ -39,7 +39,7 @@ class KotlinObjectSpecBuilder internal constructor(
 //    typeSpecSupplier.forEach(::addType)
 //  }
   override fun builder(block: TypeSpecBuilderReceiver): KotlinObjectSpecBuilder = apply {
-    delegate { block() }
+    delegate.builder.block()
   }
 
   override fun build(): KotlinObjectSpec = KotlinObjectSpec(spec = delegate.build())
