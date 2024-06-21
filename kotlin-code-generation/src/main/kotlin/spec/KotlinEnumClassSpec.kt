@@ -14,3 +14,4 @@ data class KotlinEnumClassSpec(
   override fun spec(): KotlinEnumClassSpec = this
   override fun get(): TypeSpec = spec
 }
+interface KotlinEnumClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinEnumClassSpec>, TypeSpecSupplier

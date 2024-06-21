@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
@@ -22,6 +23,10 @@ class KotlinEnumClassSpecBuilder internal constructor(
     @JvmStatic
     fun enumBuilder(className: ClassName): KotlinEnumClassSpecBuilder = enumBuilder(className.simpleName)
 
+  }
+
+  init {
+    delegate.addModifiers(KModifier.ENUM)
   }
 
 //  companion object :KLogging() {

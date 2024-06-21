@@ -13,3 +13,4 @@ data class KotlinAnnotationClassSpec(
   override fun get(): TypeSpec = spec
 
 }
+interface KotlinAnnotationClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationClassSpec>, TypeSpecSupplier

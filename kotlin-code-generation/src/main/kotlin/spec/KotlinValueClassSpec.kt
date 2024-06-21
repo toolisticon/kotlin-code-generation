@@ -19,3 +19,4 @@ data class KotlinValueClassSpec(
 }
 
 // fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
+interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, TypeSpecSupplier

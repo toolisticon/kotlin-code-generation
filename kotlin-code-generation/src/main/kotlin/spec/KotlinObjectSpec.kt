@@ -10,3 +10,4 @@ data class KotlinObjectSpec(
   override fun spec(): KotlinObjectSpec = this
   override fun get(): TypeSpec = spec
 }
+interface KotlinObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinObjectSpec>, TypeSpecSupplier

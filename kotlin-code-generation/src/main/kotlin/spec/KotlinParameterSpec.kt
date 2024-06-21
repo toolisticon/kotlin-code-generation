@@ -16,3 +16,4 @@ data class KotlinParameterSpec(
   override fun get(): ParameterSpec = this.spec
 }
 
+interface KotlinParameterSpecSupplier : KotlinGeneratorSpecSupplier<KotlinParameterSpec>, ParameterSpecSupplier

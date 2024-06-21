@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
@@ -23,6 +24,10 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
       className = className,
       delegate = TypeSpecBuilder.annotationBuilder(className.simpleName)
     )
+  }
+
+  init {
+    delegate.addModifiers(KModifier.ANNOTATION)
   }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {

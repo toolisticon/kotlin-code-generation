@@ -17,3 +17,5 @@ data class KotlinFileSpec(
   override fun spec(): KotlinFileSpec = this
   override fun get(): FileSpec = spec
 }
+
+interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, FileSpecSupplier

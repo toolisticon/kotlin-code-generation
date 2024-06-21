@@ -9,3 +9,4 @@ data class KotlinTypeAliasSpec(
   override fun spec(): KotlinTypeAliasSpec = this
   override fun get(): TypeAliasSpec = spec
 }
+interface KotlinTypeAliasSpecSupplier: KotlinGeneratorSpecSupplier<KotlinTypeAliasSpec>, TypeAliasSpecSupplier

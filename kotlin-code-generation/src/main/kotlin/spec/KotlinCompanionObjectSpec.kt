@@ -9,3 +9,4 @@ data class KotlinCompanionObjectSpec(
   override fun spec(): KotlinCompanionObjectSpec = this
   override fun get(): TypeSpec = spec
 }
+interface KotlinCompanionObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinCompanionObjectSpec>, TypeSpecSupplier

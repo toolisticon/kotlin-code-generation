@@ -11,3 +11,5 @@ data class KotlinConstructorPropertySpec(
   val type: TypeName = property.type
   override fun spec(): KotlinConstructorPropertySpec = this
 }
+
+interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinConstructorPropertySpec>
