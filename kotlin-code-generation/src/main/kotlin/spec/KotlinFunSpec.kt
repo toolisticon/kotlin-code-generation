@@ -9,4 +9,7 @@ data class KotlinFunSpec(
   override fun spec(): KotlinFunSpec = this
   override fun get(): FunSpec = spec
 }
-interface KotlinFunSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFunSpec>, FunSpecSupplier
+
+interface KotlinFunSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFunSpec>, FunSpecSupplier {
+  override fun get(): FunSpec = spec().get()
+}

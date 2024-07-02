@@ -7,9 +7,16 @@ data class KotlinConstructorPropertySpec(
   val parameter: KotlinParameterSpec,
 ) : KotlinConstructorPropertySpecSupplier {
 
-  val name: String = property.name
+  override val name: String = property.name
   val type: TypeName = property.type
   override fun spec(): KotlinConstructorPropertySpec = this
 }
 
-interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinConstructorPropertySpec>
+interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinConstructorPropertySpec> {
+  /**
+   * Name of property
+   */
+  val name: String
+}
+
+internal fun toList(constructorProperties: Collection<KotlinConstructorPropertySpecSupplier>) : List<KotlinConstructorPropertySpec> = constructorProperties.map(KotlinConstructorPropertySpecSupplier::spec).toList()

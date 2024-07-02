@@ -28,4 +28,7 @@ data class KotlinPropertySpec(
 }
 
 // TODO fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)
-interface KotlinPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinPropertySpec>, PropertySpecSupplier
+
+interface KotlinPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinPropertySpec>, PropertySpecSupplier {
+  override fun get(): PropertySpec = spec().get()
+}

@@ -2,15 +2,18 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpecSupplier
+import kotlin.reflect.KClass
 
 class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
@@ -41,6 +44,14 @@ class KotlinValueClassSpecBuilder internal constructor(
     delegate.addModifiers(KModifier.VALUE)
     delegate.builder.jvmInline()
   }
+
+  fun primaryConstructor(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = primaryConstructor(
+    KotlinCodeGeneration.buildConstructorProperty(name, type, block)
+  )
+
+  fun primaryConstructor(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = primaryConstructor(
+    KotlinCodeGeneration.buildConstructorProperty(name, type, block)
+  )
 
   fun primaryConstructor(constructorPropertySupplier: KotlinConstructorPropertySpecSupplier) = apply {
     this.constructorProperty = constructorPropertySupplier.spec()

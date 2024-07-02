@@ -28,7 +28,13 @@ class TypeSpecBuilder(
   TypeSpecHolderBuilder<TypeSpecBuilder> {
 
   companion object {
-    fun TypeSpec.Builder.wrap() = TypeSpecBuilder(builder = this)
+    internal fun TypeSpec.Builder.wrap() = TypeSpecBuilder(builder = this)
+
+    @JvmStatic
+    fun annotationBuilder(name: String): TypeSpecBuilder = TypeSpec.annotationBuilder(name).wrap()
+
+    @JvmStatic
+    fun annotationBuilder(className: ClassName): TypeSpecBuilder = annotationBuilder(className.simpleName)
 
     @JvmStatic
     fun classBuilder(name: String): TypeSpecBuilder = TypeSpec.classBuilder(name).wrap()
@@ -67,11 +73,7 @@ class TypeSpecBuilder(
     @JvmStatic
     fun anonymousClassBuilder(): TypeSpecBuilder = TypeSpec.anonymousClassBuilder().wrap()
 
-    @JvmStatic
-    fun annotationBuilder(name: String): TypeSpecBuilder = TypeSpec.annotationBuilder(name).wrap()
 
-    @JvmStatic
-    fun annotationBuilder(className: ClassName): TypeSpecBuilder = annotationBuilder(className.simpleName)
   }
 
 

@@ -5,12 +5,13 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
+import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
 import mu.KLogging
+import kotlin.reflect.KClass
 
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
@@ -44,6 +45,10 @@ class KotlinDataClassSpecBuilder internal constructor(
   }
 
   override fun build(): KotlinDataClassSpec {
+    check(constructorProperties.isNotEmpty()) { "Data class must have at least one property." }
+
+    delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
@@ -51,63 +56,34 @@ class KotlinDataClassSpecBuilder internal constructor(
   override fun spec(): KotlinDataClassSpec = build()
   override fun get(): TypeSpec = build().get()
 
-  //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
-//    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder(
-//      className = spec.className,
-//      delegate = spec.get().toBuilder()
-//    )
-//}
-//
-
-
-  //
-//operator fun invoke(block: TypeSpecBuilder.() -> Unit): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder = apply {
-//  delegate.block()
-//  override fun addKdoc(kdoc: CodeBlock) = apply {
-//    delegate.addKdoc(kdoc)
-//  }
 //
 //  fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
 //    delegate.addType(typeSpecSupplier.get())
 //  }
 //
-  fun addConstructorProperty(name: String, type: TypeName, spec: KotlinConstructorPropertySpecSupplier) = apply {
-    this.constructorProperties[name] = spec
+
+  fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
+    this.constructorProperties[spec.name] = spec
   }
-//
-//  fun addConstructorProperty(constructorProperty: ConstructorPropertySupplier) = apply {
-//    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.constructorProperties[constructorProperty.name] = constructorProperty
-//  }
-//
-//  /**
-//   * Finalize a data class based on its primary constructor parameters.
-//   *
-//   * * adds primary constructor.
-//   * * backs parameters with properties.
-//   */
-//  override fun build(): KotlinDataClassSpec {
-//    check(_root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.constructorProperties.isNotEmpty()) { "Data class must have at least one property." }
-//
-//    val constructor = FunSpec.constructorBuilder()
-//
-//    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.constructorProperties.values.map(ConstructorPropertySupplier::get).forEach {
-//      constructor.addParameter(it.parameter.get())
-//      delegate.addProperty(it.property.get())
-//    }
-//
-//    delegate.primaryConstructor(constructor.build())
-//
-//    return KotlinDataClassSpec(className = className, spec = delegate.build())
-//  }
-//
+
+  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+    buildConstructorProperty(name, type, block)
+  )
+
+  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+    buildConstructorProperty(name, type, block)
+  )
+
+  fun addAnnotation(annotation: KotlinAnnotationSpecSupplier) = apply {
+    delegate.addAnnotation(annotation.get())
+  }
+
+
 //  override fun addAnnotation(annotation: ClassName): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder = apply {
 //    fun addAnnotation(annotation: ClassName): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder = apply {
 //      delegate.addAnnotation(annotation)
 //    }
 //
-//    override fun get(): TypeSpec = build().get()
-//
-//  }
 }
 
 
@@ -128,3 +104,6 @@ class KotlinDataClassSpecBuilder internal constructor(
 //      )
 //
 //  }
+
+
+typealias KotlinDataClassSpecBuilderReceiver = KotlinDataClassSpecBuilder.() -> Unit

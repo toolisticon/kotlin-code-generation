@@ -22,4 +22,6 @@ data class KotlinDataClassSpec(
 //fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
 // TODO fun KotlinDataClassSpec.toBuilder() = KotlinDataClassBuilder.from(spec = this)
 // TODO fun KotlinDataClassSpec.toFileSpec() = KotlinFileSpecBuilder.builder(this).build()
-interface KotlinDataClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinDataClassSpec>, TypeSpecSupplier
+interface KotlinDataClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinDataClassSpec>, TypeSpecSupplier {
+  override fun get(): TypeSpec  = spec().get()
+}

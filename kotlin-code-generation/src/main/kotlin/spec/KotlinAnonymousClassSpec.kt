@@ -9,4 +9,6 @@ data class KotlinAnonymousClassSpec(
   override fun spec(): KotlinAnonymousClassSpec = this
   override fun get(): TypeSpec = spec
 }
-interface KotlinAnonymousClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnonymousClassSpec>, TypeSpecSupplier
+interface KotlinAnonymousClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnonymousClassSpec>, TypeSpecSupplier {
+  override fun get(): TypeSpec  = spec().get()
+}

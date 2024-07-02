@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilderReceiver
@@ -73,8 +74,9 @@ class KotlinPropertySpecBuilder internal constructor(
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-
-
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinPropertySpecBuilder = apply {
+    delegate.addAnnotation(annotationSpec.get())
+  }
 
   override fun builder(block: PropertySpecBuilderReceiver) = apply {
     delegate.builder.block()

@@ -26,6 +26,8 @@ data class KotlinAnnotationSpec(
 
 }
 
-interface KotlinAnnotationSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationSpec>, AnnotationSpecSupplier
+interface KotlinAnnotationSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationSpec>, AnnotationSpecSupplier {
+  override fun get(): AnnotationSpec = spec().get()
+}
 
 fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)

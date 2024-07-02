@@ -1,24 +1,17 @@
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.Supressions.CLASS_NAME
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationClassBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
+import io.toolisticon.kotlin.generation.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.builder.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
-import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
-import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
+import jakarta.annotation.Generated
+import java.time.Instant
 import kotlin.reflect.KClass
 
 object KotlinCodeGeneration {
-
-  @JvmStatic
-  fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
-
-  @JvmStatic
-  fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
-
-  @JvmStatic
-  fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
 
   @JvmStatic
   fun buildAnnotation(kclass: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(kclass.asClassName(), block)
@@ -27,7 +20,16 @@ object KotlinCodeGeneration {
   fun buildAnnotation(className: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = annotationBuilder(className).also(block).build()
 
   @JvmStatic
+  fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = annotationClassBuilder(className).also(block).build()
+
+  @JvmStatic
   fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
+
+  @JvmStatic
+  fun buildConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = KotlinCodeGeneration.buildConstructorProperty(name, type.asTypeName(), block)
+
+  @JvmStatic
+  fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
 
   @JvmStatic
   fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
@@ -49,16 +51,44 @@ object KotlinCodeGeneration {
 //  inline fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertyBuilder.() -> Unit) = KotlinConstructorPropertyBuilder.builder(name, type).also(block).build()
 //  inline fun buildValueClass(className: ClassName, block: KotlinValueClassBuilder.() -> Unit) = KotlinValueClassBuilder.builder(className).also(block).build()
 
-  internal object Supressions {
-    const val CLASS_NAME = "ClassName"
+  @Suppress(CLASS_NAME)
+  object builder {
+    @JvmStatic
+    fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
+
+    @JvmStatic
+    fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
+
+    @JvmStatic
+    fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+
+    @JvmStatic
+    fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
+
   }
 
-  object Annotation {
+  @Suppress(CLASS_NAME)
+  object annotation {
 
+    data class GeneratedAnnotation(
+      val value: String = KotlinCodeGeneration::class.asTypeName().toString(),
+      val date: String = Instant.now().toString(),
+      val comments: List<String> = emptyList()
+    ) : KotlinAnnotationSpecSupplier {
 
-//    fun serializableAnnotation(serializerClass: Avro4kSerializerKClass) = AnnotationSpec.builder(Serializable::class)
-//      .addMember("with = %T::class", serializerClass)
-//      .build()
+      fun generator(type: KClass<*>) = copy(value = type.asTypeName().toString())
+      fun date(instant: Instant) = copy(date = instant.toString())
+      fun comment(comment: Pair<String, String>) = copy(comments = this.comments + "${comment.first} = ${comment.second}")
+
+      override fun spec(): KotlinAnnotationSpec = buildAnnotation(Generated::class) {
+        addStringMember("value", value)
+        addStringMember("date", date)
+
+        if (comments.isNotEmpty()) {
+          addStringMember("comments", comments.joinToString(separator = ", "))
+        }
+      }
+    }
 
   }
 
