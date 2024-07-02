@@ -117,3 +117,5 @@ class KotlinClassSpecBuilder internal constructor(
 //      )
 //
 //  }
+
+typealias KotlinClassSpecBuilderReceiver = KotlinClassSpecBuilder.() -> Unit

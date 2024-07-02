@@ -93,3 +93,5 @@ class KotlinParameterSpecBuilder internal constructor(
   override fun spec(): KotlinParameterSpec = build()
   override fun get(): ParameterSpec = build().get()
 }
+
+typealias KotlinParameterSpecBuilderReceiver = KotlinParameterSpecBuilder.() -> Unit

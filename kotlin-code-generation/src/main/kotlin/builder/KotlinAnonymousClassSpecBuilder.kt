@@ -27,3 +27,5 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
     delegate.builder.block()
   }
 }
+
+typealias KotlinAnonymousClassSpecBuilderReceiver = KotlinAnonymousClassSpecBuilder.() -> Unit

@@ -2,23 +2,22 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpecSupplier
-import kotlin.reflect.KClass
 
 class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinValueClassSpec, TypeSpec>, KotlinValueClassSpecSupplier, DelegatingBuilder<KotlinValueClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinValueClassSpec, TypeSpec>,
+  KotlinValueClassSpecSupplier,
+  ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
+  DelegatingBuilder<KotlinValueClassSpecBuilder, TypeSpecBuilderReceiver> {
 
   companion object {
 
@@ -32,8 +31,7 @@ class KotlinValueClassSpecBuilder internal constructor(
     fun builder(className: ClassName): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(className)
   }
 
-  lateinit var constructorProperty: KotlinConstructorPropertySpec
-
+  lateinit var constructorProperty: KotlinConstructorPropertySpecSupplier
 
   internal constructor(className: ClassName) : this(
     className = className,
@@ -45,23 +43,8 @@ class KotlinValueClassSpecBuilder internal constructor(
     delegate.builder.jvmInline()
   }
 
-  fun primaryConstructor(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = primaryConstructor(
-    KotlinCodeGeneration.buildConstructorProperty(name, type, block)
-  )
-
-  fun primaryConstructor(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = primaryConstructor(
-    KotlinCodeGeneration.buildConstructorProperty(name, type, block)
-  )
-
-  fun primaryConstructor(constructorPropertySupplier: KotlinConstructorPropertySpecSupplier) = apply {
-    this.constructorProperty = constructorPropertySupplier.spec()
-
-    val constructor = KotlinFunSpecBuilder.constructorBuilder()
-      .addParameter(this.constructorProperty.parameter)
-      .build()
-
-    delegate.addProperty(constructorProperty.property.get())
-    delegate.builder.primaryConstructor(constructor.get())
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply {
+    this.constructorProperty = spec
   }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
@@ -71,8 +54,14 @@ class KotlinValueClassSpecBuilder internal constructor(
   override fun build(): KotlinValueClassSpec {
     check(::constructorProperty.isInitialized) { "Value class must have exactly one property." }
 
-    val spec = delegate.build()
-    return KotlinValueClassSpec(className = className, spec = spec)
+    val constructor = KotlinFunSpecBuilder.constructorBuilder()
+      .addParameter(this.constructorProperty.spec().parameter)
+      .build()
+
+    delegate.addProperty(constructorProperty.spec().property.get())
+    delegate.builder.primaryConstructor(constructor.get())
+
+    return KotlinValueClassSpec(className = className, spec = delegate.build())
   }
 
   override fun spec(): KotlinValueClassSpec = build()

@@ -10,21 +10,12 @@ class FileSpecBuilder(
   MemberSpecHolderBuilder<FileSpecBuilder>,
   TypeSpecHolderBuilder<FileSpecBuilder> {
   companion object {
-    fun FileSpec.Builder.wrap() = FileSpecBuilder(this)
+    internal fun FileSpec.Builder.wrap() = FileSpecBuilder(this)
 
-    @JvmStatic
     fun get(packageName: String, typeSpec: TypeSpec): FileSpec = FileSpec.get(packageName, typeSpec)
-
-    @JvmStatic
     fun builder(className: ClassName): FileSpecBuilder = FileSpec.builder(className).wrap()
-
-    @JvmStatic
     fun builder(memberName: MemberName): FileSpecBuilder = FileSpec.builder(memberName).wrap()
-
-    @JvmStatic
     fun builder(packageName: String, fileName: String): FileSpecBuilder = FileSpec.builder(packageName, fileName).wrap()
-
-    @JvmStatic
     fun scriptBuilder(fileName: String, packageName: String = ""): FileSpecBuilder = FileSpec.scriptBuilder(fileName, packageName).wrap()
   }
 

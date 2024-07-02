@@ -36,6 +36,7 @@ sealed interface AnnotatableBuilder<SELF> {
 
   fun addAnnotation(annotation: KClass<*>): SELF = addAnnotation(annotation.asClassName())
 
+  fun addAnnotation(annotationSupplier: AnnotationSpecSupplier): SELF = addAnnotation(annotationSupplier.get())
 }
 
 sealed interface TypeSpecHolderBuilder<SELF> {

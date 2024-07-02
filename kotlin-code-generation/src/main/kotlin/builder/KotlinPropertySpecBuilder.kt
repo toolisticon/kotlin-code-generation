@@ -90,3 +90,5 @@ class KotlinPropertySpecBuilder internal constructor(
   override fun spec(): KotlinPropertySpec = build()
   override fun get(): PropertySpec = build().get()
 }
+
+typealias KotlinPropertySpecBuilderReceiver = KotlinPropertySpecBuilder.() -> Unit

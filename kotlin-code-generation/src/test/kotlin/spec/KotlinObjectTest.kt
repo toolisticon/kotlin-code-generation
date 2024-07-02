@@ -1,8 +1,8 @@
-package io.toolisticon.kotlin.generation
+package io.toolisticon.kotlin.generation.spec
 
 import org.junit.jupiter.api.Test
 
-internal class KotlinFileTest {
+internal class KotlinObjectTest {
   @Test
   fun name() {
     TODO("Not yet implemented")

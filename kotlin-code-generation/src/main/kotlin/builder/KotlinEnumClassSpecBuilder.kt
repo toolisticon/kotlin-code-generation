@@ -56,3 +56,5 @@ class KotlinEnumClassSpecBuilder internal constructor(
   override fun get(): TypeSpec = build().get()
 
 }
+
+typealias KotlinEnumClassSpecBuilderReceiver = KotlinEnumClassSpecBuilder.() -> Unit

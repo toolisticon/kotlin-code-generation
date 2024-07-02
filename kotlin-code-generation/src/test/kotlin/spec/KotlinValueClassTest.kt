@@ -1,10 +1,9 @@
-package io.toolisticon.kotlin.generation
+package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildValueClass
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.toFileSpec
-import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder
+import io.toolisticon.kotlin.generation.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +13,7 @@ internal class KotlinValueClassTest {
   fun `build foo with string value`() {
     val className = ClassName("test", "Foo")
     val valueClass = buildValueClass(className = className) {
-      primaryConstructor("bar", String::class) {
+      addConstructorProperty("bar", String::class) {
         makePrivate()
         addAnnotation(TestFixtures.myAnnotationSpec)
       }
@@ -41,11 +40,9 @@ public value class Foo(
     val className = ClassName("io.acme", "Foo")
 
     val spec = buildValueClass(className) {
-      primaryConstructor(
-        KotlinConstructorPropertySpecBuilder.builder("bar", String::class.asTypeName())
-          .addAnnotation(TestFixtures.myAnnotationSpec)
-          .build()
-      )
+      addConstructorProperty("bar", String::class) {
+        addAnnotation(TestFixtures.myAnnotationSpec)
+      }
     }
 
     assertThat(spec.code.trim()).isEqualTo(

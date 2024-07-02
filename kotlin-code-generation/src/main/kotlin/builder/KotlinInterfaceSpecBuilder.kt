@@ -38,3 +38,5 @@ class KotlinInterfaceSpecBuilder internal constructor(
   override fun spec(): KotlinInterfaceSpec = build()
   override fun get(): TypeSpec = build().get()
 }
+
+typealias KotlinInterfaceSpecBuilderReceiver = KotlinInterfaceSpecBuilder.() -> Unit

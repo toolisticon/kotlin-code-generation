@@ -1,10 +1,11 @@
-package io.toolisticon.kotlin.generation
+package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.annotation.GeneratedAnnotation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
+import io.toolisticon.kotlin.generation.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,14 +15,9 @@ internal class KotlinDataClassTest {
   fun `create foo`() {
     val className = ClassName("test", "Foo")
 
-    val c1 = buildConstructorProperty("x", Int::class.asTypeName())
-    val c2 = buildConstructorProperty("y", Long::class) {
-      makePrivate()
-    }
-
     val spec = buildDataClass(className) {
-      addAnnotation(GeneratedAnnotation(date = TestFixtures.NOW.toString()).comment("version" to "1.2"))
-      addConstructorProperty("x", Int::class.asTypeName())
+      addAnnotation(GeneratedAnnotation(date = TestFixtures.NOW).comment("version" to "1.2"))
+      addConstructorProperty("x", Int::class)
       addConstructorProperty("y", Long::class) {
         makePrivate()
         addAnnotation(TestFixtures.myAnnotationSpec)

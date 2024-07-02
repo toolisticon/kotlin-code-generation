@@ -1,9 +1,11 @@
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.MemberName.Companion.member
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import io.toolisticon.kotlin.generation.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.spec.*
@@ -13,25 +15,15 @@ import kotlin.reflect.KClass
 
 object KotlinCodeGeneration {
 
-  @JvmStatic
-  fun buildAnnotation(kclass: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(kclass.asClassName(), block)
-
-  @JvmStatic
+  fun buildAnnotation(type: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(type.asClassName(), block)
   fun buildAnnotation(className: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = annotationBuilder(className).also(block).build()
-
-  @JvmStatic
   fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = annotationClassBuilder(className).also(block).build()
-
-  @JvmStatic
+  fun buildCodeBlock(format: String, vararg args: Any?) = CodeBlock.of(format, *args)
+  inline fun buildCodeBlock(builderAction: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().apply(builderAction).build()
   fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
-
-  @JvmStatic
   fun buildConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = KotlinCodeGeneration.buildConstructorProperty(name, type.asTypeName(), block)
-
-  @JvmStatic
   fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
-
-  @JvmStatic
+  fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
   fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
 
   fun toFileSpec(spec: KotlinValueClassSpecSupplier): KotlinFileSpec = spec.spec().let {
@@ -53,18 +45,11 @@ object KotlinCodeGeneration {
 
   @Suppress(CLASS_NAME)
   object builder {
-    @JvmStatic
     fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
-
-    @JvmStatic
     fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
-
-    @JvmStatic
     fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
-
-    @JvmStatic
+    fun fileBuilder(className: ClassName) = KotlinFileSpecBuilder.builder(className)
     fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
-
   }
 
   @Suppress(CLASS_NAME)
@@ -72,20 +57,20 @@ object KotlinCodeGeneration {
 
     data class GeneratedAnnotation(
       val value: String = KotlinCodeGeneration::class.asTypeName().toString(),
-      val date: String = Instant.now().toString(),
+      val date: Instant = Instant.now(),
       val comments: List<String> = emptyList()
     ) : KotlinAnnotationSpecSupplier {
 
       fun generator(type: KClass<*>) = copy(value = type.asTypeName().toString())
-      fun date(instant: Instant) = copy(date = instant.toString())
+      fun date(instant: Instant) = copy(date = instant)
       fun comment(comment: Pair<String, String>) = copy(comments = this.comments + "${comment.first} = ${comment.second}")
 
       override fun spec(): KotlinAnnotationSpec = buildAnnotation(Generated::class) {
         addStringMember("value", value)
-        addStringMember("date", date)
+        addStringMember("date", date.toString())
 
         if (comments.isNotEmpty()) {
-          addStringMember("comments", comments.joinToString(separator = ", "))
+          addStringMember("comments", comments.joinToString(separator = "; "))
         }
       }
     }
@@ -102,9 +87,14 @@ object KotlinCodeGeneration {
   }
 
   @Suppress(CLASS_NAME)
-  object typeName {
+  object name {
+    fun MemberName.asCodeBlock(): CodeBlock = buildCodeBlock("%M", this)
 
-    operator fun ClassName.plus(suffix: String?) = ClassName(this.packageName, this.simpleNames)
+    fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map{it.asCodeBlock()}.joinToCode(prefix = "[", suffix = "]")
+
+    fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
+
+    operator fun ClassName.plus(suffix: String?): ClassName = ClassName(this.packageName, this.simpleNames)
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
   }

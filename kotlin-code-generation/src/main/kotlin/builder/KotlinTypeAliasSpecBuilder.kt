@@ -41,3 +41,5 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   override fun get(): TypeAliasSpec = build().get()
 
 }
+
+typealias KotlinTypeAliasSpecBuilderReceiver = KotlinTypeAliasSpecBuilder.() -> Unit

@@ -46,3 +46,5 @@ class KotlinObjectSpecBuilder internal constructor(
   override fun spec(): KotlinObjectSpec = build()
   override fun get(): TypeSpec = build().get()
 }
+
+typealias KotlinObjectSpecBuilderReceiver = KotlinObjectSpecBuilder.() -> Unit

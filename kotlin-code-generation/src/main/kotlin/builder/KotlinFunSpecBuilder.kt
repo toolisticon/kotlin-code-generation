@@ -68,3 +68,5 @@ class KotlinFunSpecBuilder internal constructor(
   override fun spec(): KotlinFunSpec = build()
   override fun get(): FunSpec = build().get()
 }
+
+typealias KotlinFunSpecBuilderReceiver = KotlinFunSpecBuilder.() -> Unit

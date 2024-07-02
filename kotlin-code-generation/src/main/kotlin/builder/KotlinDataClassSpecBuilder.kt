@@ -16,7 +16,10 @@ import kotlin.reflect.KClass
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>, KotlinDataClassSpecSupplier, DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>,
+  KotlinDataClassSpecSupplier,
+  ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
+  DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
   companion object : KLogging() {
 
     @JvmStatic
@@ -62,17 +65,9 @@ class KotlinDataClassSpecBuilder internal constructor(
 //  }
 //
 
-  fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
     this.constructorProperties[spec.name] = spec
   }
-
-  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
-    buildConstructorProperty(name, type, block)
-  )
-
-  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
-    buildConstructorProperty(name, type, block)
-  )
 
   fun addAnnotation(annotation: KotlinAnnotationSpecSupplier) = apply {
     delegate.addAnnotation(annotation.get())
