@@ -23,17 +23,16 @@ internal class KotlinFileSpecTest {
 
   @Test
   fun `build filespec`() {
-    val builder: KotlinFileSpecBuilder = KotlinFileSpecBuilder.builder(ClassName("foo", "Bar")).invoke {
+    val builder: KotlinFileSpecBuilder = KotlinFileSpecBuilder.builder(ClassName("foo", "Bar")).builder {
       addFileComment("%L", "this is a comment.")
     }
 
-    val b = builder {
+    val b = builder.builder {
       addAnnotation(Foo::class)
     }
 
     val spec = b.build()
 
     println(spec.code)
-    println(spec)
   }
 }

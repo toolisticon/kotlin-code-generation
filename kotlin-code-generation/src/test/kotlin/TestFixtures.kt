@@ -17,4 +17,5 @@ object TestFixtures {
 
   val myAnnotationSpec = buildAnnotation(MyAnnotation::class)
 
+  fun KClass<*>.notDeprecated() = !this.annotations.map { it::class }.contains(Deprecated::class)
 }

@@ -4,10 +4,10 @@
 
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
-    <artifactId>kotlin-code-generation-root</artifactId>
+    <artifactId>kotlin-code-generation-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
-
   <groupId>io.toolisticon.kotlin.generation.itest</groupId>
   <artifactId>kotlin-code-generation-itest</artifactId>
   <name>test: ${project.artifactId}</name>

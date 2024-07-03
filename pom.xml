@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -22,12 +22,13 @@
     <module>kotlin-code-generation-bom</module>
     <module>_mvn/parent</module>
     <module>kotlin-code-generation</module>
+    <module>kotlin-code-generation-test</module>
   </modules>
 
   <properties/>
 
   <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
-  <dependencyManagement />
+  <dependencyManagement/>
 
   <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
   <dependencies/>
@@ -35,10 +36,37 @@
   <build>
     <pluginManagement>
       <!-- plugins for other modules can be managed here -->
+      <plugins>
+        <!-- KOTLIN - opt-in for experimental compiler api (https://kotlinlang.org/docs/opt-in-requirements.html#module-wide-opt-in) -->
+        <plugin>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-maven-plugin</artifactId>
+          <configuration>
+            <args>
+              <arg>-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi</arg>
+              <arg>-opt-in=com.squareup.kotlinpoet.ExperimentalKotlinPoetApi</arg>
+            </args>
+          </configuration>
+        </plugin>
+      </plugins>
     </pluginManagement>
     <!-- this is the maven root, all plugins have to be declared in the concrete modules -->
     <plugins/>
   </build>
+
+  <profiles>
+    <profile>
+      <id>itest</id>
+      <activation>
+        <property>
+          <name>!skipItest</name>
+        </property>
+      </activation>
+      <modules>
+        <module>_itest</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <licenses>
     <license>
@@ -91,17 +119,4 @@
     </developer>
   </developers>
 
-  <profiles>
-    <profile>
-      <id>itest</id>
-      <activation>
-        <property>
-          <name>!skipItest</name>
-        </property>
-      </activation>
-      <modules>
-        <module>_itest</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>

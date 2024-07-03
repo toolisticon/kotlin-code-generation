@@ -45,10 +45,8 @@ class PropertySpecBuilder(
   override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = apply { builder.addAnnotations(annotationSpecs) }
 
   // ContextReceiverBuilder
-  @ExperimentalKotlinPoetApi
   override fun contextReceivers(receiverTypes: Iterable<TypeName>) = apply { builder.contextReceivers(receiverTypes) }
 
-  @ExperimentalKotlinPoetApi
   override fun contextReceivers(vararg receiverTypes: TypeName) = apply { builder.contextReceivers(*receiverTypes) }
 
   // DocumentableBuilder

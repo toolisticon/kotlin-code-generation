@@ -1,5 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.Documentable
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty

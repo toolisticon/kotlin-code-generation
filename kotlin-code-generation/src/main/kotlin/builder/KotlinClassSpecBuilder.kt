@@ -1,32 +1,47 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinClassSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 
 
 class KotlinClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinClassSpec, TypeSpec>, KotlinClassSpecSupplier, DelegatingBuilder<KotlinClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinClassSpec, TypeSpec>,
+  KotlinClassSpecSupplier,
+  DelegatingBuilder<KotlinClassSpecBuilder, TypeSpecBuilderReceiver> {
 
   companion object {
     @JvmStatic
-    fun classBuilder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
+    fun builder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
       className = ClassName("", name),
       delegate = TypeSpecBuilder.classBuilder(name)
     )
 
     @JvmStatic
-    fun classBuilder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
+    fun builder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
       className = className,
       delegate = TypeSpecBuilder.classBuilder(className.simpleName)
     )
+  }
 
+  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
+  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = builder {
+    delegate.addAnnotation(spec.get())
+  }
+
+  fun addFunction(funSpec : KotlinFunSpecSupplier) = apply {
+    delegate.addFunction(funSpec.get())
   }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {

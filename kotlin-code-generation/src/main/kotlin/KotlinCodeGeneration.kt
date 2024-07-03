@@ -4,8 +4,10 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationClassBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.funBuilder
 import io.toolisticon.kotlin.generation.Supressions.CLASS_NAME
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.spec.*
@@ -18,12 +20,21 @@ object KotlinCodeGeneration {
   fun buildAnnotation(type: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(type.asClassName(), block)
   fun buildAnnotation(className: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = annotationBuilder(className).also(block).build()
   fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = annotationClassBuilder(className).also(block).build()
+
+  fun buildClass(className: ClassName, block: KotlinClassSpecBuilderReceiver = {}) = classBuilder(className).also(block).build()
+
   fun buildCodeBlock(format: String, vararg args: Any?) = CodeBlock.of(format, *args)
   inline fun buildCodeBlock(builderAction: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().apply(builderAction).build()
+
   fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
   fun buildConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = KotlinCodeGeneration.buildConstructorProperty(name, type.asTypeName(), block)
+
   fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
+
   fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
+
+  fun buildFun(name: String, block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpec = funBuilder(name).also(block).build()
+
   fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
 
   fun toFileSpec(spec: KotlinValueClassSpecSupplier): KotlinFileSpec = spec.spec().let {
@@ -47,8 +58,11 @@ object KotlinCodeGeneration {
   object builder {
     fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
     fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
+    fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className);
     fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+    fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className);
     fun fileBuilder(className: ClassName) = KotlinFileSpecBuilder.builder(className)
+    fun funBuilder(name: String) = KotlinFunSpecBuilder.builder(name)
     fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
   }
 
@@ -90,7 +104,7 @@ object KotlinCodeGeneration {
   object name {
     fun MemberName.asCodeBlock(): CodeBlock = buildCodeBlock("%M", this)
 
-    fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map{it.asCodeBlock()}.joinToCode(prefix = "[", suffix = "]")
+    fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
     fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
 

@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.MemberName
 import io.toolisticon.kotlin.generation.BuilderSupplier
@@ -59,6 +60,10 @@ class KotlinFunSpecBuilder internal constructor(
       addParameter(parameter.get());
     }
   }
+
+
+  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
+  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {
     delegate.builder.block()

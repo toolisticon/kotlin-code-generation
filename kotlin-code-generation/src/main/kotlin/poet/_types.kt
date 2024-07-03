@@ -63,11 +63,7 @@ sealed interface OriginatingElementsHolderBuilder<SELF> {
 }
 
 sealed interface ContextReceivableBuilder<SELF> {
-
-  @ExperimentalKotlinPoetApi
   fun contextReceivers(receiverTypes: Iterable<TypeName>): SELF
-
-  @ExperimentalKotlinPoetApi
   fun contextReceivers(vararg receiverTypes: TypeName): SELF
 }
 
