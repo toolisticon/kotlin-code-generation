@@ -26,8 +26,8 @@ class AnnotationSpecBuilder(
 
   // Annotatable
   fun addMember(format: String, vararg args: Any) = apply { builder.addMember(CodeBlock.of(format, *args)) }
-  fun addMember(codeBlock: CodeBlock) = apply { builder. addMember(codeBlock) }
-  fun useSiteTarget(useSiteTarget: UseSiteTarget?) = apply { builder. useSiteTarget(useSiteTarget) }
+  fun addMember(codeBlock: CodeBlock) = apply { builder.addMember(codeBlock) }
+  fun useSiteTarget(useSiteTarget: UseSiteTarget?) = apply { builder.useSiteTarget(useSiteTarget) }
 
 
   override fun build(): AnnotationSpec = builder.build()

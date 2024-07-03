@@ -14,7 +14,9 @@ import kotlin.reflect.KClass
 
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
-) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>, KotlinAnnotationSpecSupplier, DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
+) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
+  KotlinAnnotationSpecSupplier,
+  DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
   companion object {
     @JvmStatic
     fun builder(

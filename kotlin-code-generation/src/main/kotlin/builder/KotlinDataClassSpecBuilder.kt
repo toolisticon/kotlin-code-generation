@@ -1,16 +1,12 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
-import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
-import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import mu.KLogging
+import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
 class KotlinDataClassSpecBuilder internal constructor(
@@ -59,12 +55,6 @@ class KotlinDataClassSpecBuilder internal constructor(
   override fun spec(): KotlinDataClassSpec = build()
   override fun get(): TypeSpec = build().get()
 
-//
-//  fun addType(typeSpecSupplier: TypeSpecSupplier) = apply {
-//    delegate.addType(typeSpecSupplier.get())
-//  }
-//
-
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
     this.constructorProperties[spec.name] = spec
   }
@@ -73,32 +63,40 @@ class KotlinDataClassSpecBuilder internal constructor(
     delegate.addAnnotation(annotation.get())
   }
 
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-//  override fun addAnnotation(annotation: ClassName): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder = apply {
-//    fun addAnnotation(annotation: ClassName): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder = apply {
-//      delegate.addAnnotation(annotation)
-//    }
-//
+  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
+  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+
+  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
+  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+
+  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+
+  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+
+  fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
+  fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
+  fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }
+  fun superclass(superclass: KClass<*>) = builder { this.superclass(superclass) }
+
+  fun addSuperclassConstructorParameter(format: String, vararg args: Any) = builder { this.addSuperclassConstructorParameter(format, *args) }
+  fun addSuperclassConstructorParameter(codeBlock: CodeBlock) = builder { this.addSuperclassConstructorParameter(codeBlock) }
+
+  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>) = builder { this.addSuperinterfaces(superinterfaces) }
+  fun addSuperinterface(superinterface: TypeName) = builder { this.addSuperinterface(superinterface) }
+  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
+  fun addSuperinterface(superinterface: KClass<*>) = builder { this.addSuperinterface(superinterface) }
+  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
+  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder { this.addSuperinterface(superinterface, constructorParameterName) }
+  fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+
+  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
+  fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 }
-
-
-//  @Suppress("ClassName")
-//  object builder :
-//    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.ToKotlinPoetSpecBuilder<KotlinDataClassSpec, _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder> {
-//
-//    fun builder(className: ClassName) = _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder(className = className)
-//    operator fun invoke(packageName: String, name: String): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
-//      _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.builder.invoke(ClassName(packageName, name))
-//
-//    fun builder(packageName: String, name: String) =
-//      _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder.Companion.builder.builder(ClassName(packageName, name))
-//    operator fun invoke(className: ClassName): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
-//      _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder(
-//        className = className,
-//        delegate = TypeSpec.classBuilder(className)
-//      )
-//
-//  }
 
 
 typealias KotlinDataClassSpecBuilderReceiver = KotlinDataClassSpecBuilder.() -> Unit

@@ -72,8 +72,6 @@ class TypeSpecBuilder(
 
     @JvmStatic
     fun anonymousClassBuilder(): TypeSpecBuilder = TypeSpec.anonymousClassBuilder().wrap()
-
-
   }
 
 

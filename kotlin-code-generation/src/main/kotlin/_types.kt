@@ -11,4 +11,3 @@ fun interface Builder<PRODUCT : Any> {
 }
 
 interface BuilderSupplier<P : Any, B : Any> : Builder<P>, Supplier<B>
-

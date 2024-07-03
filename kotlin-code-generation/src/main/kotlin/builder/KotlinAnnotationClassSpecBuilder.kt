@@ -1,16 +1,16 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
-import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
-import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.toList
+import javax.lang.model.element.Element
+import kotlin.reflect.KClass
 
 class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
@@ -46,6 +46,21 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   fun retention(retention: AnnotationRetention) = apply {
     this._retention = retention
   }
+
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+
+  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
+  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  fun contextReceivers(vararg receiverTypes: TypeName)= builder { this.contextReceivers(*receiverTypes) }
+
+  fun addFunction(funSpec: FunSpecSupplier)= builder { this.addFunction(funSpec.get()) }
+  fun addProperty(propertySpec: PropertySpecSupplier)= builder { this.addProperty(propertySpec.get()) }
+
+  fun addOriginatingElement(originatingElement: Element)= builder { this.addOriginatingElement(originatingElement) }
+  fun addType(typeSpec: TypeSpecSupplier)= builder { this.addType(typeSpec.get()) }
+
+  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()

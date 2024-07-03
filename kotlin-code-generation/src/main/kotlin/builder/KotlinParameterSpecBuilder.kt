@@ -1,14 +1,11 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.asTypeName
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 import java.lang.reflect.Type
@@ -85,9 +82,14 @@ class KotlinParameterSpecBuilder internal constructor(
     delegate.builder.block()
   }
 
-  fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier): KotlinParameterSpecBuilder = builder {
-    addAnnotation(annotationSpec.get())
-  }
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinParameterSpecBuilder = builder { this.addAnnotation(annotationSpec.get()) }
+  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
+  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+
+  fun defaultValue(format: String, vararg args: Any?) = builder { this.defaultValue(format, *args) }
+  fun defaultValue(codeBlock: CodeBlock?) = builder { this.defaultValue(codeBlock) }
 
   override fun build(): KotlinParameterSpec = KotlinParameterSpec(spec = delegate.build())
   override fun spec(): KotlinParameterSpec = build()

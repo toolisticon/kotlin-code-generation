@@ -5,8 +5,8 @@ import com.squareup.kotlinpoet.CodeBlock.Builder
 
 
 class CodeBlockBuilder(
-  override val builder: CodeBlock.Builder
-) : PoetSpecBuilder<CodeBlockBuilder, CodeBlock.Builder, CodeBlock, CodeBlockSupplier> {
+  override val builder: Builder
+) : PoetSpecBuilder<CodeBlockBuilder, Builder, CodeBlock, CodeBlockSupplier> {
   companion object {
     private fun Builder.wrap() = CodeBlockBuilder(this)
     fun of(format: String, vararg args: Any?): CodeBlock = CodeBlock.of(format, *args)
