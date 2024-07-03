@@ -8,6 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
+
   <groupId>io.toolisticon.kotlin.generation.itest</groupId>
   <artifactId>kotlin-code-generation-itest</artifactId>
   <name>test: ${project.artifactId}</name>

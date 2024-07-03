@@ -13,11 +13,6 @@
   <description>Bill of material for kotlin-code-generation.</description>
   <packaging>pom</packaging>
 
-  <properties>
-    <kotlin-poet.version>1.17.0</kotlin-poet.version>
-    <kotlin-compile-testing.version>0.5.0-alpha08</kotlin-compile-testing.version>
-  </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
