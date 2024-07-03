@@ -1,13 +1,11 @@
 package io.toolisticon.kotlin.generation.test.model
 
+import com.squareup.kotlinpoet.ClassName
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import kotlin.reflect.KClass
-import kotlin.reflect.full.declaredMemberExtensionFunctions
 
-@OptIn(ExperimentalCompilerApi::class)
 data class KotlinCompilationResult(
   val cmd: KotlinCompilationCommand,
   val result: JvmCompilationResult
@@ -26,7 +24,7 @@ data class KotlinCompilationResult(
       }
   }
 
-  fun loadClass(): KClass<out Any> = result.classLoader.loadClass(cmd.fileSpec.fqn).kotlin
+  fun loadClass(className: ClassName): KClass<out Any> = result.classLoader.loadClass(className.canonicalName).kotlin
 
   fun shouldBeOk() {
     assertThat(exitCode)

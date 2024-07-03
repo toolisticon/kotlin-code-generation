@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2024.5.2</version>
+    <version>2024.6.1</version>
     <relativePath/>
   </parent>
 
@@ -19,24 +19,16 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>_bom</module>
-    <module>kotlin-code-generation-test</module>
+    <module>_mvn/parent</module>
+    <module>kotlin-code-generation-bom</module>
     <module>kotlin-code-generation</module>
+    <module>kotlin-code-generation-test</module>
   </modules>
 
   <properties/>
 
-  <!-- this is the maven root, all dependencies have to be declared in the concrete modules, using avro-kotlin-parent -->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>3.26.0</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
+  <dependencyManagement/>
 
   <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
   <dependencies/>
@@ -48,6 +40,20 @@
     <!-- this is the maven root, all plugins have to be declared in the concrete modules -->
     <plugins/>
   </build>
+
+  <profiles>
+    <profile>
+      <id>itest</id>
+      <activation>
+        <property>
+          <name>!skipItest</name>
+        </property>
+      </activation>
+      <modules>
+        <module>_itest</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <licenses>
     <license>
@@ -100,17 +106,4 @@
     </developer>
   </developers>
 
-  <profiles>
-    <profile>
-      <id>itest</id>
-      <activation>
-        <property>
-          <name>!skipItest</name>
-        </property>
-      </activation>
-      <modules>
-        <module>_itest</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>

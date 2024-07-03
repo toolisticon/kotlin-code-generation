@@ -4,25 +4,14 @@
 
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
-    <artifactId>kotlin-code-generation-root</artifactId>
+    <artifactId>kotlin-code-generation-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
   <artifactId>kotlin-code-generation-test</artifactId>
   <description>Tools for testing generated classes. This lib exposes testing libraries and is supposed to be included with `scope=test`</description>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.toolisticon.kotlin.generation</groupId>
-        <artifactId>kotlin-code-generation-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <!-- KOTLIN -->
@@ -96,6 +85,12 @@
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
+        <configuration>
+          <args>
+            <arg>-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi</arg>
+            <arg>-opt-in=com.squareup.kotlinpoet.ExperimentalKotlinPoetApi</arg>
+          </args>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

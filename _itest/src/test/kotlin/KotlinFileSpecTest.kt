@@ -1,7 +1,9 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
-import io.toolisticon.kotlin.generation.builder.KotlinFileBuilder
+import com.squareup.kotlinpoet.FileSpec
+import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
+import org.jetbrains.kotlin.metadata.ProtoBuf
 import org.junit.jupiter.api.Test
 
 internal class KotlinFileSpecTest {
@@ -10,18 +12,27 @@ internal class KotlinFileSpecTest {
   annotation class Foo
 
   @Test
+  fun name() {
+    val spec = FileSpec.builder(ClassName("some","Stuff"))
+      .addFileComment("%L", "this is a comment")
+      .addAnnotation(Foo::class)
+      .build()
+
+    println(spec)
+  }
+
+  @Test
   fun `build filespec`() {
-    val builder: KotlinFileBuilder = KotlinFileBuilder.builder(ClassName("foo", "Bar")) {
+    val builder: KotlinFileSpecBuilder = KotlinFileSpecBuilder.builder(ClassName("foo", "Bar")).builder {
       addFileComment("%L", "this is a comment.")
     }
 
-    val b = builder {
+    val b = builder.builder {
       addAnnotation(Foo::class)
     }
 
     val spec = b.build()
 
     println(spec.code)
-    println(spec)
   }
 }

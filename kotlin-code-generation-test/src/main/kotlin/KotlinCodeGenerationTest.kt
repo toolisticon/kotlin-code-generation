@@ -2,9 +2,10 @@ package io.toolisticon.kotlin.generation.test
 
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
+import com.tschuchort.compiletesting.SourceFile
+import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationResult
-import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import java.io.ByteArrayOutputStream
 
 /**
@@ -28,7 +29,6 @@ import java.io.ByteArrayOutputStream
  *     }.compile()
  *  ```
  */
-@OptIn(ExperimentalCompilerApi::class)
 object KotlinCodeGenerationTest {
 
   @JvmStatic
@@ -38,7 +38,7 @@ object KotlinCodeGenerationTest {
   fun compile(cmd: KotlinCompilationCommand): KotlinCompilationResult {
 
     val result: JvmCompilationResult = KotlinCompilation().apply {
-      sources = listOf(cmd.sourceFile)
+      sources = cmd.sourceFiles
       inheritClassPath = true
 
       this.
@@ -50,5 +50,5 @@ object KotlinCodeGenerationTest {
     return KotlinCompilationResult(cmd = cmd, result = result)
   }
 
-
+  fun KotlinFileSpec.sourceFile() = SourceFile.kotlin(name = this.fileName, contents = this.code)
 }

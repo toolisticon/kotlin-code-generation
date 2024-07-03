@@ -4,8 +4,9 @@
 
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
-    <artifactId>kotlin-code-generation-root</artifactId>
+    <artifactId>kotlin-code-generation-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
@@ -83,6 +84,11 @@
       <artifactId>kotlin-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -90,6 +96,12 @@
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
+        <configuration>
+          <args>
+            <arg>-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi</arg>
+            <arg>-opt-in=com.squareup.kotlinpoet.ExperimentalKotlinPoetApi</arg>
+          </args>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

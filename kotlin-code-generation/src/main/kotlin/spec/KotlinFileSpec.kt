@@ -2,15 +2,22 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
+import io.toolisticon.kotlin.generation.poet.FileSpecSupplier
 
-@JvmInline
-value class KotlinFileSpec(private val spec: FileSpec) : KotlinPoetSpec<FileSpec>, FileSpecSupplier {
+data class KotlinFileSpec(
+  private val spec: FileSpec
+) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier {
 
-  val packageName: String get() = spec.packageName
-  val rootName: String get() = spec.name
-  val className: ClassName get() = ClassName(packageName, rootName)
-  val fqn: String get() = "$packageName.$rootName"
-  val fileName: String get() = "$fqn.kt"
+  val packageName: String = spec.packageName
+  val rootName: String = spec.name
+  val className: ClassName = ClassName(packageName, rootName)
+  val fqn: String = "$packageName.$rootName"
+  val fileName: String = "$fqn.kt"
 
+  override fun spec(): KotlinFileSpec = this
   override fun get(): FileSpec = spec
+}
+
+interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, FileSpecSupplier {
+  override fun get(): FileSpec = spec().get()
 }

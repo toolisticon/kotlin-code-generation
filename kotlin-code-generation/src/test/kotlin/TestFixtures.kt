@@ -1,12 +1,21 @@
 package io.toolisticon.kotlin.generation
 
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.annotationBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
+import java.time.Instant
+import kotlin.reflect.KClass
 
 object TestFixtures {
 
-  @Target(AnnotationTarget.VALUE_PARAMETER)
-  annotation class MyAnnotation()
+  // a fixed instant to be used in test with
+  val NOW = Instant.parse( "2024-07-02T10:01:33.205357100Z")
 
-  val myAnnotationSpec = annotationBuilder(type = MyAnnotation::class)
+  @Target(allowedTargets = [AnnotationTarget.VALUE_PARAMETER])
+  annotation class MyAnnotation(
+    val name: String,
+    val type: KClass<*>
+  )
 
+  val myAnnotationSpec = buildAnnotation(MyAnnotation::class)
+
+  fun KClass<*>.notDeprecated() = !this.annotations.map { it::class }.contains(Deprecated::class)
 }

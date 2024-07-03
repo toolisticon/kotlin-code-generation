@@ -3,19 +3,22 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isValueClass
-import io.toolisticon.kotlin.generation.builder.KotlinValueClassBuilder
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
 data class KotlinValueClassSpec(
-  override val className: ClassName,
+  val className: ClassName,
   private val spec: TypeSpec
-) : KotlinPoetNamedTypeSpec {
+) : KotlinGeneratorTypeSpec<KotlinValueClassSpec>, KotlinValueClassSpecSupplier {
 
   init {
     require(spec.isValueClass) { "Not a valueClass spec: $spec." }
   }
 
+  override fun spec(): KotlinValueClassSpec = this
   override fun get(): TypeSpec = spec
-
 }
 
-fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
+// fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
+interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, TypeSpecSupplier {
+  override fun get(): TypeSpec = spec().get()
+}

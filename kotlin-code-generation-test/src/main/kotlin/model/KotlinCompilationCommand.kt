@@ -1,12 +1,17 @@
 package io.toolisticon.kotlin.generation.test.model
 
-import com.squareup.kotlinpoet.FileSpec
 import com.tschuchort.compiletesting.SourceFile
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
+import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.sourceFile
 
 data class KotlinCompilationCommand(
-  val fileSpec: KotlinFileSpec
+  val fileSpecs: List<KotlinFileSpec>
 ) {
 
-  val sourceFile = SourceFile.kotlin(name = fileSpec.fileName, contents = fileSpec.code)
+  constructor(fileSpec: KotlinFileSpec) : this(listOf(fileSpec))
+
+  operator fun plus(fileSpec: KotlinFileSpec) = copy(fileSpecs = fileSpecs + fileSpec)
+
+
+  val sourceFiles: List<SourceFile> by lazy { fileSpecs.map { it.sourceFile() } }
 }
