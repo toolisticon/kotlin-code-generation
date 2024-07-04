@@ -16,19 +16,12 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   DelegatingBuilder<KotlinTypeAliasSpecBuilder, TypeAliasSpecBuilderReceiver> {
 
   companion object {
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName
-    ): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(
+
+    fun builder(name: String, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(
       delegate = TypeAliasSpecBuilder.builder(name, type)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>
-    ): KotlinTypeAliasSpecBuilder = builder(name, type.asTypeName())
+    fun builder(name: String, type: KClass<*>): KotlinTypeAliasSpecBuilder = builder(name, type.asTypeName())
   }
 
 

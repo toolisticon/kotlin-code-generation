@@ -1,30 +1,27 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.BuilderSupplier
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.toList
 import javax.lang.model.element.Element
-import kotlin.reflect.KClass
 
 class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinAnnotationClassSpec, TypeSpec>, KotlinAnnotationClassSpecSupplier,
-  ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
-  DelegatingBuilder<KotlinAnnotationClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
+  ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder> {
 
   companion object {
 
-    @JvmStatic
     fun builder(name: String): KotlinAnnotationClassSpecBuilder = builder(ClassName("", name))
 
-    @JvmStatic
     fun builder(className: ClassName): KotlinAnnotationClassSpecBuilder = KotlinAnnotationClassSpecBuilder(
       className = className,
       delegate = TypeSpecBuilder.annotationBuilder(className.simpleName)
@@ -52,13 +49,13 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName)= builder { this.contextReceivers(*receiverTypes) }
+  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
-  fun addFunction(funSpec: FunSpecSupplier)= builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier)= builder { this.addProperty(propertySpec.get()) }
+  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
+  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
 
-  fun addOriginatingElement(originatingElement: Element)= builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier)= builder { this.addType(typeSpec.get()) }
+  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
@@ -91,9 +88,6 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
     return KotlinAnnotationClassSpec(className = className, spec = delegate.build())
   }
 
-  override fun spec(): KotlinAnnotationClassSpec = build()
-
-  override fun get(): TypeSpec = build().get()
 }
 
 typealias KotlinAnnotationClassSpecBuilderReceiver = KotlinAnnotationClassSpecBuilder.() -> Unit

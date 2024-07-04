@@ -18,63 +18,30 @@ class KotlinParameterSpecBuilder internal constructor(
   DelegatingBuilder<KotlinParameterSpecBuilder, ParameterSpecBuilderReceiver> {
   companion object {
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      vararg modifiers: KModifier
-    ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
+    fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, *modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: Type,
-      vararg modifiers: KModifier
-    ): KotlinParameterSpecBuilder = builder(name, type.asTypeName(), *modifiers)
+    fun builder(name: String, type: Type, vararg modifiers: KModifier): KotlinParameterSpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      vararg modifiers: KModifier,
-    ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
+    fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), *modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      modifiers: Iterable<KModifier>,
-    ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
+    fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: Type,
-      modifiers: Iterable<KModifier>,
-    ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
+    fun builder(name: String, type: Type, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      modifiers: Iterable<KModifier>,
-    ): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
+    fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
-
-    @JvmStatic
     fun builder(spec: KotlinParameterSpec) = builder(spec.get())
 
-    @JvmStatic
     fun builder(spec: ParameterSpec) = KotlinParameterSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 

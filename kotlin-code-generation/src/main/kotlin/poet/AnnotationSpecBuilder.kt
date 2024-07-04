@@ -10,14 +10,10 @@ class AnnotationSpecBuilder(
   companion object {
     fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
 
-    @JvmStatic
     fun builder(type: ClassName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
-    @JvmStatic
     fun builder(type: ParameterizedTypeName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
-
-    @JvmStatic
     fun builder(type: KClass<out Annotation>): AnnotationSpecBuilder = builder(type.asClassName())
   }
 

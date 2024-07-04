@@ -31,9 +31,7 @@ import java.io.ByteArrayOutputStream
  */
 object KotlinCodeGenerationTest {
 
-  @JvmStatic
   fun assertThat(actual: KotlinCompilationResult): KotlinCompilationAssert = KotlinCompilationAssert(actual)
-
 
   fun compile(cmd: KotlinCompilationCommand): KotlinCompilationResult {
 

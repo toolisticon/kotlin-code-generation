@@ -12,40 +12,24 @@ class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder
 ) : BuilderSupplier<KotlinFileSpec, FileSpec>, KotlinFileSpecSupplier, DelegatingBuilder<KotlinFileSpecBuilder, FileSpecBuilderReceiver> {
   companion object {
-    @JvmStatic
-    fun builder(
-      className: ClassName
-    ): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
+    fun builder(className: ClassName): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(className)
     )
 
-    @JvmStatic
-    fun builder(
-      memberName: MemberName
-    ): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
+    fun builder(memberName: MemberName): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(memberName)
     )
 
-    @JvmStatic
-    fun builder(
-      packageName: String,
-      fileName: String
-    ): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
+    fun builder(packageName: String, fileName: String): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(packageName, fileName)
     )
 
-    @JvmStatic
-    fun scriptBuilder(
-      fileName: String,
-      packageName: String = ""
-    ): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
+    fun scriptBuilder(fileName: String, packageName: String = ""): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.scriptBuilder(fileName, packageName)
     )
 
-    @JvmStatic
     fun builder(spec: KotlinFileSpec) = builder(spec.get())
 
-    @JvmStatic
     fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 

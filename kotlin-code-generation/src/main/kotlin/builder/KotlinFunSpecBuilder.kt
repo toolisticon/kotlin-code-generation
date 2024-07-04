@@ -20,40 +20,28 @@ class KotlinFunSpecBuilder internal constructor(
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver> {
 
   companion object {
-    @JvmStatic
-    fun builder(
-      name: String
-    ): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+    fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(name)
     )
 
-    @JvmStatic
-    fun builder(
-      memberName: MemberName
-    ): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
+    fun builder(memberName: MemberName): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(memberName)
     )
 
-    @JvmStatic
     fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.constructorBuilder()
     )
 
-    @JvmStatic
     fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.getterBuilder()
     )
 
-    @JvmStatic
     fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.setterBuilder()
     )
 
-
-    @JvmStatic
     fun builder(spec: KotlinFunSpec) = builder(spec.get())
 
-    @JvmStatic
     fun builder(spec: FunSpec) = KotlinFunSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 

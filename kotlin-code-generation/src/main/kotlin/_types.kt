@@ -10,4 +10,4 @@ fun interface Builder<PRODUCT : Any> {
   fun build(): PRODUCT
 }
 
-interface BuilderSupplier<P : Any, B : Any> : Builder<P>, Supplier<B>
+interface BuilderSupplier<PRODUCT : Any, SPEC : Any> : Builder<PRODUCT>, Supplier<SPEC>

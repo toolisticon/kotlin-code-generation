@@ -12,49 +12,22 @@ class ParameterSpecBuilder(
   companion object {
     fun ParameterSpec.Builder.wrap() = ParameterSpecBuilder(this)
 
-
-    @JvmStatic
     fun builder(name: String, type: TypeName, vararg modifiers: KModifier): ParameterSpecBuilder = ParameterSpec.builder(name, type, *modifiers).wrap()
 
-    @JvmStatic
-    fun builder(name: String, type: Type, vararg modifiers: KModifier): ParameterSpecBuilder =
-      builder(name, type.asTypeName(), *modifiers)
+    fun builder(name: String, type: Type, vararg modifiers: KModifier): ParameterSpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      vararg modifiers: KModifier,
-    ): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), *modifiers).wrap()
+    fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), *modifiers).wrap()
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      modifiers: Iterable<KModifier>,
-    ): ParameterSpecBuilder = ParameterSpec.builder(name, type, modifiers).wrap()
+    fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): ParameterSpecBuilder = ParameterSpec.builder(name, type, modifiers).wrap()
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: Type,
-      modifiers: Iterable<KModifier>,
-    ): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), modifiers).wrap()
+    fun builder(name: String, type: Type, modifiers: Iterable<KModifier>): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), modifiers).wrap()
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      modifiers: Iterable<KModifier>,
-    ): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), modifiers).wrap()
+    fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): ParameterSpecBuilder = ParameterSpec.builder(name, type.asTypeName(), modifiers).wrap()
 
-    @JvmStatic
     fun unnamed(type: KClass<*>): ParameterSpec = ParameterSpec.unnamed(type.asTypeName())
 
-    @JvmStatic
     fun unnamed(type: Type): ParameterSpec = ParameterSpec.unnamed(type.asTypeName())
 
-    @JvmStatic
     fun unnamed(type: TypeName): ParameterSpec = ParameterSpec.unnamed(type)
   }
 

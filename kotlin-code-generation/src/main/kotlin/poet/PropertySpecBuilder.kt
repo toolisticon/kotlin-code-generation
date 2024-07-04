@@ -15,27 +15,18 @@ class PropertySpecBuilder(
   companion object {
     fun PropertySpec.Builder.wrap() = PropertySpecBuilder(builder = this)
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      vararg modifiers: KModifier,
-    ): PropertySpecBuilder = PropertySpec.builder(name, type, *modifiers).wrap()
+    fun builder(name: String, type: TypeName, vararg modifiers: KModifier, ): PropertySpecBuilder = PropertySpec.builder(name, type, *modifiers).wrap()
 
-    @JvmStatic
     fun builder(name: String, type: Type, vararg modifiers: KModifier): PropertySpecBuilder = builder(
       name = name,
       type = type.asTypeName(),
       modifiers = modifiers
     )
 
-    @JvmStatic
     fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): PropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
-    @JvmStatic
     fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): PropertySpecBuilder = PropertySpec.builder(name, type, modifiers).wrap()
 
-    @JvmStatic
     fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): PropertySpecBuilder = PropertySpec.builder(name, type.asTypeName(), modifiers).wrap()
   }
 

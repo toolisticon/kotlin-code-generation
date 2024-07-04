@@ -3,10 +3,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
-import io.toolisticon.kotlin.generation.spec.KotlinClassSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
@@ -14,18 +11,14 @@ import kotlin.reflect.KClass
 class KotlinClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinClassSpec, TypeSpec>,
-  KotlinClassSpecSupplier,
-  DelegatingBuilder<KotlinClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec> {
 
   companion object {
-    @JvmStatic
     fun builder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
       className = ClassName("", name),
       delegate = TypeSpecBuilder.classBuilder(name)
     )
 
-    @JvmStatic
     fun builder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
       className = className,
       delegate = TypeSpecBuilder.classBuilder(className.simpleName)
@@ -85,9 +78,6 @@ class KotlinClassSpecBuilder internal constructor(
     className = className,
     spec = delegate.build()
   )
-
-  override fun spec(): KotlinClassSpec = build()
-  override fun get(): TypeSpec = build().get()
 
 //  operator fun invoke(spec: KotlinDataClassSpec): _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder =
 //    _root_ide_package_.io.toolisticon.kotlin.generation._BAK.KotlinDataClassBuilder.KotlinDataClassSpecBuilder(

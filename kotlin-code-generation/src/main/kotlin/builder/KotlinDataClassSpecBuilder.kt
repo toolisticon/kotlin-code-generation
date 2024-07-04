@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.*
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spec.toList
 import mu.KLogging
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
@@ -12,23 +14,19 @@ import kotlin.reflect.KClass
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
-) : BuilderSupplier<KotlinDataClassSpec, TypeSpec>,
-  KotlinDataClassSpecSupplier,
-  ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
-  DelegatingBuilder<KotlinDataClassSpecBuilder, TypeSpecBuilderReceiver> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
+  ConstructorPropertySupport<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
 
-    @JvmStatic
     fun builder(name: String): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
       className = ClassName("", name),
       delegate = TypeSpecBuilder.classBuilder(name)
     )
 
-    @JvmStatic
     fun builder(className: ClassName): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(className)
   }
 
-  internal constructor(className: ClassName) : this(
+  internal constructor (className: ClassName) : this(
     className = className,
     delegate = TypeSpecBuilder.classBuilder(className)
   )
@@ -50,10 +48,6 @@ class KotlinDataClassSpecBuilder internal constructor(
 
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
-
-
-  override fun spec(): KotlinDataClassSpec = build()
-  override fun get(): TypeSpec = build().get()
 
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
     this.constructorProperties[spec.name] = spec

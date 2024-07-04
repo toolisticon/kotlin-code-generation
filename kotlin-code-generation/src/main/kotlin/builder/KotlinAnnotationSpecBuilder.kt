@@ -18,24 +18,15 @@ class KotlinAnnotationSpecBuilder internal constructor(
   KotlinAnnotationSpecSupplier,
   DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
   companion object {
-    @JvmStatic
-    fun builder(
-      type: ClassName
-    ): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
+    fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
     )
 
-    @JvmStatic
-    fun builder(
-      type: ParameterizedTypeName
-    ): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
+    fun builder(type: ParameterizedTypeName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
     )
 
-    @JvmStatic
-    fun builder(
-      type: KClass<out Annotation>
-    ): KotlinAnnotationSpecBuilder = builder(type.asClassName())
+    fun builder(type: KClass<out Annotation>): KotlinAnnotationSpecBuilder = builder(type.asClassName())
 
     fun from(spec: KotlinAnnotationSpecSupplier) = KotlinAnnotationSpecBuilder(
       delegate = spec.get().toBuilder().wrap()
@@ -57,6 +48,8 @@ class KotlinAnnotationSpecBuilder internal constructor(
   fun addStringMember(name: String, value: String) = addMember("$name = %S", value)
 
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember("$name = %M", value.asMemberName())
+
+  fun addNumberMember(name: String, value: Number) : KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
 
   fun addEnumMembers(name: String, vararg value: Enum<*>): KotlinAnnotationSpecBuilder {
     val members = value.map { it.asMemberName() }.asCodeBlock()

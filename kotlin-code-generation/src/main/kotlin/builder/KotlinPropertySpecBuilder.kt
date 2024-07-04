@@ -21,55 +21,28 @@ class KotlinPropertySpecBuilder internal constructor(
 
   companion object {
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      vararg modifiers: KModifier,
-    ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: String, type: TypeName, vararg modifiers: KModifier, ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, *modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: Type,
-      vararg modifiers: KModifier
-    ): KotlinPropertySpecBuilder = builder(
+    fun builder(name: String, type: Type, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(
       name = name,
       type = type.asTypeName(),
       modifiers = modifiers
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      vararg modifiers: KModifier
-    ): KotlinPropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
+    fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: TypeName,
-      modifiers: Iterable<KModifier>
-    ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, modifiers)
     )
 
-    @JvmStatic
-    fun builder(
-      name: String,
-      type: KClass<*>,
-      modifiers: Iterable<KModifier>
-    ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
-    @JvmStatic
     fun builder(spec: KotlinPropertySpec) = builder(spec.get())
 
-    @JvmStatic
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
