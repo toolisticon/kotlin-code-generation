@@ -20,7 +20,7 @@
 
   <modules>
     <module>_mvn/parent</module>
-    <module>kotlin-code-generation-bom</module>
+    <module>_mvn/bom</module>
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
   </modules>
