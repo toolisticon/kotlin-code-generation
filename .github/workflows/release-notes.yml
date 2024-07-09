@@ -9,6 +9,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@master
+      
     - name: Create Release Notes Markdown
       uses: docker://decathlon/release-notes-generator-action:3.1.5
       env:
@@ -23,7 +24,7 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
     - name: Create a Draft Release Notes on GitHub
       id: create_release
-      uses: actions/create-release@v1
+      uses: actions/create-release@v1.1.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
