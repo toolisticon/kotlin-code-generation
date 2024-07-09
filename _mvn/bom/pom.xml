@@ -1,0 +1,33 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.toolisticon.kotlin.generation._</groupId>
+    <artifactId>kotlin-code-generation-root</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <groupId>io.toolisticon.kotlin.generation</groupId>
+  <artifactId>kotlin-code-generation-bom</artifactId>
+  <description>Bill of material for kotlin-code-generation.</description>
+  <packaging>pom</packaging>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>kotlin-code-generation</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>kotlin-code-generation-test</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
