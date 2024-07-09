@@ -13,18 +13,6 @@
   <artifactId>kotlin-code-generation</artifactId>
   <description>Wrapping core components for kotlin code generation with kotlin-poet.</description>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.toolisticon.kotlin.generation</groupId>
-        <artifactId>kotlin-code-generation-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <!-- KOTLIN -->
     <dependency>
