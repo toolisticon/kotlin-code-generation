@@ -1,42 +1,79 @@
-# BASE_ARTIFACT_ID
-
-Template repository for usage in organizations: toolisticon, holunda-io, holixon...
+# kotlin-code-generation
 
 [![incubating](https://img.shields.io/badge/lifecycle-INCUBATING-orange.svg)](https://github.com/holisticon#open-source-lifecycle)
-[![Build Status](https://github.com/GITHUB_ORGANIZATION/GITHUB_REPOSITORY/workflows/Development%20branches/badge.svg)](https://github.com/GITHUB_ORGANIZATION/GITHUB_REPOSITORY/actions)
+[![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
 [![sponsored](https://img.shields.io/badge/sponsoredBy-Holisticon-RED.svg)](https://holisticon.de/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/BASE_GROUP_ID/BASE_ARTIFACT_ID/badge.svg)](https://maven-badges.herokuapp.com/maven-central/BASE_GROUP_ID/BASE_ARTIFACT_ID)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation)
 
-This repository is a **template repository** designed to be a template for the next project.
+**Usage:**
 
-## How to use
+```xml
+<dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.toolisticon.kotlin.generation</groupId>
+        <artifactId>kotlin-code-generation-bom</artifactId>
+        <version>LATEST_VERSION</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
 
-* create a new repo on github (can be in any organization). Choose this project as template repository. Copy all branches, so the `master`exists in your repo (for the github actions)
-* on the command line: clone your new repo locally
-* in the `setup.sh` script: set your organization, repository and base package
-* run the `setup.sh` script, all placeholders are filled with your information
-* delete the setup-script
-* Update the `README.md`
-* in the `developers` section of the `pom.xml`: mention yourself ... it is your project.
+## Documentation
 
-## Things to change after usage of template
+* see [kotlin-poet](https://square.github.io/kotlinpoet/) 
 
-To change the following values, modify the placeholders in `setup.sh` and run it.
-This is a one-time operation, you can safely delete the `setup.sh` file afterwards.
+## Features
 
-Of course, you can also edit manually .... and do not forget to change this `README.md` with YOUR project specific information :-).
+* KotlinAnnotationSpec
+  * KotlinAnnotationSpecBuilder
+* KotlinFileSpec
+  * KotlinFileSpecBuilder
+* KotlinFunSpec
+  * KotlinFunSpecBuilder
+* KotlinParameterSpec
+  * KotlinParameterSpecBuilder
+* KotlinPropertySpec
+  * KotlinPropertySpecBuilder
 
-### Maven pom.xml 
 
-* Maven coordinates: `groupId`, `artifactId` and `version`
-* Main description: `name`, `url`, `description`
-* SCM: `connection`, `url`, `developerConnection`
 
-### Issue Template
+## Roadmap
 
-* correct the URL to repo
+### Specs to support
 
-### Issue Labels
+* com/squareup/kotlinpoet/TypeAliasSpec
+* com/squareup/kotlinpoet/TypeSpec
 
-* Check the release-notes.yml for details, but create the following labels: Type: dependencies, Type: bug, Type: documentation, Type: question, Type: enhancement
+### Builders to implement
 
+* com/squareup/kotlinpoet/AnnotationSpec$Builder
+  * Taggable.Builder<Builder>
+* com/squareup/kotlinpoet/CodeBlock$Builder
+  * None
+* com/squareup/kotlinpoet/FileSpec$Builder
+  * Annotatable.Builder<Builder>
+  * Taggable.Builder<Builder>
+  * TypeSpecHolder.Builder<Builder>
+* com/squareup/kotlinpoet/FunSpec$Builder
+  * Annotatable.Builder<Builder>
+  * ContextReceivable.Builder<Builder>
+  * Documentable.Builder<Builder>
+  * Taggable.Builder<Builder>
+  * OriginatingElementsHolder.Builder<Builder>
+* com/squareup/kotlinpoet/ParameterSpec$Builder
+  * Annotatable.Builder<Builder>
+  * Documentable.Builder<Builder>
+  * Taggable.Builder<Builder>
+* com/squareup/kotlinpoet/PropertySpec$Builder
+  * Annotatable.Builder<Builder>
+  * ContextReceivable.Builder<Builder>
+  * Documentable.Builder<Builder>
+  * OriginatingElementsHolder.Builder<Builder>
+  * Taggable.Builder<Builder>
+* com/squareup/kotlinpoet/TypeAliasSpec$Builder
+  * Annotatable.Builder<Builder>
+  * Documentable.Builder<Builder>
+  * Taggable.Builder<Builder>

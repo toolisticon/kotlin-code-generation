@@ -5,103 +5,69 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2024.5.0</version>
+    <version>2024.6.1</version>
     <relativePath/>
   </parent>
 
-  <groupId>BASE_GROUP_ID</groupId>
-  <artifactId>BASE_ARTIFACT_ID</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>${project.artifactId}</name>
-  <description>BASE_DESCRIPTION</description>
-  <url>https://github.com/GITHUB_ORGANIZATION/GITHUB_REPOSITORY/</url>
+  <groupId>io.toolisticon.kotlin.generation._</groupId>
+  <artifactId>kotlin-code-generation-root</artifactId>
+  <version>0.0.1</version>
 
-  <properties>
-    <!-- TEST -->
-    <mockito.version>5.3.1</mockito.version>
-    <assertj.version>3.25.3</assertj.version>
-  </properties>
+  <name>pom: ${project.artifactId}</name>
+  <description>Root of kotlin-code-generation</description>
+  <url>https://github.com/toolisticon/kotlin-code-generation/</url>
+  <packaging>pom</packaging>
 
-  <dependencies>
-    <!-- KOTLIN -->
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib-jdk8</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-reflect</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.github.microutils</groupId>
-      <artifactId>kotlin-logging-jvm</artifactId>
-      <version>${kotlin-logging.version}</version>
-    </dependency>
+  <modules>
+    <module>_mvn/parent</module>
+    <module>_mvn/bom</module>
+    <module>kotlin-code-generation</module>
+    <module>kotlin-code-generation-test</module>
+  </modules>
 
-    <!-- TEST -->
-    <dependency>
-      <groupId>org.mockito.kotlin</groupId>
-      <artifactId>mockito-kotlin</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-test-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <properties/>
+
+  <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
+  <dependencyManagement/>
+
+  <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
+  <dependencies/>
 
   <build>
-    <defaultGoal>clean jacoco:prepare-agent package</defaultGoal>
-
-    <plugins>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <!-- plugins for other modules can be managed here -->
+    </pluginManagement>
+    <!-- this is the maven root, all plugins have to be declared in the concrete modules -->
+    <plugins/>
   </build>
+
+  <profiles>
+    <profile>
+      <id>itest</id>
+      <activation>
+        <property>
+          <name>!skipItest</name>
+        </property>
+      </activation>
+      <modules>
+        <module>_itest</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
       <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
     </license>
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:GITHUB_ORGANIZATION/GITHUB_REPOSITORY.git</connection>
-    <url>scm:git:git@github.com:GITHUB_ORGANIZATION/GITHUB_REPOSITORY.git</url>
-    <developerConnection>scm:git:git@github.com:GITHUB_ORGANIZATION/GITHUB_REPOSITORY.git</developerConnection>
+    <connection>scm:git:git@github.com:toolisticon/kotlin-code-generation.git</connection>
+    <url>scm:git:git@github.com:toolisticon/kotlin-code-generation.git</url>
+    <developerConnection>scm:git:git@github.com:toolisticon/kotlin-code-generation.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -139,4 +105,5 @@
       <organizationUrl>https://holisticon.de</organizationUrl>
     </developer>
   </developers>
+
 </project>
