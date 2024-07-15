@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
 
@@ -33,33 +33,16 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- KOTLIN -->
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-reflect</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.github.microutils</groupId>
-      <artifactId>kotlin-logging-jvm</artifactId>
-    </dependency>
-    <!-- /KOTLIN -->
 
     <dependency>
       <groupId>io.toolisticon.kotlin.generation</groupId>
       <artifactId>kotlin-code-generation</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.toolisticon.kotlin.generation</groupId>
       <artifactId>kotlin-code-generation-test</artifactId>
-      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -69,6 +52,19 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>io.toolisticon.kotlin.generation.itest.created.**/*</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
