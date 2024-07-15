@@ -15,7 +15,8 @@ class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
-  ConstructorPropertySupport<KotlinDataClassSpecBuilder> {
+  ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
+KotlinDocumentableBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
 
     fun builder(name: String): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
@@ -59,8 +60,9 @@ class KotlinDataClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+  override fun addKdoc(kdoc: KDoc): KotlinDataClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
@@ -91,6 +93,5 @@ class KotlinDataClassSpecBuilder internal constructor(
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 }
-
 
 typealias KotlinDataClassSpecBuilderReceiver = KotlinDataClassSpecBuilder.() -> Unit

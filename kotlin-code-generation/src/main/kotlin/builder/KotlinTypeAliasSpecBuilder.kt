@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpec
@@ -13,7 +14,8 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   private val delegate: TypeAliasSpecBuilder
 ) : BuilderSupplier<KotlinTypeAliasSpec, TypeAliasSpec>,
   KotlinTypeAliasSpecSupplier,
-  DelegatingBuilder<KotlinTypeAliasSpecBuilder, TypeAliasSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinTypeAliasSpecBuilder, TypeAliasSpecBuilderReceiver>,
+KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder>{
 
   companion object {
 
@@ -27,8 +29,9 @@ class KotlinTypeAliasSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+  override fun addKdoc(kdoc: KDoc): KotlinTypeAliasSpecBuilder = apply{
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 

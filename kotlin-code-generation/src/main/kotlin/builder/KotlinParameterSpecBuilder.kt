@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilderReceiver
@@ -15,7 +16,8 @@ class KotlinParameterSpecBuilder internal constructor(
   private val delegate: ParameterSpecBuilder
 ) : BuilderSupplier<KotlinParameterSpec, ParameterSpec>,
   KotlinParameterSpecSupplier,
-  DelegatingBuilder<KotlinParameterSpecBuilder, ParameterSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinParameterSpecBuilder, ParameterSpecBuilderReceiver>,
+  KotlinDocumentableBuilder<KotlinParameterSpecBuilder> {
   companion object {
 
     fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
@@ -50,8 +52,10 @@ class KotlinParameterSpecBuilder internal constructor(
   }
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinParameterSpecBuilder = builder { this.addAnnotation(annotationSpec.get()) }
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinParameterSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 

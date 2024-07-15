@@ -6,6 +6,7 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
@@ -17,7 +18,8 @@ class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
   KotlinFunSpecSupplier,
-  DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
+  KotlinDocumentableBuilder<KotlinFunSpecBuilder> {
 
   companion object {
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
@@ -46,6 +48,10 @@ class KotlinFunSpecBuilder internal constructor(
   }
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
