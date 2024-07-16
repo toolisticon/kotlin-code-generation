@@ -8,7 +8,8 @@ import kotlin.reflect.KClass
 
 class KotlinInterfaceSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec>,
+  KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder> {
   companion object {
     fun builder(name: String): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(
       delegate = TypeSpecBuilder.interfaceBuilder(name)
@@ -26,8 +27,9 @@ class KotlinInterfaceSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+  override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 

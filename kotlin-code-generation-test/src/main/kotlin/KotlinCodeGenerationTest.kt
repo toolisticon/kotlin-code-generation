@@ -39,7 +39,7 @@ object KotlinCodeGenerationTest {
       sources = cmd.sourceFiles
       inheritClassPath = true
 
-      this.
+
         // needed so kotlin compile does not spam the console log (would default to System.out)
       messageOutputStream = ByteArrayOutputStream()
       //compilerPluginRegistrars = listOf(SerializationComponentRegistrar())

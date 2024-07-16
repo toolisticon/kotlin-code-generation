@@ -1,7 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
@@ -16,7 +15,8 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
-  ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder> {
+  ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
+  KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder> {
 
   companion object {
 
@@ -46,8 +46,9 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+  override fun addKdoc(kdoc: KDoc): KotlinAnnotationClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 

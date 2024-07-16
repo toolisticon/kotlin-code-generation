@@ -2,11 +2,8 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
-import io.toolisticon.kotlin.generation.poet.FunSpecSupplier
-import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder
+import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
-import io.toolisticon.kotlin.generation.poet.PropertySpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import java.lang.reflect.Type
@@ -17,11 +14,12 @@ class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
   KotlinPropertySpecSupplier,
-  DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver> {
+  DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
+  KotlinDocumentableBuilder<KotlinPropertySpecBuilder> {
 
   companion object {
 
-    fun builder(name: String, type: TypeName, vararg modifiers: KModifier, ): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, *modifiers)
     )
 
@@ -48,6 +46,10 @@ class KotlinPropertySpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }

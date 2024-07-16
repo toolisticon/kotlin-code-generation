@@ -13,7 +13,8 @@ import kotlin.reflect.KClass
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
-  DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
+  KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder> {
 
   companion object {
     fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder(
@@ -22,6 +23,10 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   }
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
