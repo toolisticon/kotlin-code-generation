@@ -2,14 +2,17 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinInterfaceSpec
+import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
 class KotlinInterfaceSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec>,
-  KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinInterfaceSpecBuilder> {
   companion object {
     fun builder(name: String): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(
       delegate = TypeSpecBuilder.interfaceBuilder(name)
@@ -31,10 +34,11 @@ class KotlinInterfaceSpecBuilder internal constructor(
     delegate.addKdoc(kdoc.get())
   }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }

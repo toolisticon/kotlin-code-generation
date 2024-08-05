@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -9,10 +9,15 @@
     <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>io.toolisticon.kotlin.generation.itest</groupId>
-  <artifactId>kotlin-code-generation-itest</artifactId>
-  <name>test: ${project.artifactId}</name>
-  <description>Integration Tests applied on specs, builders and compilation tests.</description>
+  <artifactId>kotlin-code-generation-itest-root</artifactId>
+  <name>pom: ${project.artifactId}</name>
+  <description>Root of itests.</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>builder-itest</module>
+    <module>spi-itest</module>
+  </modules>
 
   <properties>
     <!-- itest is excluded from install/deploy/release -->
@@ -49,14 +54,19 @@
       <groupId>org.jetbrains.kotlinx</groupId>
       <artifactId>kotlinx-serialization-core-jvm</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
           <configuration>
             <excludes>
               <exclude>io.toolisticon.kotlin.generation.itest.created.**/*</exclude>
