@@ -39,6 +39,11 @@ interface ConstructorPropertySupport<SELF> {
   )
 }
 
+/**
+ * Typesafe wrapper for [com.squareup.kotlinpoet.Documentable.Builder]. Marks anything that can have `kdoc` documentation.
+ *
+ * * `addKdoc`
+ */
 interface KotlinDocumentableBuilder<SELF> {
   fun addKdoc(kdoc: KDoc): SELF
   fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
@@ -46,6 +51,12 @@ interface KotlinDocumentableBuilder<SELF> {
   fun addKdoc(format: String, first: String, vararg other: Any): SELF = addKdoc(KDoc.of(format, first, *other))
 }
 
+/**
+ * Typesafe wrapper for [com.squareup.kotlinpoet.MemberSpecHolder.Builder].
+ *
+ * * `addFunction`
+ * * `addProperty`
+ */
 interface KotlinMemberSpecHolderBuilder<SELF> {
   fun addFunction(funSpec: KotlinFunSpecSupplier): SELF
   fun addFunction(name: FunctionName, block: KotlinFunSpecBuilderReceiver): SELF = addFunction(funSpec = buildFun(name, block))

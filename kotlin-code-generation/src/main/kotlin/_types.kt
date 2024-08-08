@@ -3,7 +3,6 @@ package io.toolisticon.kotlin.generation
 import com.squareup.kotlinpoet.ClassName
 import java.util.function.Supplier
 
-
 /**
  * Marks a type as capable of building a new product.
  */
@@ -18,7 +17,23 @@ interface WithClassName {
 }
 
 typealias CodeBlockFormat = String
+
+/**
+ * A function name, like `doSomething`().
+ */
 typealias FunctionName = String
+
+/**
+ * The package part of a FQN (e.g. `de.foo.bar`).
+ */
 typealias PackageName = String
-typealias PropertyName = String
+
+/**
+ * The simple part of an FQN (e.g. `MyClass`).
+ */
 typealias SimpleName = String
+
+/**
+ * A property name, the field name of a property.
+ */
+typealias PropertyName = String
