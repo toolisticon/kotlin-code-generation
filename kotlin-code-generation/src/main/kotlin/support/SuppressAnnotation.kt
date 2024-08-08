@@ -13,10 +13,17 @@ data class SuppressAnnotation(val names: List<String> = emptyList()) : KotlinAnn
      */
     const val CLASS_NAME = "ClassName"
 
+    const val MEMBER_VISIBILITY_CAN_BE_PRIVATE = "MemberVisibilityCanBePrivate"
+
     /**
      * Suppress redundant visibility modifiers - the public keywords used by kotlinpoet.
      */
     const val REDUNDANT_VISIBILITY_MODIFIER = "RedundantVisibilityModifier"
+
+    /**
+     * We are sure that the cast will work although the compiler warns about it.
+     */
+    const val UNCHECKED_CAST = "UNCHECKED_CAST"
 
     /**
      * Suppress warnings on unused methods and types.

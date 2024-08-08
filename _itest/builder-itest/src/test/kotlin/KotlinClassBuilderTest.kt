@@ -8,7 +8,7 @@ internal class KotlinClassBuilderTest {
   @Test
   fun `kotlin poet only generation`() {
     val builder = TypeSpec.classBuilder("Bar")
-      .addKdoc("%L","hello world")
+      .addKdoc("%L", "hello world")
 
     println(builder.build())
   }

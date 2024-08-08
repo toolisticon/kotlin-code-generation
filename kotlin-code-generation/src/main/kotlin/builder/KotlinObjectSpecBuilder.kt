@@ -2,14 +2,17 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinObjectSpec
+import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
 class KotlinObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec>,
-  KotlinDocumentableBuilder<KotlinObjectSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinObjectSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder> {
   companion object {
     fun builder(name: String): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(
       delegate = TypeSpecBuilder.objectBuilder(name)
@@ -27,10 +30,11 @@ class KotlinObjectSpecBuilder internal constructor(
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinObjectSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }

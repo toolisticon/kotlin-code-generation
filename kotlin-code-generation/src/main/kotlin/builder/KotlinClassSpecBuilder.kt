@@ -1,9 +1,11 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.*
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
@@ -12,7 +14,8 @@ class KotlinClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
-  KotlinDocumentableBuilder<KotlinClassSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder> {
 
   companion object {
     fun builder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
@@ -34,16 +37,15 @@ class KotlinClassSpecBuilder internal constructor(
     delegate.addAnnotation(spec.get())
   }
 
-  fun addFunction(funSpec: KotlinFunSpecSupplier) = apply {
-    delegate.addFunction(funSpec.get())
-  }
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }

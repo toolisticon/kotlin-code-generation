@@ -1,6 +1,8 @@
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.WithClassName
 import kotlin.reflect.KClass
 
 class FileSpecBuilder(
@@ -8,7 +10,8 @@ class FileSpecBuilder(
 ) : PoetSpecBuilder<FileSpecBuilder, FileSpec.Builder, FileSpec, FileSpecSupplier>,
   AnnotatableBuilder<FileSpecBuilder>,
   MemberSpecHolderBuilder<FileSpecBuilder>,
-  TypeSpecHolderBuilder<FileSpecBuilder> {
+  TypeSpecHolderBuilder<FileSpecBuilder>,
+  WithClassName {
   companion object {
     internal fun FileSpec.Builder.wrap() = FileSpecBuilder(this)
 
@@ -32,7 +35,6 @@ class FileSpecBuilder(
   // TypeSpecHolderBuilder
   override fun addType(typeSpec: TypeSpec) = apply { builder.addType(typeSpec) }
   override fun addTypes(typeSpecs: Iterable<TypeSpec>) = apply { builder.addTypes(typeSpecs) }
-
 
   fun addFileComment(format: String, vararg args: Any) = apply { builder.addFileComment(format, *args) }
   fun clearComment(): FileSpecBuilder = apply { builder.clearComment() }
@@ -64,6 +66,7 @@ class FileSpecBuilder(
   fun clearBody(): FileSpecBuilder = apply { builder.clearBody() }
 
   override fun build(): FileSpec = builder.build()
+  override val className: ClassName = className(builder.packageName, builder.name)
 }
 
 interface FileSpecSupplier : PoetSpecSupplier<FileSpec>
