@@ -1,6 +1,6 @@
 package io.toolisticon.kotlin.generation
 
-import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.ClassName
 import java.util.function.Supplier
 
 
@@ -12,3 +12,13 @@ fun interface Builder<PRODUCT : Any> {
 }
 
 interface BuilderSupplier<PRODUCT : Any, SPEC : Any> : Builder<PRODUCT>, Supplier<SPEC>
+
+interface WithClassName {
+  val className: ClassName
+}
+
+typealias CodeBlockFormat = String
+typealias FunctionName = String
+typealias PackageName = String
+typealias PropertyName = String
+typealias SimpleName = String

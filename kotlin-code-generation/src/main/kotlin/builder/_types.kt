@@ -4,12 +4,14 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.FunctionName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
+import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinGeneratorSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinGeneratorTypeSpec
+import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
 interface DelegatingBuilder<SELF, RECEIVER> {
@@ -28,11 +30,11 @@ interface ConstructorPropertySupport<SELF> {
 
   fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): SELF
 
-  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
 
-  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
 }
@@ -40,6 +42,16 @@ interface ConstructorPropertySupport<SELF> {
 interface KotlinDocumentableBuilder<SELF> {
   fun addKdoc(kdoc: KDoc): SELF
   fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
-  fun addKdoc(docs: String) = addKdoc(KDoc.of(docs))
-  fun addKdoc(format: String, first: String, vararg other: Any) = addKdoc(KDoc.of(format, first, *other))
+  fun addKdoc(docs: String): SELF = addKdoc(KDoc.of(docs))
+  fun addKdoc(format: String, first: String, vararg other: Any): SELF = addKdoc(KDoc.of(format, first, *other))
+}
+
+interface KotlinMemberSpecHolderBuilder<SELF> {
+  fun addFunction(funSpec: KotlinFunSpecSupplier): SELF
+  fun addFunction(name: FunctionName, block: KotlinFunSpecBuilderReceiver): SELF = addFunction(funSpec = buildFun(name, block))
+
+  fun addProperty(propertySpec: KotlinPropertySpecSupplier): SELF
+  fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+  fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+
 }
