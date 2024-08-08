@@ -1,5 +1,5 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
 
   <properties>
+    <classgraph.version>4.8.174</classgraph.version>
     <kotlin-poet.version>1.17.0</kotlin-poet.version>
     <kotlin-compile-testing.version>0.5.0-alpha08</kotlin-compile-testing.version>
     <slf4j.version>2.0.13</slf4j.version>
@@ -37,6 +38,18 @@
         <artifactId>core</artifactId>
         <scope>test</scope>
         <version>${kotlin-compile-testing.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>io.github.classgraph</groupId>
+        <artifactId>classgraph</artifactId>
+        <version>${classgraph.version}</version>
       </dependency>
 
       <dependency>

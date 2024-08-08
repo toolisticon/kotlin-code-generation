@@ -8,7 +8,8 @@ import kotlin.reflect.KClass
 
 class KotlinEnumClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : KotlinGeneratorTypeSpecBuilder<KotlinEnumClassSpecBuilder, KotlinEnumClassSpec> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinEnumClassSpecBuilder, KotlinEnumClassSpec>,
+  KotlinDocumentableBuilder<KotlinEnumClassSpecBuilder> {
 
   companion object {
     fun builder(name: String): KotlinEnumClassSpecBuilder = KotlinEnumClassSpecBuilder(
@@ -26,8 +27,10 @@ class KotlinEnumClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinEnumClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
@@ -57,7 +60,6 @@ class KotlinEnumClassSpecBuilder internal constructor(
 
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
-
 
   fun addEnumConstant(name: String) = apply {
     delegate.addEnumConstant(name)

@@ -8,7 +8,8 @@ import kotlin.reflect.KClass
 
 class KotlinObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
-) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec> {
+) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec>,
+  KotlinDocumentableBuilder<KotlinObjectSpecBuilder> {
   companion object {
     fun builder(name: String): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(
       delegate = TypeSpecBuilder.objectBuilder(name)
@@ -18,6 +19,10 @@ class KotlinObjectSpecBuilder internal constructor(
   }
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinObjectSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }

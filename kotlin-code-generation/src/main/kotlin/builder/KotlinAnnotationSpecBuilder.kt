@@ -17,6 +17,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
   KotlinAnnotationSpecSupplier,
   DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
+
   companion object {
     fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
@@ -49,7 +50,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
 
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember("$name = %M", value.asMemberName())
 
-  fun addNumberMember(name: String, value: Number) : KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
+  fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
 
   fun addEnumMembers(name: String, vararg value: Enum<*>): KotlinAnnotationSpecBuilder {
     val members = value.map { it.asMemberName() }.asCodeBlock()

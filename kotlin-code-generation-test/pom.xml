@@ -11,7 +11,9 @@
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
   <artifactId>kotlin-code-generation-test</artifactId>
-  <description>Tools for testing generated classes. This lib exposes testing libraries and is supposed to be included with `scope=test`</description>
+  <description>Tools for testing generated classes. This lib exposes testing libraries and is supposed to be included
+    with `scope=test`
+  </description>
 
   <dependencies>
     <dependency>
@@ -23,6 +25,12 @@
     <dependency>
       <groupId>dev.zacsweers.kctfork</groupId>
       <artifactId>core</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.classgraph</groupId>
+      <artifactId>classgraph</artifactId>
       <scope>compile</scope>
     </dependency>
 

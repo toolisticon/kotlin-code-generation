@@ -12,7 +12,8 @@ class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
-  ConstructorPropertySupport<KotlinValueClassSpecBuilder> {
+  ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
+  KotlinDocumentableBuilder<KotlinValueClassSpecBuilder> {
 
   companion object {
 
@@ -43,9 +44,11 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
+  override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
+  
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
   fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
