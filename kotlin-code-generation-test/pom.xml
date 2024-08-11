@@ -26,6 +26,30 @@
       <groupId>dev.zacsweers.kctfork</groupId>
       <artifactId>core</artifactId>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-annotation-processing-embeddable</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-annotation-processing-compiler</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-annotation-processing-embeddable</artifactId>
+      <!-- TODO can be removed with parent 2024.8.2 -->
+      <version>${kotlin.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-annotation-processing-compiler</artifactId>
+      <!-- TODO can be removed with parent 2024.8.2 -->
+      <version>${kotlin.version}</version>
     </dependency>
 
     <dependency>
