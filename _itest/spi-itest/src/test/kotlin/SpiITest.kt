@@ -13,7 +13,7 @@ internal class SpiITest {
 
   @Test
   fun `use spi defined strategies and processors to generate code`() {
-    val registry = KotlinCodeGeneration.spi.registry(TestContext::class)
+    val registry = KotlinCodeGeneration.spi.repository(TestContext::class)
     val context = TestContext(registry)
 
     val input = MapInput(

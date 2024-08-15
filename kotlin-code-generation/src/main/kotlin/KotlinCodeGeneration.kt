@@ -14,7 +14,7 @@ import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.AbstractKotlinCodeGenerationSpiRegistry
-import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.support.SuppressAnnotation.Companion.CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SuppressAnnotation.Companion.MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import kotlin.reflect.KClass
@@ -82,10 +82,10 @@ object KotlinCodeGeneration {
   object spi {
     val defaultClassLoader: () -> ClassLoader = { Thread.currentThread().contextClassLoader }
 
-    fun registry(
+    fun repository(
       contextType: KClass<out KotlinCodeGenerationContext>,
       classLoader: ClassLoader = defaultClassLoader()
-    ): AbstractKotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader.load(contextType = contextType, classLoader = classLoader)
+    ): AbstractKotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceRepository.load(contextType = contextType, classLoader = classLoader)
   }
 
   @Suppress(CLASS_NAME)

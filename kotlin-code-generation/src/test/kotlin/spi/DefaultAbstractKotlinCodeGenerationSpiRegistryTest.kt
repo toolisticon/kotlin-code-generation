@@ -1,7 +1,7 @@
 package io.toolisticon.kotlin.generation.spi
 
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
-import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.spi.strategy.DataClassSpecStrategy
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -29,7 +29,7 @@ internal class DefaultAbstractKotlinCodeGenerationSpiRegistryTest {
 
   @Test
   fun `create registry from spi instances`() {
-    val registry = KotlinCodeGenerationServiceLoader(contextType = TestContext::class, FooDataClassStrategy())
+    val registry = KotlinCodeGenerationServiceRepository(contextType = TestContext::class, FooDataClassStrategy())
 
     println(registry)
   }

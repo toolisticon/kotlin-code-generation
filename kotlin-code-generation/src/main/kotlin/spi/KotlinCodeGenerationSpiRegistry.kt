@@ -23,11 +23,11 @@ interface KotlinCodeGenerationSpiRegistry {
     subcontextType: KClass<CONTEXT>
   ): List<KotlinCodeGenerationStrategy<CONTEXT, *, *>>
 
-  fun <CONTEXT : KotlinCodeGenerationContext, INPUT : Any, SPEC : Any> findProcessors(
+  fun <CONTEXT : KotlinCodeGenerationContext, INPUT : Any, BUILDER : Any> findProcessors(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>,
-    specType: KClass<SPEC>
-  ): List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>>
+    builderType: KClass<BUILDER>
+  ): List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>>
 
   fun <CONTEXT : KotlinCodeGenerationContext, INPUT : Any> findProcessors(
     subcontextType: KClass<CONTEXT>,
