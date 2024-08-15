@@ -5,7 +5,7 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
 import kotlin.reflect.KClass
 
-abstract class AbstractKotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any>(
+abstract class AbstractKotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext, INPUT : Any, BUILDER : Any>(
   override val contextType: KClass<CONTEXT>,
   override val inputType: KClass<INPUT>,
   override val builderType: KClass<BUILDER>,

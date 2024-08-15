@@ -4,7 +4,6 @@ import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +13,7 @@ internal class SpiITest {
 
   @Test
   fun `use spi defined strategies and processors to generate code`() {
-    val registry = KotlinCodeGenerationSpiRegistry.load<TestContext>()
+    val registry = KotlinCodeGeneration.spi.registry(TestContext::class)
     val context = TestContext(registry)
 
     val input = MapInput(
@@ -24,7 +23,7 @@ internal class SpiITest {
       )
     )
 
-    val strategy = context.registry.getStrategy<MapInput, KotlinDataClassSpec>()
+    val strategy = context.registry.getStrategy<TestContext, MapInput, KotlinDataClassSpec>()
 
     val spec = strategy(context = context, input = input)
     val file = KotlinCodeGeneration.builder.fileBuilder(input.className).addType(spec).build()

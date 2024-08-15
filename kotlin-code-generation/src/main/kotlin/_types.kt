@@ -16,6 +16,7 @@ interface WithClassName {
   val className: ClassName
 }
 
+typealias FileName = ClassName
 typealias CodeBlockFormat = String
 
 /**
