@@ -8,6 +8,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinEnumClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinEnumClassSpecBuilder, KotlinEnumClassSpec>,
@@ -74,4 +75,5 @@ class KotlinEnumClassSpecBuilder internal constructor(
   override fun build(): KotlinEnumClassSpec = KotlinEnumClassSpec(delegate.build())
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinEnumClassSpecBuilderReceiver = KotlinEnumClassSpecBuilder.() -> Unit

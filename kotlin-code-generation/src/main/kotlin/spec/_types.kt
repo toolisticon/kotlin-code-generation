@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.PoetSpec
@@ -19,6 +20,7 @@ interface KotlinGeneratorTypeSpec<SELF : KotlinGeneratorTypeSpec<SELF>> : Kotlin
   override fun spec(): SELF
 }
 
+@ExperimentalKotlinPoetApi
 interface KotlinDocumentableSpec {
   val kdoc: KDoc
 }

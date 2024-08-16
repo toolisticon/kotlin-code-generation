@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildClass
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFile
@@ -8,8 +9,11 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
+@ExperimentalCompilerApi
 internal class HelloWorldExampleTest {
 
   @Test

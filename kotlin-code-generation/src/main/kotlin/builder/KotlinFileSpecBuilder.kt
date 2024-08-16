@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder
 ) : BuilderSupplier<KotlinFileSpec, FileSpec>, KotlinFileSpecSupplier, DelegatingBuilder<KotlinFileSpecBuilder, FileSpecBuilderReceiver>,
@@ -82,4 +83,5 @@ class KotlinFileSpecBuilder internal constructor(
   override val className: ClassName = delegate.className
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinFileSpecBuilderReceiver = KotlinFileSpecBuilder.() -> Unit

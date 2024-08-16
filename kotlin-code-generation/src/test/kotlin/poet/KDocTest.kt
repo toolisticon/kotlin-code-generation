@@ -1,8 +1,10 @@
 package io.toolisticon.kotlin.generation.poet
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class KDocTest {
 
   @Test

@@ -17,6 +17,7 @@ import kotlin.reflect.KClass
  * * ObjectSpec
  * * ValueClassSpec
  */
+@ExperimentalKotlinPoetApi
 class TypeSpecBuilder(
   override val builder: TypeSpec.Builder
 ) : PoetSpecBuilder<TypeSpecBuilder, TypeSpec.Builder, TypeSpec, TypeSpecSupplier>,

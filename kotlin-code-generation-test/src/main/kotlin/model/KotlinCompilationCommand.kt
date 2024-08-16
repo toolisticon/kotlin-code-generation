@@ -1,9 +1,13 @@
 package io.toolisticon.kotlin.generation.test.model
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.SourceFile
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.sourceFile
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
+@ExperimentalKotlinPoetApi
+@ExperimentalCompilerApi
 data class KotlinCompilationCommand(
   val fileSpecs: List<KotlinFileSpec>
 ) {

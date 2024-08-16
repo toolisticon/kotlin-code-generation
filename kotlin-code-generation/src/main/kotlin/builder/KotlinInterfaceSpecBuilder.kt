@@ -8,6 +8,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinInterfaceSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec>,
@@ -71,4 +72,5 @@ class KotlinInterfaceSpecBuilder internal constructor(
   override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(spec = delegate.build())
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinInterfaceSpecBuilderReceiver = KotlinInterfaceSpecBuilder.() -> Unit

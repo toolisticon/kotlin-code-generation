@@ -1,9 +1,11 @@
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.MemberName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format
 
+@ExperimentalKotlinPoetApi
 object FormatSpecifier {
   const val STRING = format.FORMAT_STRING
   const val STRING_TEMPLATE = format.FORMAT_STRING_TEMPLATE

@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.support
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
@@ -8,6 +9,7 @@ import jakarta.annotation.Generated
 import java.time.Instant
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 data class GeneratedAnnotation(
     val value: String = KotlinCodeGeneration::class.asTypeName().toString(),
     val date: Instant = Instant.now(),

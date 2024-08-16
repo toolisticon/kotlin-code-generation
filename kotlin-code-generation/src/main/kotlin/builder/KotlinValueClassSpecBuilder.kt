@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
@@ -101,5 +102,6 @@ class KotlinValueClassSpecBuilder internal constructor(
   }
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinValueClassSpecBuilderReceiver = KotlinValueClassSpecBuilder.() -> Unit
 

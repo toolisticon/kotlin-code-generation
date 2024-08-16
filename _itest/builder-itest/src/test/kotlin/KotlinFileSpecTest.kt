@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FileSpec
 import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class KotlinFileSpecTest {
 
   @Target(AnnotationTarget.FILE)

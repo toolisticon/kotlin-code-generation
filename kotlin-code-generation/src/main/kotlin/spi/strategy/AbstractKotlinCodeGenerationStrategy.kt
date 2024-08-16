@@ -5,7 +5,7 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import kotlin.reflect.KClass
 
-abstract class AbstractKotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext, INPUT : Any, SPEC : Any>(
+abstract class AbstractKotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any>(
   override val contextType: KClass<CONTEXT>,
   override val inputType: KClass<INPUT>,
   override val specType: KClass<SPEC>,

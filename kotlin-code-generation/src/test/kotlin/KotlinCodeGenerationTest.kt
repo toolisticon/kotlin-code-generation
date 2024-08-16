@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class KotlinCodeGenerationTest {
 
   @Nested

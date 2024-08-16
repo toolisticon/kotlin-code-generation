@@ -79,12 +79,6 @@
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
-        <configuration>
-          <args>
-            <arg>-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi</arg>
-            <arg>-opt-in=com.squareup.kotlinpoet.ExperimentalKotlinPoetApi</arg>
-          </args>
-        </configuration>
       </plugin>
     </plugins>
   </build>

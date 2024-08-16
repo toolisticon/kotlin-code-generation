@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
@@ -30,4 +31,5 @@ interface KotlinAnnotationSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnot
   override fun get(): AnnotationSpec = spec().get()
 }
 
+@ExperimentalKotlinPoetApi
 fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)

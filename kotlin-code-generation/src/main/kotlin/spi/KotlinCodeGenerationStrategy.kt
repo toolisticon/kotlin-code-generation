@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 /**
  * Root marker interface for all strategies.
  */
-interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext, INPUT : Any, SPEC : Any> : KotlinCodeGenerationSpi<CONTEXT, INPUT> {
+interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> : KotlinCodeGenerationSpi<CONTEXT, INPUT> {
 
   override val contextType: KClass<CONTEXT>
   override val inputType: KClass<INPUT>

@@ -1,12 +1,13 @@
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import jakarta.annotation.Generated
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-
+@ExperimentalKotlinPoetApi
 internal class TypeSpecBuilderTest {
 
 

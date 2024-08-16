@@ -1,9 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
@@ -11,7 +8,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
-
+@ExperimentalKotlinPoetApi
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
@@ -67,4 +64,5 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   override fun build(): KotlinAnonymousClassSpec = KotlinAnonymousClassSpec(delegate.build())
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinAnonymousClassSpecBuilderReceiver = KotlinAnonymousClassSpecBuilder.() -> Unit

@@ -1,9 +1,11 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
+@ExperimentalKotlinPoetApi
 data class KotlinCompanionObjectSpec(
   private val spec: TypeSpec
 ) : KotlinGeneratorTypeSpec<KotlinCompanionObjectSpec>, KotlinCompanionObjectSpecSupplier, KotlinDocumentableSpec {
@@ -13,6 +15,7 @@ data class KotlinCompanionObjectSpec(
   override fun get(): TypeSpec = spec
 }
 
+@ExperimentalKotlinPoetApi
 interface KotlinCompanionObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinCompanionObjectSpec>, TypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }

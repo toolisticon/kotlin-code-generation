@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
@@ -9,6 +10,7 @@ import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import javax.lang.model.element.Element
 
+@ExperimentalKotlinPoetApi
 class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
@@ -91,4 +93,5 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinAnnotationClassSpecBuilderReceiver = KotlinAnnotationClassSpecBuilder.() -> Unit

@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation.spi
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.TestFixtures
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.ServiceLoader
 
+@ExperimentalKotlinPoetApi
 class ServiceLoaderTestClassLoaderTest {
 
   interface MyInterface {

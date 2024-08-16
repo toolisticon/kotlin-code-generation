@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -14,7 +15,7 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.reflect.KClass
 
-
+@ExperimentalKotlinPoetApi
 object TestFixtures {
 
   // a fixed instant to be used in test with

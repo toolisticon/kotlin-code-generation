@@ -8,6 +8,7 @@ import mu.KLogging
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
@@ -97,4 +98,5 @@ class KotlinDataClassSpecBuilder internal constructor(
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinDataClassSpecBuilderReceiver = KotlinDataClassSpecBuilder.() -> Unit

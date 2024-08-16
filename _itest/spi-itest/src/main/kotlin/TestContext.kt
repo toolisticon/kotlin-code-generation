@@ -1,9 +1,8 @@
 package io.toolisticon.kotlin.generation.itest.spi
 
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
-import io.toolisticon.kotlin.generation.spi.AbstractKotlinCodeGenerationSpiRegistry
-import kotlin.reflect.KClass
+import io.toolisticon.kotlin.generation.context.AbstractKotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 
-class TestContext(override val registry: AbstractKotlinCodeGenerationSpiRegistry) : KotlinCodeGenerationContext {
-  override val contextType: KClass<*> = TestContext::class
+class TestContext(registry: KotlinCodeGenerationSpiRegistry) : AbstractKotlinCodeGenerationContext<TestContext>(registry) {
+  override val contextType = TestContext::class
 }

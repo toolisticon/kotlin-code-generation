@@ -7,12 +7,19 @@ import kotlin.reflect.KClass
  * Required because all spi-instances have to be generated via default-constructor, so all state data
  * we would normally store in a property has to be passed to every function call.
  */
-interface KotlinCodeGenerationContext {
+interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> {
 
-  /**
-   * Include the [KotlinCodeGenerationSpiRegistryBean] so strategies and processors can access themselves if required.
-   */
-  val registry: AbstractKotlinCodeGenerationSpiRegistry
-  val contextType: KClass<out KotlinCodeGenerationContext>
+  val contextType: KClass<SELF>
+
+
+
+  fun <INPUT : Any, SPEC : Any> findStrategies(inputType: KClass<INPUT>, specType: KClass<SPEC>): List<KotlinCodeGenerationStrategy<SELF, INPUT, SPEC>>
+  fun <INPUT : Any> findStrategies(inputType: KClass<INPUT>): List<KotlinCodeGenerationStrategy<SELF, INPUT, *>>
+  fun findStrategies(): List<KotlinCodeGenerationStrategy<SELF, *, *>>
+
+
+  fun <INPUT : Any, SPEC : Any> findProcessors(inputType: KClass<INPUT>, specType: KClass<SPEC>): List<KotlinCodeGenerationProcessor<SELF, INPUT, SPEC>>
+  fun <INPUT : Any> findProcessors(inputType: KClass<INPUT>): List<KotlinCodeGenerationProcessor<SELF, INPUT, *>>
+  fun findProcessors(): List<KotlinCodeGenerationProcessor<SELF, *, *>>
 
 }

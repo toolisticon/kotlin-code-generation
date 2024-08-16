@@ -14,11 +14,13 @@ import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.AbstractKotlinCodeGenerationSpiRegistry
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.support.SuppressAnnotation.Companion.CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SuppressAnnotation.Companion.MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 object KotlinCodeGeneration {
 
   inline fun buildAnnotation(type: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(type.asClassName(), block)
@@ -48,6 +50,7 @@ object KotlinCodeGeneration {
     KotlinFileSpecBuilder.builder(it.className).addType(it).build()
   }
 
+  @ExperimentalKotlinPoetApi
   @Suppress(CLASS_NAME, MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
@@ -83,9 +86,9 @@ object KotlinCodeGeneration {
     val defaultClassLoader: () -> ClassLoader = { Thread.currentThread().contextClassLoader }
 
     fun repository(
-      contextType: KClass<out KotlinCodeGenerationContext>,
+      contextType: KClass<*>,
       classLoader: ClassLoader = defaultClassLoader()
-    ): AbstractKotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceRepository.load(contextType = contextType, classLoader = classLoader)
+    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceRepository.load(contextType = contextType, classLoader = classLoader)
   }
 
   @Suppress(CLASS_NAME)

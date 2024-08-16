@@ -11,6 +11,7 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
@@ -18,6 +19,7 @@ class KotlinPropertySpecBuilder internal constructor(
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
   KotlinDocumentableBuilder<KotlinPropertySpecBuilder> {
 
+  @ExperimentalKotlinPoetApi
   companion object {
 
     fun builder(name: PropertyName, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
@@ -83,4 +85,5 @@ class KotlinPropertySpecBuilder internal constructor(
   override fun get(): PropertySpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinPropertySpecBuilderReceiver = KotlinPropertySpecBuilder.() -> Unit

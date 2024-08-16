@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation.test
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationResult
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import java.io.ByteArrayOutputStream
 
 /**
@@ -29,6 +31,8 @@ import java.io.ByteArrayOutputStream
  *     }.compile()
  *  ```
  */
+@ExperimentalCompilerApi
+@ExperimentalKotlinPoetApi
 object KotlinCodeGenerationTest {
 
   fun assertThat(actual: KotlinCompilationResult): KotlinCompilationAssert = KotlinCompilationAssert(actual)

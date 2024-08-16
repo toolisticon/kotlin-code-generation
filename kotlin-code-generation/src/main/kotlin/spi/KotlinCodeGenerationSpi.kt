@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
  * * strategies
  * * processors
  */
-sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any?> {
+sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any?> {
   companion object {
     val metaInfServices = "META-INF/services/${KotlinCodeGenerationSpi::class.qualifiedName}"
     const val DEFAULT_ORDER = 0
