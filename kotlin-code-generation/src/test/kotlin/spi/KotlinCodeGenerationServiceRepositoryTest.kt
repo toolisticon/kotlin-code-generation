@@ -2,11 +2,10 @@ package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
-import io.toolisticon.kotlin.generation.context.AbstractKotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.context.AbstractKotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.spi.strategy.DataClassSpecStrategy
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -35,7 +34,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   @Test
   fun `create registry from spi instances`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextType = TestContext::class, FooDataClassStrategy())
+    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = TestContext::class, FooDataClassStrategy())
 
     println(registry)
   }
@@ -72,7 +71,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   @Test
   fun `initialize with sealed super context`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextType = SealedSuperContext.SuperContext::class, SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
+    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = SealedSuperContext.SuperContext::class, SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
 
 
     assertThat(registry.findStrategies(SealedSuperContext.SuperContext.SubContextLong::class, String::class, KotlinDataClassSpec::class)).isNotEmpty

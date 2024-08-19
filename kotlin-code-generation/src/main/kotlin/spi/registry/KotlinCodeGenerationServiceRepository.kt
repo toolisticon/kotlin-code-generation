@@ -3,6 +3,8 @@ package io.toolisticon.kotlin.generation.spi.registry
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.spi.*
+import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import io.toolisticon.kotlin.generation.support.SuppressAnnotation
 import mu.KLogging
 import java.util.*
@@ -12,7 +14,7 @@ import kotlin.reflect.full.isSubclassOf
 /**
  * Holds all implementation instances of [KotlinCodeGenerationStrategy] and [KotlinCodeGenerationProcessor].
  *
- * Main Use-Case is loading these instances via [ServiceLoader], using [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.repository].
+ * Main Use-Case is loading these instances via [ServiceLoader], using [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry].
  *
  * To avoid too many ´META-INF/services` declarations, all [KotlinCodeGenerationSpi] instances are declared in
  * one single resource. The loading mechanism automatically sorts them into strategies and processors.
@@ -20,50 +22,55 @@ import kotlin.reflect.full.isSubclassOf
 @ExperimentalKotlinPoetApi
 class KotlinCodeGenerationServiceRepository(
   override val contextTypeUpperBound: KClass<*>,
-
-  @PublishedApi
-  internal val strategyMap: Map<String, KotlinCodeGenerationStrategy<*, *, *>>,
-
-  @PublishedApi
-  internal val processorMap: Map<String, KotlinCodeGenerationProcessor<*, *, *>>
+  override val processors: KotlinCodeGenerationProcessorList<*, *, *>,
+  override val strategies: KotlinCodeGenerationStrategyList<*, *, *>,
 ) : KotlinCodeGenerationSpiRegistry {
   companion object : KLogging() {
 
-    fun load(contextType: KClass<*>, classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader()): KotlinCodeGenerationServiceRepository {
-      val loadedSpis: List<KotlinCodeGenerationSpi<*, *>> = ServiceLoader.load(KotlinCodeGenerationSpi::class.java, classLoader).toList()
-      require(loadedSpis.isNotEmpty()) { "No spis found, configure `${KotlinCodeGenerationSpi.metaInfServices}`." }
+    fun load(contextTypeUpperBound: KClass<*>, classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader()): KotlinCodeGenerationServiceRepository {
+      val serviceInstances: List<KotlinCodeGenerationSpi<*, *>> = ServiceLoader.load(KotlinCodeGenerationSpi::class.java, classLoader).toList()
+      require(serviceInstances.isNotEmpty()) { "No serviceInstances found, configure `${KotlinCodeGenerationSpi.metaInfServices}`." }
 
-      val withIllegalContextType = loadedSpis.filterNot { it.contextType.isSubclassOf(contextType) }
+      val withIllegalContextType = serviceInstances.filterNot { it.contextType.isSubclassOf(contextTypeUpperBound) }
 
       require(withIllegalContextType.isEmpty()) {
         "All declarations of type `${KotlinCodeGenerationSpi.metaInfServices}` " +
-          "must be a subclass of contextType=$contextType, but " +
+          "must be a subclass of contextType=$contextTypeUpperBound, but " +
           "found ${withIllegalContextType.joinToString(", ")}."
       }
 
-      return KotlinCodeGenerationServiceRepository(contextType = contextType, spiInstances = loadedSpis.map { it })
+      val strategies: KotlinCodeGenerationStrategyList<*,*,*>  = KotlinCodeGenerationStrategyList.of(serviceInstances)
+
+      return KotlinCodeGenerationServiceRepository(
+        contextTypeUpperBound = contextTypeUpperBound,
+        strategies = KotlinCodeGenerationStrategyList.of(serviceInstances)
+        )
+    }
+
+    fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any, BUILDER : Any> of(serviceInstances: List<KotlinCodeGenerationSpi<*, *>>): KotlinCodeGenerationProcessorList<CONTEXT, INPUT, SPEC> {
+      val strategies : KotlinCodeGenerationStrategyList<*,*,*> = KotlinCodeGenerationStrategyList.of(se
+        value = spi.sorted()
+          .filterIsInstance<KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>>()
+      )
+      val processors = KotlinCodeGenerationProcessorList(
+        value = spi.sorted()
+          .filterIsInstance<KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>>()
+      )
+
+
+      return KotlinCodeGenerationProcessorList(value)
     }
   }
 
-  constructor(contextType: KClass<*>, vararg spiInstances: KotlinCodeGenerationSpi<*, *>) : this(contextType, spiInstances.toList())
-
-  constructor(contextType: KClass<*>, spiInstances: List<KotlinCodeGenerationSpi<*, *>>) : this(
-    contextTypeUpperBound = contextType,
-    strategyMap = spiInstances.sorted().filterIsInstance<KotlinCodeGenerationStrategy<*, *, *>>().associateBy { it.name },
-    processorMap = spiInstances.sorted().filterIsInstance<KotlinCodeGenerationProcessor<*, *, *>>().associateBy { it.name },
-  )
+  constructor(contextTypeUpperBound: KClass<*>, vararg spiInstances: KotlinCodeGenerationSpi<*, *>) : this(contextTypeUpperBound, spiInstances.toList())
 
   init {
-    require(strategyMap.isNotEmpty()) { "At least one strategy is required." }
-    if (processorMap.isEmpty()) {
+    require(strategies.isNotEmpty()) { "At least one strategy is required." }
+    if (processors.isEmpty()) {
       logger.info { "No processors have been registered." }
     }
   }
 
-  override val processors: List<KotlinCodeGenerationProcessor<*, *, *>> = processorMap.values.sorted()
-  override val strategies: List<KotlinCodeGenerationStrategy<*, *, *>> = strategyMap.values.sorted()
-
-  @Suppress(SuppressAnnotation.UNCHECKED_CAST)
   override fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>> findProcessors(subcontextType: KClass<CONTEXT>): List<KotlinCodeGenerationProcessor<CONTEXT, *, *>> {
     return processors.filter { subcontextType == it.contextType }.map { it as KotlinCodeGenerationProcessor<CONTEXT, *, *> }
   }
@@ -106,16 +113,17 @@ class KotlinCodeGenerationServiceRepository(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>,
     specType: KClass<SPEC>
-  ): List<KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>> {
-    return strategies.filter { subcontextType == it.contextType }
-      .filter { inputType == it.inputType }
-      .filter { specType == it.specType }
-      .map { it as KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC> }
+  ): KotlinCodeGenerationStrategyList<CONTEXT, INPUT, SPEC> {
+    return KotlinCodeGenerationStrategyList(strategies
+      .filter { it.matchesContextType(subcontextType) }
+      .filter { it.matchesInputType(inputType) }
+      .filter { it.matchesSpecType(subcontextType) }
+      .map { it as KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC> })
   }
 
   override fun toString(): String = "${this::class.simpleName}(" +
     "contextType=$contextTypeUpperBound, " +
-    "strategies=${strategyMap.keys}, " +
-    "processors=${processorMap.keys})"
+    "strategies=${strategies}, " +
+    "processors=${processors})"
 
 }

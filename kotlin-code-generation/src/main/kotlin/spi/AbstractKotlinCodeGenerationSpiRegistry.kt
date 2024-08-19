@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.spi
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import kotlin.reflect.KClass
 
 /**
  * Allows type safe access to all implementation instances of [KotlinCodeGenerationStrategy] and [KotlinCodeGenerationProcessor].
  */
+@ExperimentalKotlinPoetApi
 @Deprecated("remove")
 abstract class AbstractKotlinCodeGenerationSpiRegistry(val contextType: KClass<*>) {
 

@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.spi
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import java.util.function.BiPredicate
 import kotlin.reflect.KClass
 
@@ -11,6 +12,7 @@ import kotlin.reflect.KClass
  * * strategies
  * * processors
  */
+@ExperimentalKotlinPoetApi
 sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any?> {
   companion object {
     val metaInfServices = "META-INF/services/${KotlinCodeGenerationSpi::class.qualifiedName}"

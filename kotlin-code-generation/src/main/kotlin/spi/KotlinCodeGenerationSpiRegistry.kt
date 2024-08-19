@@ -1,42 +1,47 @@
 package io.toolisticon.kotlin.generation.spi
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import kotlin.reflect.KClass
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 interface KotlinCodeGenerationSpiRegistry {
   val contextTypeUpperBound: KClass<*>
 
-  val strategies: List<KotlinCodeGenerationStrategy<*, *, *>>
-  val processors: List<KotlinCodeGenerationProcessor<*, *, *>>
+  val strategies: KotlinCodeGenerationStrategyList<*, *, *>
+  val processors: KotlinCodeGenerationProcessorList<*, *, *>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> findStrategies(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>,
     specType: KClass<SPEC>
-  ): List<KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>>
+  ): KotlinCodeGenerationStrategyList<CONTEXT, INPUT, SPEC>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> findStrategies(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>
-  ): List<KotlinCodeGenerationStrategy<CONTEXT, INPUT, *>>
+  ): KotlinCodeGenerationStrategyList<CONTEXT, INPUT, *>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>> findStrategies(
     subcontextType: KClass<CONTEXT>
-  ): List<KotlinCodeGenerationStrategy<CONTEXT, *, *>>
+  ): KotlinCodeGenerationStrategyList<CONTEXT, *, *>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> findProcessors(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>,
     builderType: KClass<BUILDER>
-  ): List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>>
+  ): KotlinCodeGenerationProcessorList<CONTEXT, INPUT, BUILDER>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> findProcessors(
     subcontextType: KClass<CONTEXT>,
     inputType: KClass<INPUT>,
-  ): List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, *>>
+  ): KotlinCodeGenerationProcessorList<CONTEXT, INPUT, *>
 
   fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>> findProcessors(
     subcontextType: KClass<CONTEXT>
-  ): List<KotlinCodeGenerationProcessor<CONTEXT, *, *>>
+  ): KotlinCodeGenerationProcessorList<CONTEXT, *, *>
+
 }
 
 
