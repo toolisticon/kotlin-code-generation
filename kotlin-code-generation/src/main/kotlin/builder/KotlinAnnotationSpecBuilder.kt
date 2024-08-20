@@ -12,11 +12,13 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
   KotlinAnnotationSpecSupplier,
   DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
+
   companion object {
     fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
@@ -49,7 +51,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
 
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember("$name = %M", value.asMemberName())
 
-  fun addNumberMember(name: String, value: Number) : KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
+  fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
 
   fun addEnumMembers(name: String, vararg value: Enum<*>): KotlinAnnotationSpecBuilder {
     val members = value.map { it.asMemberName() }.asCodeBlock()
@@ -65,4 +67,5 @@ class KotlinAnnotationSpecBuilder internal constructor(
   override fun get(): AnnotationSpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinAnnotationSpecBuilderReceiver = KotlinAnnotationSpecBuilder.() -> Unit

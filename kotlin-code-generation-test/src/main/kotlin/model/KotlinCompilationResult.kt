@@ -1,11 +1,15 @@
 package io.toolisticon.kotlin.generation.test.model
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import kotlin.reflect.KClass
 
+@ExperimentalCompilerApi
+@ExperimentalKotlinPoetApi
 data class KotlinCompilationResult(
   val cmd: KotlinCompilationCommand,
   val result: JvmCompilationResult

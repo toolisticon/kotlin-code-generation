@@ -1,12 +1,14 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildValueClass
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.toFileSpec
 import io.toolisticon.kotlin.generation.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class KotlinValueClassTest {
 
   @Test

@@ -1,15 +1,19 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.FunctionName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
+import io.toolisticon.kotlin.generation.PropertyName
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinGeneratorSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinGeneratorTypeSpec
+import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
-
 
 interface DelegatingBuilder<SELF, RECEIVER> {
   fun builder(block: RECEIVER): SELF
@@ -23,56 +27,46 @@ interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SP
   override fun get(): TypeSpec = spec().get()
 }
 
+@ExperimentalKotlinPoetApi
 interface ConstructorPropertySupport<SELF> {
 
   fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): SELF
 
-  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+  fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
 
-  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = addConstructorProperty(
+  fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
 }
 
-//BuilderSupplier<KotlinAnonymousClassSpec, TypeSpec>,
-//KotlinAnonymousClassSpecSupplier,
-//DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
-//
-//  BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
-//  KotlinAnnotationSpecSupplier,
-//  DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {}
-//
-//sealed class KotlinCodeGenerationSpecBuilder<
-//  SELF : Any,
-//  POET_SPEC : Any,
-//  SPEC: KotlinAnnotationSpec,
-//  POET_BUILDER,
-//  POET_BUILDER_RECCEIVER
-//  >(protected val delegate: POET_BUILDER) :
-//  DelegatingBuilder<SELF, POET_BUILDER_RECCEIVER>, BuilderSupplier<SELF, POET_SPEC> {
-//
-//}
+/**
+ * Typesafe wrapper for [com.squareup.kotlinpoet.Documentable.Builder]. Marks anything that can have `kdoc` documentation.
+ *
+ * * `addKdoc`
+ */
+@ExperimentalKotlinPoetApi
+interface KotlinDocumentableBuilder<SELF> {
+  fun addKdoc(kdoc: KDoc): SELF
+  fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
+  fun addKdoc(docs: String): SELF = addKdoc(KDoc.of(docs))
+  fun addKdoc(format: String, first: String, vararg other: Any): SELF = addKdoc(KDoc.of(format, first, *other))
+}
 
-// FIXME
-//class FooSpecBuilder internal constructor(
-//  delegate: AnnotationSpecBuilder
-//) : KotlinCodeGenerationSpecBuilder<
-//  FooSpecBuilder,
-//  AnnotationSpec,
-//  AnnotationSpecBuilder,
-//  AnnotationSpecBuilderReceiver
-//  >(delegate)
-//{
-//  override fun builder(block: AnnotationSpecBuilderReceiver): FooSpecBuilder {
-//    TODO("Not yet implemented")
-//  }
-//
-//  override fun build(): FooSpecBuilder {
-//    TODO("Not yet implemented")
-//  }
-//
-//  override fun get(): AnnotationSpec = build().get()
-//
-//}
+/**
+ * Typesafe wrapper for [com.squareup.kotlinpoet.MemberSpecHolder.Builder].
+ *
+ * * `addFunction`
+ * * `addProperty`
+ */
+@ExperimentalKotlinPoetApi
+interface KotlinMemberSpecHolderBuilder<SELF> {
+  fun addFunction(funSpec: KotlinFunSpecSupplier): SELF
+  fun addFunction(name: FunctionName, block: KotlinFunSpecBuilderReceiver): SELF = addFunction(funSpec = buildFun(name, block))
+
+  fun addProperty(propertySpec: KotlinPropertySpecSupplier): SELF
+  fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+  fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+
+}

@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotationClass
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFile
 import io.toolisticon.kotlin.generation.itest.KotlinCodeGenerationITest.ROOT_PACKAGE
 
+@ExperimentalKotlinPoetApi
 object MyCustomAnnotationSpec {
   val name = ClassName(ROOT_PACKAGE, "MyCustomAnnotation")
 

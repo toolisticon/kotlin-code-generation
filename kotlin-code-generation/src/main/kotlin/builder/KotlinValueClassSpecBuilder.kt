@@ -4,15 +4,20 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
-  ConstructorPropertySupport<KotlinValueClassSpecBuilder> {
+  ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
+  KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder> {
 
   companion object {
 
@@ -43,13 +48,16 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
+
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
@@ -94,5 +102,6 @@ class KotlinValueClassSpecBuilder internal constructor(
   }
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinValueClassSpecBuilderReceiver = KotlinValueClassSpecBuilder.() -> Unit
 

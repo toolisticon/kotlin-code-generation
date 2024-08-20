@@ -6,6 +6,7 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
@@ -13,11 +14,13 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
   KotlinFunSpecSupplier,
-  DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver> {
+  DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
+  KotlinDocumentableBuilder<KotlinFunSpecBuilder> {
 
   companion object {
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
@@ -46,6 +49,10 @@ class KotlinFunSpecBuilder internal constructor(
   }
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
+
+  override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply {
+    delegate.addKdoc(kdoc.get())
+  }
 
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
@@ -114,4 +121,5 @@ class KotlinFunSpecBuilder internal constructor(
   override fun get(): FunSpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinFunSpecBuilderReceiver = KotlinFunSpecBuilder.() -> Unit

@@ -1,17 +1,26 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.PropertySpecSupplier
 
-data class KotlinPropertySpec(
-  private val spec: PropertySpec
-) : KotlinGeneratorSpec<KotlinPropertySpec, PropertySpec, PropertySpecSupplier>, KotlinPropertySpecSupplier {
+@JvmInline
+@ExperimentalKotlinPoetApi
+value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinGeneratorSpec<KotlinPropertySpec,
+  PropertySpec,
+  PropertySpecSupplier>,
+  KotlinPropertySpecSupplier,
+  KotlinDocumentableSpec {
+
   val name: String get() = spec.name
 
   val type: TypeName get() = spec.type
 
   val mutable: Boolean get() = spec.mutable
+
+  override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
   override fun spec(): KotlinPropertySpec = this
   override fun get(): PropertySpec = spec
@@ -29,6 +38,7 @@ data class KotlinPropertySpec(
 
 // TODO fun KotlinPropertySpec.toBuilder() = KotlinPropertyBuilder.builder(spec = this)
 
+@ExperimentalKotlinPoetApi
 interface KotlinPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinPropertySpec>, PropertySpecSupplier {
   override fun get(): PropertySpec = spec().get()
 }

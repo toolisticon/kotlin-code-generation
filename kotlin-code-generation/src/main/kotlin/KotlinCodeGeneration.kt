@@ -8,12 +8,17 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilde
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.funBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBuilder
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
-import io.toolisticon.kotlin.generation.support.SuppressAnnotation.Companion.CLASS_NAME
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
+import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
+import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 object KotlinCodeGeneration {
 
   inline fun buildAnnotation(type: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(type.asClassName(), block)
@@ -22,38 +27,69 @@ object KotlinCodeGeneration {
 
   inline fun buildClass(className: ClassName, block: KotlinClassSpecBuilderReceiver = {}) = classBuilder(className).also(block).build()
 
-  fun buildCodeBlock(format: String, vararg args: Any?) = CodeBlock.of(format, *args)
+  fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = CodeBlock.of(format, *args)
   inline fun buildCodeBlock(builderAction: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().apply(builderAction).build()
 
-  inline fun buildConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
-  inline fun buildConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = KotlinCodeGeneration.buildConstructorProperty(name, type.asTypeName(), block)
+  inline fun buildConstructorProperty(name: PropertyName, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
+  inline fun buildConstructorProperty(name: PropertyName, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = buildConstructorProperty(name, type.asTypeName(), block)
 
   inline fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
 
   inline fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
 
-  inline fun buildFun(name: String, block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpec = funBuilder(name).also(block).build()
+  inline fun buildFun(name: FunctionName, block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpec = funBuilder(name).also(block).build()
 
-  inline fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver = {}): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
+  inline fun buildProperty(name: PropertyName, typeName: TypeName, block: KotlinPropertySpecBuilderReceiver = {}): KotlinPropertySpec = propertyBuilder(name, typeName).also(block).build()
+  inline fun buildProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver = {}): KotlinPropertySpec = buildProperty(name, type.asTypeName(), block)
+
+  fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver = {}): KotlinValueClassSpec = KotlinValueClassSpecBuilder.builder(className).also(block).build()
 
   fun toFileSpec(spec: KotlinValueClassSpecSupplier): KotlinFileSpec = spec.spec().let {
     KotlinFileSpecBuilder.builder(it.className).addType(it).build()
   }
 
-
-  @Suppress(CLASS_NAME)
+  @ExperimentalKotlinPoetApi
+  @Suppress(SUPPRESS_CLASS_NAME, SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
+    fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
+
     fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
+    fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName) = annotationClassBuilder(className(packageName, simpleName))
+
     fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className);
-    fun constructorPropertyBuilder(name: String, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
-    fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className);
+    fun classBuilder(packageName: PackageName, simpleName: SimpleName) = classBuilder(className(packageName, simpleName))
+
+    fun constructorPropertyBuilder(name: PropertyName, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+
+    fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className)
+    fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName) = dataClassBuilder(className(packageName, simpleName))
+
     fun fileBuilder(className: ClassName) = KotlinFileSpecBuilder.builder(className)
-    fun funBuilder(name: String) = KotlinFunSpecBuilder.builder(name)
+    fun fileBuilder(packageName: PackageName, simpleName: SimpleName) = fileBuilder(className(packageName, simpleName))
+
+    fun funBuilder(name: FunctionName) = KotlinFunSpecBuilder.builder(name)
+
+    fun propertyBuilder(name: PropertyName, type: TypeName) = KotlinPropertySpecBuilder.builder(name, type)
+    fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
+
     fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
+    fun valueClassBuilder(packageName: PackageName, simpleName: SimpleName) = valueClassBuilder(className(packageName, simpleName))
   }
 
-  @Suppress(CLASS_NAME)
+  fun className(packageName: PackageName, simpleName: SimpleName) = ClassName(packageName, simpleName)
+
+  @Suppress(SUPPRESS_CLASS_NAME)
+  object spi {
+    val defaultClassLoader: () -> ClassLoader = { Thread.currentThread().contextClassLoader }
+
+    fun registry(
+      contextTypeUpperBound: KClass<*> = Any::class,
+      classLoader: ClassLoader = defaultClassLoader()
+    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader).invoke()
+  }
+
+  @Suppress(SUPPRESS_CLASS_NAME)
   object typeSpec {
 
     fun TypeSpec.hasModifier(modifier: KModifier) = this.modifiers.contains(modifier)
@@ -62,7 +98,7 @@ object KotlinCodeGeneration {
     val TypeSpec.isValueClass: Boolean get() = hasModifier(KModifier.VALUE)
   }
 
-  @Suppress(CLASS_NAME)
+  @Suppress(SUPPRESS_CLASS_NAME)
   object name {
     fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
@@ -73,4 +109,13 @@ object KotlinCodeGeneration {
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
   }
 
+  @Suppress(SUPPRESS_CLASS_NAME)
+  object format {
+    const val FORMAT_STRING = "%S"
+    const val FORMAT_STRING_TEMPLATE = "%P"
+    const val FORMAT_TYPE = "%T"
+    const val FORMAT_MEMBER = "%M"
+    const val FORMAT_NAME = "%N"
+    const val FORMAT_LITERAL = "%L"
+  }
 }

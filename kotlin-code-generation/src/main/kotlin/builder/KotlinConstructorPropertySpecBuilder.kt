@@ -1,20 +1,25 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
+import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 
+@ExperimentalKotlinPoetApi
 class KotlinConstructorPropertySpecBuilder internal constructor(
   override val name: String,
   private val type: TypeName,
   private val propertyBuilder: KotlinPropertySpecBuilder,
   private val parameterBuilder: KotlinParameterSpecBuilder
-) : Builder<KotlinConstructorPropertySpec>, KotlinConstructorPropertySpecSupplier {
+) : Builder<KotlinConstructorPropertySpec>,
+  KotlinConstructorPropertySpecSupplier,
+  KotlinDocumentableBuilder<KotlinConstructorPropertySpecBuilder> {
 
   companion object {
     fun builder(name: String, type: TypeName): KotlinConstructorPropertySpecBuilder = KotlinConstructorPropertySpecBuilder(
@@ -33,7 +38,6 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
       this.primaryConstructor(constructor.build())
     }
-
   }
 
   fun makePrivate() = apply {
@@ -45,10 +49,10 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier) = apply {
     parameterBuilder.addAnnotation(annotationSpec)
   }
-//    parameterBuilder {
-//      addAnnotation(annotationSpec)
-//    }
-//  }
+
+  override fun addKdoc(kdoc: KDoc): KotlinConstructorPropertySpecBuilder = apply {
+    parameterBuilder.addKdoc(kdoc)
+  }
 
   override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()
@@ -62,7 +66,8 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   }
 
   override fun spec(): KotlinConstructorPropertySpec = build()
+
 }
 
-
+@ExperimentalKotlinPoetApi
 typealias KotlinConstructorPropertySpecBuilderReceiver = KotlinConstructorPropertySpecBuilder.() -> Unit
