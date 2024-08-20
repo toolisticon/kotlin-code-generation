@@ -3,29 +3,34 @@ package io.toolisticon.kotlin.generation.spi.processor
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
-
+import io.toolisticon.kotlin.generation.spi.UnboundKotlinCodeGenerationProcessor
+import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 @JvmInline
-value class KotlinCodeGenerationProcessorList<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any>(
-  private val value: List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>>
-) : List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>> by value {
+value class KotlinCodeGenerationProcessorList(val list: List<UnboundKotlinCodeGenerationProcessor>) :
+    List<UnboundKotlinCodeGenerationProcessor> by list {
 
-  companion object {
-    fun <CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> of(spi: List<KotlinCodeGenerationSpi<*, *>>): KotlinCodeGenerationProcessorList<CONTEXT, INPUT, SPEC> {
-      val value: List<KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>> = spi.sorted()
-        .filterIsInstance<KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>>()
+    constructor(vararg processors: UnboundKotlinCodeGenerationProcessor) : this(processors.toList())
 
-      return KotlinCodeGenerationProcessorList(value)
-    }
-  }
-
-  operator fun invoke(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER = value.sorted()
-    .filter { it.test(context, input) }
-    .fold(builder) { acc, cur ->
-      cur.invoke(context, input, acc)
+    fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> filter(
+        processorType: KClass<PROCESSOR>
+    ): List<PROCESSOR> {
+        return list.filterIsInstance(processorType.java)
     }
 }
+
+
+@ExperimentalKotlinPoetApi
+fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> List<PROCESSOR>.executeSingle(
+    context: CONTEXT,
+    input: INPUT,
+    builder: BUILDER
+): BUILDER = single().execute(context, input, builder)
+
+@ExperimentalKotlinPoetApi
+fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> List<PROCESSOR>.executeAll(
+    context: CONTEXT,
+    input: INPUT,
+    builder: BUILDER
+): BUILDER = fold(builder) { acc, cur -> cur.execute(context, input, acc) }

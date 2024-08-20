@@ -1,8 +1,14 @@
 package io.toolisticon.kotlin.generation
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
-import java.io.ByteArrayInputStream
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
+import io.toolisticon.kotlin.generation.spi.context.AbstractKotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
+import io.toolisticon.kotlin.generation.spi.strategy.DataClassSpecStrategy
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -11,15 +17,13 @@ import java.net.URLConnection
 import java.net.URLStreamHandler
 import java.time.Instant
 import java.util.*
-import java.util.stream.Collectors
-import java.util.stream.Stream
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 object TestFixtures {
 
   // a fixed instant to be used in test with
-  val NOW = Instant.parse( "2024-07-02T10:01:33.205357100Z")
+  val NOW = Instant.parse("2024-07-02T10:01:33.205357100Z")
 
   @Target(allowedTargets = [AnnotationTarget.VALUE_PARAMETER])
   annotation class MyAnnotation(
@@ -58,7 +62,7 @@ object TestFixtures {
       require(metaInfInterface.java.isInterface) { "the META-INF service $metaInfInterface must be an interface" }
     }
 
-    val fileContent : String = implementingClasses.joinToString(separator = "\n")
+    val fileContent: String = implementingClasses.joinToString(separator = "\n")
 
     @Throws(IOException::class)
     override fun getResources(name: String): Enumeration<URL> {
@@ -95,4 +99,46 @@ object TestFixtures {
       return super.getResources(name)
     }
   }
+
+
+  object SpiFixtures {
+
+    data class InputA(
+      val packageName: PackageName,
+      val simpleName: SimpleName,
+      val fields: Map<String, KClass<*>>
+    ) {
+      val className = KotlinCodeGeneration.className(packageName, simpleName)
+    }
+
+    data class InputB(
+      val className: ClassName,
+      val fields: Map<String, KClass<*>>
+    )
+
+    class SpiTestContext(registry: KotlinCodeGenerationSpiRegistry) : AbstractKotlinCodeGenerationContext<SpiTestContext>(registry) {
+      override val contextType = SpiTestContext::class
+    }
+
+    abstract class DataClassAStrategy : DataClassSpecStrategy<EmptyContext, InputA>(
+      contextType = EmptyContext::class, inputType = InputA::class
+    )
+
+    abstract class DataClassBStrategy : DataClassSpecStrategy<EmptyContext, InputB>(
+      contextType = EmptyContext::class, inputType = InputB::class
+    )
+
+
+    object EmptyContext : KotlinCodeGenerationContext<EmptyContext> {
+      override val contextType = EmptyContext::class
+      override val registry = EmptyRegistry
+    }
+
+    object EmptyRegistry : KotlinCodeGenerationSpiRegistry {
+      override val contextTypeUpperBound = Any::class
+      override val strategies: KotlinCodeGenerationStrategyList = KotlinCodeGenerationStrategyList()
+      override val processors: KotlinCodeGenerationProcessorList = KotlinCodeGenerationProcessorList()
+    }
+  }
+
 }

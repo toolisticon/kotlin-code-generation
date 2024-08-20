@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import org.assertj.core.api.Assertions.assertThat
@@ -28,9 +28,7 @@ internal class SpiITest {
       )
     )
 
-    val strategy = context.findStrategies(MapInput::class, KotlinDataClassSpec::class).single()
-
-    val spec = strategy(context = context, input = input)
+    val spec = requireNotNull(context.registry.strategies.filter(TestDataClassStrategy::class).executeSingle(context, input))
     val file = KotlinCodeGeneration.builder.fileBuilder(input.className).addType(spec).build()
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(file))

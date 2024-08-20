@@ -15,7 +15,7 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `single unused on class`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED).spec()
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED).spec()
 
     val type = typeBuilder.addAnnotation(suppress).build()
 
@@ -30,8 +30,8 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `multiple on class`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED)
-      .plus(SuppressAnnotation.REDUNDANT_VISIBILITY_MODIFIER)
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED)
+      .plus(SUPPRESS_REDUNDANT_VISIBILITY_MODIFIER)
       .spec()
 
     val type = typeBuilder.addAnnotation(suppress).build()
@@ -47,8 +47,8 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `multiple on file`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED)
-      .plus(SuppressAnnotation.REDUNDANT_VISIBILITY_MODIFIER)
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED)
+      .plus(SUPPRESS_REDUNDANT_VISIBILITY_MODIFIER)
       .spec()
 
     val file = fileBuilder.addAnnotation(suppress).addType(typeBuilder.spec()).build()

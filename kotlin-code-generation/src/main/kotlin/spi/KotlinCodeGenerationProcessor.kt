@@ -2,7 +2,6 @@ package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
 
 /**
  * Root interface of all processors. Used to load all implementations
@@ -17,15 +16,20 @@ interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CO
   override val name: String
   val builderType: KClass<BUILDER>
 
+  /**
+   * Input is nullable because we could use processors solely based on context.
+   */
   operator fun invoke(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER
+
+  /**
+   * Checks if this strategy should be applied (using `test`) and then runs `invoke`.
+   */
+  fun execute(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER = if (test(context, input)) {
+    invoke(context, input, builder)
+  } else {
+    builder
+  }
 }
 
 @ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationProcessor<*, *, *>.matchesContextType(contextType: KClass<*>) = this.contextType.isSubclassOf(contextType)
-
-@ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationProcessor<*, *, *>.matchesInputType(inputType: KClass<*>) = this.inputType.isSubclassOf(inputType)
-
-@ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationProcessor<*, *, *>.matchesBuilderType(builderType: KClass<*>) = this.builderType.isSubclassOf(builderType)
-
+typealias UnboundKotlinCodeGenerationProcessor = KotlinCodeGenerationProcessor<*, *, *>

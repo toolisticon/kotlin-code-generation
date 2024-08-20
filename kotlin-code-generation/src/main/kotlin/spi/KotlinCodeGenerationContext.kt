@@ -1,8 +1,6 @@
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import kotlin.reflect.KClass
 
 /**
@@ -16,11 +14,15 @@ interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> 
   val contextType: KClass<SELF>
   val registry: KotlinCodeGenerationSpiRegistry
 
-  fun <INPUT : Any, SPEC : Any> findStrategies(inputType: KClass<INPUT>, specType: KClass<SPEC>): KotlinCodeGenerationStrategyList<SELF, INPUT, SPEC>
-  fun <INPUT : Any> findStrategies(inputType: KClass<INPUT>): KotlinCodeGenerationStrategyList<SELF, INPUT, *>
-  fun findStrategies(): KotlinCodeGenerationStrategyList<SELF, *, *>
+  fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> processors(
+    processorType: KClass<PROCESSOR>
+  ): List<PROCESSOR> {
+    return registry.processors.filterIsInstance(processorType.java)
+  }
 
-  fun <INPUT : Any, SPEC : Any> findProcessors(inputType: KClass<INPUT>, specType: KClass<SPEC>): KotlinCodeGenerationProcessorList<SELF, INPUT, SPEC>
-  fun <INPUT : Any> findProcessors(inputType: KClass<INPUT>): KotlinCodeGenerationProcessorList<SELF, INPUT, *>
-  fun findProcessors(): KotlinCodeGenerationProcessorList<SELF, *, *>
+  fun <STRATEGY : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> strategies(
+    strategyType: KClass<STRATEGY>
+  ): List<STRATEGY> {
+    return registry.strategies.filterIsInstance(strategyType.java)
+  }
 }

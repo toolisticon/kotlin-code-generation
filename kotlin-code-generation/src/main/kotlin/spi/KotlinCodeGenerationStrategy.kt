@@ -2,7 +2,6 @@ package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
 
 /**
  * Root marker interface for all strategies.
@@ -21,13 +20,16 @@ interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CON
   val specType: KClass<SPEC>
 
   operator fun invoke(context: CONTEXT, input: INPUT): SPEC
+
+  /**
+   * Checks if this strategy should be applied (using `test`) and then runs `invoke`.
+   */
+  fun execute(context: CONTEXT, input: INPUT): SPEC? = if (test(context, input)) {
+    invoke(context, input)
+  } else {
+    null
+  }
 }
 
 @ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationStrategy<*, *, *>.matchesContextType(contextType: KClass<*>) = this.contextType.isSubclassOf(contextType)
-
-@ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationStrategy<*, *, *>.matchesInputType(inputType: KClass<*>) = this.inputType.isSubclassOf(inputType)
-
-@ExperimentalKotlinPoetApi
-fun KotlinCodeGenerationStrategy<*, *, *>.matchesSpecType(specType: KClass<*>) = this.specType.isSubclassOf(specType)
+typealias UnboundKotlinCodeGenerationStrategy = KotlinCodeGenerationStrategy<*, *, *>

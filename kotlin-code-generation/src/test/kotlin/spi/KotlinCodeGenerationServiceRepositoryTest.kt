@@ -2,10 +2,11 @@ package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
-import io.toolisticon.kotlin.generation.spi.context.AbstractKotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
+import io.toolisticon.kotlin.generation.spi.context.AbstractKotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.spi.strategy.DataClassSpecStrategy
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -34,7 +35,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   @Test
   fun `create registry from spi instances`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = TestContext::class, FooDataClassStrategy())
+    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = TestContext::class, strategies = KotlinCodeGenerationStrategyList(FooDataClassStrategy()))
 
     println(registry)
   }
@@ -61,6 +62,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
         addConstructorProperty(input, Long::class)
       }
     }
+
     class StringDataClassStrategy : DataClassSpecStrategy<SuperContext.SubContextString, String>(SuperContext.SubContextString::class, String::class) {
       override fun invoke(context: SuperContext.SubContextString, input: String): KotlinDataClassSpec = KotlinCodeGeneration.buildDataClass(KotlinCodeGeneration.className("foo.bar", "StringClass")) {
         addConstructorProperty(input, Long::class)
@@ -71,13 +73,15 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   @Test
   fun `initialize with sealed super context`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = SealedSuperContext.SuperContext::class, SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
+    val registry = KotlinCodeGenerationServiceRepository(
+      contextTypeUpperBound = SealedSuperContext.SuperContext::class,
+      strategies = KotlinCodeGenerationStrategyList(SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
+    )
 
-
-    assertThat(registry.findStrategies(SealedSuperContext.SuperContext.SubContextLong::class, String::class, KotlinDataClassSpec::class)).isNotEmpty
+    assertThat(registry.strategies.filter(SealedSuperContext.LongDataClassStrategy::class)).isNotEmpty
 
     val longContext = SealedSuperContext.SuperContext.SubContextLong(registry)
-    val longDataClass = longContext.findStrategies(inputType = String::class, specType = KotlinDataClassSpec::class).single()
+    val longDataClass = longContext.registry.strategies.filter(SealedSuperContext.LongDataClassStrategy::class).single()
       .invoke(longContext, "foo")
 
     assertThat(longDataClass.code).isEqualToIgnoringWhitespace(
