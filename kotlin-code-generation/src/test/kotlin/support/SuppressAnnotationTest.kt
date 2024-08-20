@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation.support
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class SuppressAnnotationTest {
   private val className = ClassName("foo", "Bar")
   private val typeBuilder = classBuilder(className)
@@ -13,7 +15,7 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `single unused on class`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED).spec()
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED).spec()
 
     val type = typeBuilder.addAnnotation(suppress).build()
 
@@ -28,8 +30,8 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `multiple on class`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED)
-      .plus(SuppressAnnotation.REDUNDANT_VISIBILITY_MODIFIER)
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED)
+      .plus(SUPPRESS_REDUNDANT_VISIBILITY_MODIFIER)
       .spec()
 
     val type = typeBuilder.addAnnotation(suppress).build()
@@ -45,8 +47,8 @@ internal class SuppressAnnotationTest {
 
   @Test
   fun `multiple on file`() {
-    val suppress = SuppressAnnotation(SuppressAnnotation.UNUSED)
-      .plus(SuppressAnnotation.REDUNDANT_VISIBILITY_MODIFIER)
+    val suppress = SuppressAnnotation(SUPPRESS_UNUSED)
+      .plus(SUPPRESS_REDUNDANT_VISIBILITY_MODIFIER)
       .spec()
 
     val file = fileBuilder.addAnnotation(suppress).addType(typeBuilder.spec()).build()

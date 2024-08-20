@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpec
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpecSupplier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinTypeAliasSpecBuilder internal constructor(
   private val delegate: TypeAliasSpecBuilder
 ) : BuilderSupplier<KotlinTypeAliasSpec, TypeAliasSpec>,
@@ -49,4 +50,5 @@ KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder>{
 
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinTypeAliasSpecBuilderReceiver = KotlinTypeAliasSpecBuilder.() -> Unit

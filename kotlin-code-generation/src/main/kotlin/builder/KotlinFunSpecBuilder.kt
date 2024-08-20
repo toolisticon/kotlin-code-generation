@@ -14,6 +14,7 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
@@ -120,4 +121,5 @@ class KotlinFunSpecBuilder internal constructor(
   override fun get(): FunSpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinFunSpecBuilderReceiver = KotlinFunSpecBuilder.() -> Unit

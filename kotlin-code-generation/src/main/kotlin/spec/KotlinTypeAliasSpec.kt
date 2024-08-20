@@ -1,10 +1,12 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeAliasSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecSupplier
 
 
+@ExperimentalKotlinPoetApi
 @JvmInline
 value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinGeneratorSpec<KotlinTypeAliasSpec,
   TypeAliasSpec,
@@ -18,6 +20,7 @@ value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinGenerat
   override fun get(): TypeAliasSpec = spec
 }
 
+@ExperimentalKotlinPoetApi
 interface KotlinTypeAliasSpecSupplier : KotlinGeneratorSpecSupplier<KotlinTypeAliasSpec>, TypeAliasSpecSupplier {
   override fun get(): TypeAliasSpec = spec().get()
 }

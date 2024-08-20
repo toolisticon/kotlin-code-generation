@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
@@ -7,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 internal class KotlinAnnotationTest {
 
   annotation class Foo(

@@ -1,12 +1,14 @@
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.dataClassBuilder
 import io.toolisticon.kotlin.generation.builder.KotlinDataClassSpecBuilder
 import org.junit.jupiter.api.Test
 
+@ExperimentalKotlinPoetApi
 internal class KotlinDataClassSpecTest {
 
   @Test

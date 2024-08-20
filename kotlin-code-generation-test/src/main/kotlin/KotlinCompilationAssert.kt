@@ -1,17 +1,22 @@
 package io.toolisticon.kotlin.generation.test
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationResult
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
+
+@ExperimentalKotlinPoetApi
+@ExperimentalCompilerApi
 class KotlinCompilationAssert(
   actual: KotlinCompilationResult,
 ) : AbstractAssert<KotlinCompilationAssert, KotlinCompilationResult>(actual, KotlinCompilationAssert::class.java) {
 
-  fun errorMessages()  = Assertions.assertThat(actual.errors)
+  fun errorMessages() = Assertions.assertThat(actual.errors)
 
-  fun hasExitCode(exitCode: KotlinCompilation.ExitCode) : KotlinCompilationAssert = apply {
+  fun hasExitCode(exitCode: KotlinCompilation.ExitCode): KotlinCompilationAssert = apply {
     Assertions.assertThat(actual.exitCode).isEqualTo(exitCode)
   }
 }

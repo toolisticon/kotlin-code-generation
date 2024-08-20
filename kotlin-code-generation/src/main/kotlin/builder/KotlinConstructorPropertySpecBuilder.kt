@@ -1,5 +1,6 @@
 package io.toolisticon.kotlin.generation.builder
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
@@ -10,6 +11,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 
+@ExperimentalKotlinPoetApi
 class KotlinConstructorPropertySpecBuilder internal constructor(
   override val name: String,
   private val type: TypeName,
@@ -67,4 +69,5 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinConstructorPropertySpecBuilderReceiver = KotlinConstructorPropertySpecBuilder.() -> Unit

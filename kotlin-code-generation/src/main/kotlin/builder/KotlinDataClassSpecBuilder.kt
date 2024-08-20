@@ -3,20 +3,19 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
-import io.toolisticon.kotlin.generation.spec.toList
+import io.toolisticon.kotlin.generation.spec.*
 import mu.KLogging
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
   ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
-KotlinDocumentableBuilder<KotlinDataClassSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
 
     fun builder(name: String): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(
@@ -50,24 +49,29 @@ KotlinDocumentableBuilder<KotlinDataClassSpecBuilder> {
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
 
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply {
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinDataClassSpecBuilder = apply {
     this.constructorProperties[spec.name] = spec
   }
 
-  fun addAnnotation(annotation: KotlinAnnotationSpecSupplier) = apply {
+  fun addAnnotation(annotation: KotlinAnnotationSpecSupplier): KotlinDataClassSpecBuilder = apply {
     delegate.addAnnotation(annotation.get())
   }
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinDataClassSpecBuilder = builder { this.addAnnotation(annotationSpec.get()) }
 
   override fun addKdoc(kdoc: KDoc): KotlinDataClassSpecBuilder = apply {
     delegate.addKdoc(kdoc.get())
   }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinDataClassSpecBuilder = apply {
+    delegate.addFunction(funSpec.get())
+  }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinDataClassSpecBuilder = apply {
+    delegate.addProperty(propertySpec.get())
+  }
+
+  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
@@ -94,4 +98,5 @@ KotlinDocumentableBuilder<KotlinDataClassSpecBuilder> {
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinDataClassSpecBuilderReceiver = KotlinDataClassSpecBuilder.() -> Unit

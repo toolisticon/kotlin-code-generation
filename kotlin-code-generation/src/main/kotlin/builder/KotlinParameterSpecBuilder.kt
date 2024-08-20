@@ -12,6 +12,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinParameterSpecBuilder internal constructor(
   private val delegate: ParameterSpecBuilder
 ) : BuilderSupplier<KotlinParameterSpec, ParameterSpec>,
@@ -67,4 +68,5 @@ class KotlinParameterSpecBuilder internal constructor(
   override fun get(): ParameterSpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinParameterSpecBuilderReceiver = KotlinParameterSpecBuilder.() -> Unit

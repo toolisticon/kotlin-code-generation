@@ -12,6 +12,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
@@ -66,4 +67,5 @@ class KotlinAnnotationSpecBuilder internal constructor(
   override fun get(): AnnotationSpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinAnnotationSpecBuilderReceiver = KotlinAnnotationSpecBuilder.() -> Unit

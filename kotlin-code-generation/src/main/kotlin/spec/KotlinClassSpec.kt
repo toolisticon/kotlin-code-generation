@@ -1,12 +1,15 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.WithClassName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
+@ExperimentalKotlinPoetApi
 data class KotlinClassSpec(
-  val className: ClassName,
+  override val className: ClassName,
   private val spec: TypeSpec
 ) : KotlinGeneratorTypeSpec<KotlinClassSpec>, KotlinClassSpecSupplier, KotlinDocumentableSpec {
 
@@ -23,6 +26,8 @@ data class KotlinClassSpec(
 //fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
 // TODO fun KotlinDataClassSpec.toBuilder() = KotlinDataClassBuilder.from(spec = this)
 // TODO fun KotlinDataClassSpec.toFileSpec() = KotlinFileSpecBuilder.builder(this).build()
-interface KotlinClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinClassSpec>, TypeSpecSupplier {
+
+@ExperimentalKotlinPoetApi
+interface KotlinClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinClassSpec>, TypeSpecSupplier, WithClassName {
   override fun get(): TypeSpec = spec().get()
 }

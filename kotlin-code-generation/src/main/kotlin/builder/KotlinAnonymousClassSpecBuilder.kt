@@ -1,20 +1,20 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
+import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
-
+@ExperimentalKotlinPoetApi
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
-  KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder> {
 
   companion object {
     fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder(
@@ -31,10 +31,11 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
   fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnonymousClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-  fun addFunction(funSpec: FunSpecSupplier) = builder { this.addFunction(funSpec.get()) }
-  fun addProperty(propertySpec: PropertySpecSupplier) = builder { this.addProperty(propertySpec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
@@ -63,4 +64,5 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   override fun build(): KotlinAnonymousClassSpec = KotlinAnonymousClassSpec(delegate.build())
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinAnonymousClassSpecBuilderReceiver = KotlinAnonymousClassSpecBuilder.() -> Unit

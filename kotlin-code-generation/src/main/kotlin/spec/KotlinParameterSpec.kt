@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.ParameterSpecSupplier
 
 @JvmInline
+@ExperimentalKotlinPoetApi
 value class KotlinParameterSpec(
   private val spec: ParameterSpec
 ) : KotlinGeneratorSpec<KotlinParameterSpec,
@@ -23,6 +25,7 @@ value class KotlinParameterSpec(
   override fun get(): ParameterSpec = this.spec
 }
 
+@ExperimentalKotlinPoetApi
 interface KotlinParameterSpecSupplier : KotlinGeneratorSpecSupplier<KotlinParameterSpec>, ParameterSpecSupplier {
   override fun get(): ParameterSpec = spec().get()
 }

@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
@@ -10,6 +11,7 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+@ExperimentalKotlinPoetApi
 class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
@@ -17,25 +19,26 @@ class KotlinPropertySpecBuilder internal constructor(
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
   KotlinDocumentableBuilder<KotlinPropertySpecBuilder> {
 
+  @ExperimentalKotlinPoetApi
   companion object {
 
-    fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: PropertyName, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, *modifiers)
     )
 
-    fun builder(name: String, type: Type, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(
+    fun builder(name: PropertyName, type: Type, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(
       name = name,
       type = type.asTypeName(),
       modifiers = modifiers
     )
 
-    fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
+    fun builder(name: PropertyName, type: KClass<*>, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
-    fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: PropertyName, type: TypeName, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, modifiers)
     )
 
-    fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
+    fun builder(name: PropertyName, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
@@ -82,4 +85,5 @@ class KotlinPropertySpecBuilder internal constructor(
   override fun get(): PropertySpec = build().get()
 }
 
+@ExperimentalKotlinPoetApi
 typealias KotlinPropertySpecBuilderReceiver = KotlinPropertySpecBuilder.() -> Unit

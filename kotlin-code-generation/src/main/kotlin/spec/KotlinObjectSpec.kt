@@ -1,10 +1,11 @@
 package io.toolisticon.kotlin.generation.spec
 
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
-
+@ExperimentalKotlinPoetApi
 data class KotlinObjectSpec(
   private val spec: TypeSpec
 ) : KotlinGeneratorTypeSpec<KotlinObjectSpec>, KotlinObjectSpecSupplier, KotlinDocumentableSpec {
@@ -13,6 +14,7 @@ data class KotlinObjectSpec(
   override fun get(): TypeSpec = spec
 }
 
+@ExperimentalKotlinPoetApi
 interface KotlinObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinObjectSpec>, TypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }
