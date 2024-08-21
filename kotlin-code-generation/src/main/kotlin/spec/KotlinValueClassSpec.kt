@@ -4,9 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isValueClass
-import io.toolisticon.kotlin.generation.WithClassName
 import io.toolisticon.kotlin.generation.poet.KDoc
-import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
 @ExperimentalKotlinPoetApi
 data class KotlinValueClassSpec(

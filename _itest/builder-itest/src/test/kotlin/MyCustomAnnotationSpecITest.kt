@@ -40,7 +40,7 @@ internal class MyCustomAnnotationSpecITest {
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(MyCustomAnnotationSpec.file).plus(file))
 
-    assertThatCompilation(result).hasExitCode(KotlinCompilation.ExitCode.OK);
+    assertThatCompilation(result).hasExitCode(KotlinCompilation.ExitCode.OK)
 
     val klass: KClass<out Any> = result.loadClass(name)
     assertThat(klass::class.asClassName()).isEqualTo(name)

@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
+@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class, ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.itest
 
@@ -7,8 +7,6 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.asTypeName
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.dataClassBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinDataClassSpecBuilder
 import io.toolisticon.kotlin.generation.spec.toFileSpec
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
@@ -23,9 +21,6 @@ internal class KotlinDataClassSpecITest {
   @Test
   fun `create simple data class`() {
     val className = ClassName("foo.bar", "Bar")
-    val builder: KotlinDataClassSpecBuilder = dataClassBuilder(className)
-      .addConstructorProperty("name", String::class)
-      .addConstructorProperty("age", Int::class)
 
     val spec = buildDataClass(className) {
       addConstructorProperty("name", String::class.asTypeName())
@@ -33,7 +28,6 @@ internal class KotlinDataClassSpecITest {
     }
 
     val file = spec.toFileSpec()
-    println(file.code)
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(file))
 

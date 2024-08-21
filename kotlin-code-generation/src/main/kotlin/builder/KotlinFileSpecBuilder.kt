@@ -1,3 +1,5 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
@@ -8,6 +10,7 @@ import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
@@ -17,8 +20,8 @@ class KotlinFileSpecBuilder internal constructor(
   KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinFileSpecBuilder> {
   companion object {
-    fun builder(className: ClassName): KotlinFileSpecBuilder  {
-      require(className.packageName.isNotEmpty()) {"cannot build file for empty package."}
+    fun builder(className: ClassName): KotlinFileSpecBuilder {
+      require(className.packageName.isNotEmpty()) { "cannot build file for empty package." }
       return KotlinFileSpecBuilder(delegate = FileSpecBuilder.builder(className))
     }
 

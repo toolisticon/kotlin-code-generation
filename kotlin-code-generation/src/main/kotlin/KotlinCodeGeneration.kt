@@ -1,3 +1,5 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
@@ -16,6 +18,7 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
 import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
@@ -58,7 +61,7 @@ object KotlinCodeGeneration {
     fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
     fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName) = annotationClassBuilder(className(packageName, simpleName))
 
-    fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className);
+    fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className)
     fun classBuilder(packageName: PackageName, simpleName: SimpleName) = classBuilder(className(packageName, simpleName))
 
     fun constructorPropertyBuilder(name: PropertyName, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
@@ -107,6 +110,8 @@ object KotlinCodeGeneration {
 
     fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
 
+    // FIXME: remove?
+    @Deprecated("not usable this way, fix or remove")
     operator fun ClassName.plus(suffix: String?): ClassName = ClassName(this.packageName, this.simpleNames)
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)

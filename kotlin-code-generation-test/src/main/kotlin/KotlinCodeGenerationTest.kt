@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.test
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -32,7 +34,6 @@ import java.io.ByteArrayOutputStream
  *  ```
  */
 @ExperimentalCompilerApi
-@ExperimentalKotlinPoetApi
 object KotlinCodeGenerationTest {
 
   fun assertThat(actual: KotlinCompilationResult): KotlinCompilationAssert = KotlinCompilationAssert(actual)
@@ -44,7 +45,7 @@ object KotlinCodeGenerationTest {
       inheritClassPath = true
 
 
-        // needed so kotlin compile does not spam the console log (would default to System.out)
+      // needed so kotlin compile does not spam the console log (would default to System.out)
       messageOutputStream = ByteArrayOutputStream()
       //compilerPluginRegistrars = listOf(SerializationComponentRegistrar())
     }.compile()
