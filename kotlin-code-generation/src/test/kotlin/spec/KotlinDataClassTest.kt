@@ -40,7 +40,7 @@ internal class KotlinDataClassTest {
        * @param y the y parameter
        */
       @jakarta.`annotation`.Generated(
-        value = "io.toolisticon.kotlin.generation.KotlinCodeGeneration",
+        value = ["io.toolisticon.kotlin.generation.KotlinCodeGeneration"],
         date = "2024-07-02T10:01:33.205357100Z",
         comments = "version = 1.2",
       )

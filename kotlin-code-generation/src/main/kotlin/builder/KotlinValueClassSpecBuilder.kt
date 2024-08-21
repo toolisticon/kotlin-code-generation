@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.jvm.jvmInline
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
@@ -17,15 +18,11 @@ class KotlinValueClassSpecBuilder internal constructor(
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
   ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
-  KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder>{
 
   companion object {
-
-    fun builder(name: String): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(
-      className = ClassName("", name),
-      delegate = TypeSpecBuilder.classBuilder(name)
-    )
-
+    fun builder(name: String): KotlinValueClassSpecBuilder = builder(simpleClassName(name))
     fun builder(className: ClassName): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(className)
   }
 
@@ -34,36 +31,23 @@ class KotlinValueClassSpecBuilder internal constructor(
   internal constructor(className: ClassName) : this(
     className = className,
     delegate = TypeSpecBuilder.classBuilder(className)
-  )
-
-  init {
+  ) {
     delegate.addModifiers(KModifier.VALUE)
     delegate.builder.jvmInline()
   }
 
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply {
-    this.constructorProperty = spec
-  }
+
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { this.constructorProperty = spec }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-
-
-  override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
-
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }

@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.WithClassName
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 

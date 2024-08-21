@@ -32,7 +32,7 @@ internal class CodeBlockArrayTest {
   }
 
   enum class ABC {
-    A, B, C
+    A, B
   }
 
   @Test
@@ -44,7 +44,7 @@ internal class CodeBlockArrayTest {
       ).build()
     ).hasToString("""[io.toolisticon.kotlin.generation.support.CodeBlockArrayTest.ABC.A, io.toolisticon.kotlin.generation.support.CodeBlockArrayTest.ABC.B]""")
   }
-  
+
   @Test
   fun `numberArray with two items`() {
     assertThat(numberArray(2, 3).build()).hasToString("""[2, 3]""")

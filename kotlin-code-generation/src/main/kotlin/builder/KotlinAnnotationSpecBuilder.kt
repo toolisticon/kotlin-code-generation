@@ -14,9 +14,11 @@ import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.enumArr
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.kclassArray
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.numberArray
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.stringArray
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
+@Suppress(SUPPRESS_UNUSED)
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,

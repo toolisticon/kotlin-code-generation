@@ -9,9 +9,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_KCLASS
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_LITERAL
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_MEMBER
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_NAME
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_TYPE
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import kotlin.reflect.KClass
 
@@ -23,11 +21,12 @@ data class CodeBlockArray<T>(val format: String, val items: Collection<T> = empt
 
     fun enumArray(vararg items: Enum<*>): CodeBlockArray<MemberName> = CodeBlockArray(FORMAT_MEMBER, items.map { it.asMemberName() }.toList())
 
-    fun kclassArray(vararg  items: KClass<*>) : CodeBlockArray<KClass<*>> = CodeBlockArray(FORMAT_KCLASS, items.toList())
+    fun kclassArray(vararg items: KClass<*>): CodeBlockArray<KClass<*>> = CodeBlockArray(FORMAT_KCLASS, items.toList())
 
-    fun numberArray(vararg items: Number) : CodeBlockArray<Number> = CodeBlockArray(FORMAT_LITERAL, items.toList())
+    fun numberArray(vararg items: Number): CodeBlockArray<Number> = CodeBlockArray(FORMAT_LITERAL, items.toList())
   }
 
+  @Suppress(SUPPRESS_UNUSED)
   constructor(format: String, item: T) : this(format, listOf(item))
 
   operator fun plus(item: T): CodeBlockArray<T> = copy(items = items + item)

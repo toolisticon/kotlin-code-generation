@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
+
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import com.squareup.kotlinpoet.asClassName
 import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
@@ -14,13 +17,12 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat as assertThatCompilation
 
-@ExperimentalCompilerApi
-@ExperimentalKotlinPoetApi
-internal class MyCustomAnnotationSpecTest {
+
+internal class MyCustomAnnotationSpecITest {
 
   @Test
   fun `generate class with custom annotation`() {
-    val name = ClassName(KotlinCodeGenerationITest.ROOT_PACKAGE, "MyClass")
+    val name = ClassName(KotlinCodeGenerationITestConfig.ROOT_PACKAGE, "MyClass")
 
     val customAnnotation = buildAnnotation(MyCustomAnnotationSpec.name) {
       addStringMember("value", "hello")
@@ -41,9 +43,11 @@ internal class MyCustomAnnotationSpecTest {
     assertThatCompilation(result).hasExitCode(KotlinCompilation.ExitCode.OK);
 
     val klass: KClass<out Any> = result.loadClass(name)
+    assertThat(klass::class.asClassName()).isEqualTo(name)
     assertThat(klass.annotations).hasSize(1)
     val annotation: Annotation = klass.annotations[0]
 
-    //assertThat(annotation::class.)
+
+    assertThat(annotation::class.asClassName()).isEqualTo(MyCustomAnnotationSpec.name)
   }
 }

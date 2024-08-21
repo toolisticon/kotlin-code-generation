@@ -12,6 +12,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
@@ -69,4 +70,17 @@ interface KotlinMemberSpecHolderBuilder<SELF> {
   fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
   fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
 
+}
+
+@ExperimentalKotlinPoetApi
+interface KotlinTypeSpecHolderBuilder<SELF> {
+  fun addType(spec: KotlinAnnotationClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinDataClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinEnumClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinInterfaceSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinObjectSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  fun addType(spec: KotlinValueClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+
+  fun addType(typeSpec: TypeSpecSupplier): SELF
 }

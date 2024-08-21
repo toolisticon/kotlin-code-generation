@@ -28,6 +28,6 @@ data class KotlinClassSpec(
 // TODO fun KotlinDataClassSpec.toFileSpec() = KotlinFileSpecBuilder.builder(this).build()
 
 @ExperimentalKotlinPoetApi
-interface KotlinClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinClassSpec>, TypeSpecSupplier, WithClassName {
+interface KotlinClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }

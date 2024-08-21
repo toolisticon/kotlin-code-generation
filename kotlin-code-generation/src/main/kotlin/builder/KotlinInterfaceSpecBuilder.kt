@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinInterfaceSpec
@@ -10,42 +11,32 @@ import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 class KotlinInterfaceSpecBuilder internal constructor(
+  private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec>,
   KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder>,
-  KotlinMemberSpecHolderBuilder<KotlinInterfaceSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinInterfaceSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinInterfaceSpecBuilder> {
   companion object {
-    fun builder(name: String): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(
-      delegate = TypeSpecBuilder.interfaceBuilder(name)
-    )
-
-    fun builder(className: ClassName): KotlinInterfaceSpecBuilder = builder(className.simpleName)
-
-    fun funInterfaceBuilder(name: String): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(
-      delegate = TypeSpecBuilder.funInterfaceBuilder(name)
-    )
-
-    fun funInterfaceBuilder(className: ClassName): KotlinInterfaceSpecBuilder = funInterfaceBuilder(className.simpleName)
+    private const val DEFAULT_IS_FUNCTIONAL = false
+    fun builder(name: String, isFunctionInterface: Boolean = DEFAULT_IS_FUNCTIONAL): KotlinInterfaceSpecBuilder = builder(simpleClassName(name), isFunctionInterface)
+    fun builder(className: ClassName, isFunctionInterface: Boolean = DEFAULT_IS_FUNCTIONAL): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(className, isFunctionInterface)
   }
 
-
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-
-  override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
-
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
+  internal constructor(className: ClassName, funInterface: Boolean = false) : this(
+    className = className,
+    delegate = if (funInterface) TypeSpecBuilder.funInterfaceBuilder(className) else TypeSpecBuilder.interfaceBuilder(className)
+  )
 
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
+  override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }
@@ -69,7 +60,7 @@ class KotlinInterfaceSpecBuilder internal constructor(
     delegate.builder.block()
   }
 
-  override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(spec = delegate.build())
+  override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(className = className, spec = delegate.build())
 }
 
 @ExperimentalKotlinPoetApi

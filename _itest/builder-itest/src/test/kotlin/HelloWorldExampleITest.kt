@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
+
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
@@ -12,9 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
-@ExperimentalCompilerApi
-internal class HelloWorldExampleTest {
+internal class HelloWorldExampleITest {
 
   @Test
   fun `hello world from kotlin poet talk`() {

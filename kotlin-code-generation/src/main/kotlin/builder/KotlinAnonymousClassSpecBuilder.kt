@@ -14,7 +14,8 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
   KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>{
 
   companion object {
     fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder(
@@ -24,21 +25,14 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnonymousClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 

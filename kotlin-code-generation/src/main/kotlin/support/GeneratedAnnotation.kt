@@ -10,6 +10,7 @@ import java.time.Instant
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
+@Suppress(SUPPRESS_UNUSED)
 data class GeneratedAnnotation(
     val value: String = KotlinCodeGeneration::class.asTypeName().toString(),
     val date: Instant = Instant.now(),

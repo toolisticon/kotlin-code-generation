@@ -34,6 +34,7 @@ object KotlinCodeGeneration {
   inline fun buildConstructorProperty(name: PropertyName, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = buildConstructorProperty(name, type.asTypeName(), block)
 
   inline fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
+  inline fun buildDataClass(packageName: PackageName, simpleName: SimpleName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = buildDataClass(className(packageName, simpleName), block)
 
   inline fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
 
@@ -78,6 +79,8 @@ object KotlinCodeGeneration {
   }
 
   fun className(packageName: PackageName, simpleName: SimpleName) = ClassName(packageName, simpleName)
+  fun simpleClassName(simpleName: SimpleName) = className("", simpleName)
+
 
   @Suppress(SUPPRESS_CLASS_NAME)
   object spi {
@@ -117,5 +120,7 @@ object KotlinCodeGeneration {
     const val FORMAT_MEMBER = "%M"
     const val FORMAT_NAME = "%N"
     const val FORMAT_LITERAL = "%L"
+
+    const val FORMAT_KCLASS = "$FORMAT_TYPE::class"
   }
 }

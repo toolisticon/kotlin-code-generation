@@ -25,6 +25,6 @@ data class KotlinValueClassSpec(
 
 // fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
 @ExperimentalKotlinPoetApi
-interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, TypeSpecSupplier, WithClassName {
+interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }

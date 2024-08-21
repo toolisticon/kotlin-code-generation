@@ -20,6 +20,6 @@ data class KotlinAnnotationClassSpec(
 }
 
 @ExperimentalKotlinPoetApi
-interface KotlinAnnotationClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationClassSpec>, TypeSpecSupplier, WithClassName {
+interface KotlinAnnotationClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }
