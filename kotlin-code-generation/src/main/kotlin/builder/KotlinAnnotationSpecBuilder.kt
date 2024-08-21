@@ -2,14 +2,18 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildCodeBlock
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asCodeBlock
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_LITERAL
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.support.CodeBlockArray
+import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.enumArray
+import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.kclassArray
+import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.numberArray
+import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.stringArray
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
@@ -44,19 +48,19 @@ class KotlinAnnotationSpecBuilder internal constructor(
   }
 
   fun addMember(memberName: MemberName): KotlinAnnotationSpecBuilder = addMember("%M", memberName)
+  private fun addArrayMember(name: String, array: CodeBlockArray<*>): KotlinAnnotationSpecBuilder = addMember("$name = $FORMAT_LITERAL", array.build())
 
   fun addKClassMember(name: String, klass: KClass<*>) = addMember("$name = %T::class", klass)
+  fun addKClassMembers(name: String, vararg klasses: KClass<*>) = addArrayMember(name = name, kclassArray(*klasses))
 
   fun addStringMember(name: String, value: String) = addMember("$name = %S", value)
+  fun addStringMembers(name: String, vararg values: String) = addArrayMember(name = name, array = stringArray(*values))
 
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember("$name = %M", value.asMemberName())
+  fun addEnumMembers(name: String, vararg values: Enum<*>): KotlinAnnotationSpecBuilder = addArrayMember(name = name, enumArray(*values))
 
   fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember("$name = %L", value)
-
-  fun addEnumMembers(name: String, vararg value: Enum<*>): KotlinAnnotationSpecBuilder {
-    val members = value.map { it.asMemberName() }.asCodeBlock()
-    return addMember(buildCodeBlock(format = "$name = %L", args = arrayOf(members)))
-  }
+  fun addNumberMembers(name: String, vararg values: Number): KotlinAnnotationSpecBuilder = addArrayMember(name = name, numberArray(*values))
 
   override fun builder(block: AnnotationSpecBuilderReceiver) = apply {
     delegate.builder.block()

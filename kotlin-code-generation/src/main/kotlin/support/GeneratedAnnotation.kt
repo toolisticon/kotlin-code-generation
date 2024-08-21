@@ -21,7 +21,7 @@ data class GeneratedAnnotation(
   fun comment(comment: Pair<String, String>) = copy(comments = this.comments + "${comment.first} = ${comment.second}")
 
   override fun spec(): KotlinAnnotationSpec = KotlinCodeGeneration.buildAnnotation(Generated::class) {
-      addStringMember("value", value)
+      addStringMembers("value", value)
       addStringMember("date", date.toString())
 
       if (comments.isNotEmpty()) {
