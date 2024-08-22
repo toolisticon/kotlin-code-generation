@@ -14,7 +14,13 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
-data class CodeBlockArray<T>(val format: String, val items: Collection<T> = emptyList()) : Builder<CodeBlock> {
+data class CodeBlockArray<T>(
+  val format: String,
+  val items: Collection<T> = emptyList(),
+  val separator: CharSequence = ", ",
+  val prefix: CharSequence = "[",
+  val suffix: CharSequence = "]",
+) : Builder<CodeBlock> {
   companion object {
 
     fun stringArray(vararg items: String) = CodeBlockArray(FORMAT_STRING, items.toList())
@@ -31,5 +37,11 @@ data class CodeBlockArray<T>(val format: String, val items: Collection<T> = empt
 
   operator fun plus(item: T): CodeBlockArray<T> = copy(items = items + item)
 
-  override fun build(): CodeBlock = items.map { buildCodeBlock(format, it) }.joinToCode(prefix = "[", suffix = "]")
+  override fun build(): CodeBlock = items.map {
+    if (it is CodeBlock) {
+      it
+    } else {
+      buildCodeBlock(format, it)
+    }
+  }.joinToCode(prefix = prefix, suffix = suffix)
 }
