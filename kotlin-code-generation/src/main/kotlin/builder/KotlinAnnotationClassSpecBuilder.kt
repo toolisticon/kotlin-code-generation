@@ -19,7 +19,7 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
-  KotlinTypeSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>{
+  KotlinTypeSpecHolderBuilder<KotlinAnnotationClassSpecBuilder> {
 
   companion object {
 
@@ -52,7 +52,6 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-
 
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
