@@ -19,6 +19,10 @@ sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CO
     const val DEFAULT_ORDER = 0
   }
 
+  /**
+   * The name that is used when the implementing class is listed in a `META-INF/services/` file.
+   * Attention: SPI uses java naming, so inner classes have to be separated by `$`.
+   */
   val name: String
 
   /**
@@ -38,11 +42,18 @@ sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CO
 
   /**
    * Compare by order to sort list of SPI instances.
+   *
+   * @param other the other spi instance
+   * @return -1,0,1 as specified by [Comparable]
    */
   override fun compareTo(other: KotlinCodeGenerationSpi<*, *>): Int = order.compareTo(other.order)
 
   /**
    * If `true`, the spi instance is executed, else ignored.
+   *
+   * @param context the context we are operating in
+   * @param input the concrete work item, for the check this is unbound and nullable, so we can check against calling with unsupported types.
+   * @return `true` when the spi shoud be applied.
    */
-  override fun test(ctx: CONTEXT, input: Any?): Boolean = input == null || inputType == input::class
+  override fun test(context: CONTEXT, input: Any?): Boolean = input == null || inputType == input::class
 }
