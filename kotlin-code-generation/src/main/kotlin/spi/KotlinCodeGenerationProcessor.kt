@@ -10,6 +10,8 @@ import kotlin.reflect.KClass
  * the passed builder.
  *
  * Example: add additional annotations to a class builder.
+ *
+ * Hint: for implementing a concrete processor, use the [io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorBase].
  */
 @ExperimentalKotlinPoetApi
 interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> : KotlinCodeGenerationSpi<CONTEXT, INPUT> {

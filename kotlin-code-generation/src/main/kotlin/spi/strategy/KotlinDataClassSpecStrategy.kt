@@ -6,14 +6,23 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
 import kotlin.reflect.KClass
 
+/**
+ * Used to implement a [io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy]
+ * that will generate a [KotlinDataClassSpec].
+ */
 @ExperimentalKotlinPoetApi
-abstract class DataClassSpecStrategy<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any>(
+abstract class KotlinDataClassSpecStrategy<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any>(
   contextType: KClass<CONTEXT>,
   override val inputType: KClass<INPUT>,
   order: Int = KotlinCodeGenerationSpi.DEFAULT_ORDER,
-) : AbstractKotlinCodeGenerationStrategy<CONTEXT, INPUT, KotlinDataClassSpec>(
+) : KotlinCodeGenerationStrategyBase<CONTEXT, INPUT, KotlinDataClassSpec>(
   contextType = contextType,
   inputType = inputType,
   specType = KotlinDataClassSpec::class,
   order = order
-)
+) {
+
+  abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinDataClassSpec
+
+  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+}

@@ -3,9 +3,13 @@ package io.toolisticon.kotlin.generation.spi.processor
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.UnboundKotlinCodeGenerationProcessor
 import kotlin.reflect.KClass
 
+/**
+ * Wraps list of [KotlinCodeGenerationProcessor] instances. Used to provide additional functionalities.
+ */
 @ExperimentalKotlinPoetApi
 @JvmInline
 value class KotlinCodeGenerationProcessorList(val list: List<UnboundKotlinCodeGenerationProcessor>) :
@@ -13,6 +17,11 @@ value class KotlinCodeGenerationProcessorList(val list: List<UnboundKotlinCodeGe
 
   constructor(vararg processors: UnboundKotlinCodeGenerationProcessor) : this(processors.toList())
 
+  /**
+   * Filter the current list and return instances of given type.
+   * @param strategyType defining which concrete implementations to use
+   * @return list containing only instances of given [strategyType]
+   */
   fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> filter(
     processorType: KClass<PROCESSOR>
   ): List<PROCESSOR> {

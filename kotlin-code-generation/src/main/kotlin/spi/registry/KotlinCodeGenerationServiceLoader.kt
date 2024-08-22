@@ -12,13 +12,17 @@ import java.util.ServiceLoader
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
+/**
+ * Provides [KotlinCodeGenerationSpiRegistry] using [ServiceLoader].
+ *
+ * To avoid too many ´META-INF/services` declarations, all [KotlinCodeGenerationSpi] instances are declared in
+ * one single resource. The loading mechanism automatically sorts them into strategies and processors.
+ */
 @ExperimentalKotlinPoetApi
 class KotlinCodeGenerationServiceLoader(
   val contextTypeUpperBound: KClass<*> = Any::class,
   val classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader()
 ) : () -> KotlinCodeGenerationSpiRegistry {
-
-  val metaInfServices = "META-INF/services/${KotlinCodeGenerationSpi::class.java.name}"
 
   override fun invoke(): KotlinCodeGenerationSpiRegistry {
     val serviceInstances: List<KotlinCodeGenerationSpi<*, *>> = ServiceLoader.load(KotlinCodeGenerationSpi::class.java, classLoader).toList()

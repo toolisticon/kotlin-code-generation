@@ -7,10 +7,10 @@ import kotlin.reflect.KClass
 /**
  * Root interface for code generation spi.
  *
- * There are two kinds of spi:
+ * This is a sealed interface, the only allowed subtypes are:
  *
- * * strategies
- * * processors
+ * * [KotlinCodeGenerationStrategy] - the build plan of a spec using input and context
+ * * [KotlinCodeGenerationProcessor] - visitor pattern to modify spec builders before the spec is build.
  */
 @ExperimentalKotlinPoetApi
 sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any?> {
