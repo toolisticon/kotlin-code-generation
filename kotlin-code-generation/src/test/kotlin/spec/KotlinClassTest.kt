@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -6,7 +8,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRIN
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
+
 internal class KotlinClassTest {
 
   @Test

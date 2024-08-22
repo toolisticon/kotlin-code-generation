@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -16,7 +18,6 @@ import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
 class KotlinCodeGenerationStrategyListTest {
 
   class AStrategy : DataClassAStrategy() {
@@ -79,7 +80,7 @@ class KotlinCodeGenerationStrategyListTest {
           input.fields.map { (k, v) -> buildConstructorProperty(k, v) }.forEach(this::addConstructorProperty)
         }
 
-        override fun test(ctx: EmptyContext, input: Any?): Boolean = false
+        override fun test(context: EmptyContext, input: Any?): Boolean = false
       },
       object : DataClassAStrategy() {
         override fun invoke(context: EmptyContext, input: InputA): KotlinDataClassSpec = buildDataClass(className(input.packageName, input.simpleName + "XXX")) {

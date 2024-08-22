@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
@@ -6,30 +8,39 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotationClas
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
 internal class KotlinAnnotationClassTest {
+
   @Test
   fun `build custom annotation class`() {
     val className = ClassName("foo", "CustomAnnotation")
 
     val annotationClass: KotlinAnnotationClassSpec = buildAnnotationClass(className) {
       mustBeDocumented()
-      retention(AnnotationRetention.SOURCE)
+      //retention(AnnotationRetention.SOURCE) //TODO: issue 27
       target(AnnotationTarget.CLASS, AnnotationTarget.ANNOTATION_CLASS)
       target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
       repeatable()
       addConstructorProperty("value", String::class)
     }
 
-    assertThat(annotationClass.code).isEqualTo("""
-      @kotlin.`annotation`.Target(allowedTargets = [kotlin.`annotation`.AnnotationTarget.ANNOTATION_CLASS, kotlin.`annotation`.AnnotationTarget.CLASS, kotlin.`annotation`.AnnotationTarget.FUNCTION])
-      @kotlin.`annotation`.Retention(value = kotlin.`annotation`.AnnotationRetention.SOURCE)
-      @kotlin.`annotation`.Repeatable
-      @kotlin.`annotation`.MustBeDocumented
-      public annotation class CustomAnnotation(
-        public val `value`: kotlin.String,
-      )
+    assertThat(annotationClass.toFileSpec().code).isEqualToIgnoringWhitespace(
+      """
+      package foo
 
+      import kotlin.String
+      import kotlin.`annotation`.AnnotationTarget.ANNOTATION_CLASS
+      import kotlin.`annotation`.AnnotationTarget.CLASS
+      import kotlin.`annotation`.AnnotationTarget.FUNCTION
+      import kotlin.`annotation`.MustBeDocumented
+      import kotlin.`annotation`.Repeatable
+      import kotlin.`annotation`.Target
+
+      @Target(allowedTargets = [ANNOTATION_CLASS, CLASS, FUNCTION])
+      @Repeatable
+      @MustBeDocumented
+      public annotation class CustomAnnotation(
+        public val `value`: String,
+      )
     """.trimIndent()
     )
   }

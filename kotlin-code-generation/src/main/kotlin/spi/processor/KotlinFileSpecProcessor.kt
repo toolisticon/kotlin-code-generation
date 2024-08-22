@@ -6,16 +6,21 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
 import kotlin.reflect.KClass
 
+/**
+ * Used to implement a [io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor]
+ * that will visit/modify a [KotlinFileSpecBuilder].
+ */
 @ExperimentalKotlinPoetApi
-abstract class FileSpecProcessor<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any>(
+abstract class KotlinFileSpecProcessor<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any>(
   contextType: KClass<CONTEXT>,
   inputType: KClass<INPUT>,
   order: Int = KotlinCodeGenerationSpi.DEFAULT_ORDER
-) : AbstractKotlinCodeGenerationProcessor<CONTEXT, INPUT, KotlinFileSpecBuilder>(
+) : KotlinCodeGenerationProcessorBase<CONTEXT, INPUT, KotlinFileSpecBuilder>(
   contextType = contextType,
   inputType = inputType,
   builderType = KotlinFileSpecBuilder::class,
   order = order
-)
-
-
+) {
+  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinFileSpecBuilder): KotlinFileSpecBuilder
+  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+}

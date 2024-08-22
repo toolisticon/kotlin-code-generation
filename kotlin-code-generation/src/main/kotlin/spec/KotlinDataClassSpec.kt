@@ -3,10 +3,9 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isDataClass
-import io.toolisticon.kotlin.generation.WithClassName
 import io.toolisticon.kotlin.generation.poet.KDoc
-import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 
 @ExperimentalKotlinPoetApi
 data class KotlinDataClassSpec(
@@ -28,8 +27,13 @@ data class KotlinDataClassSpec(
 //fun KotlinDataClassSpec.toBuilder() = KotlinDataClassSpecBuilder.builder(spec = this)
 //fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
 // TODO fun KotlinDataClassSpec.toBuilder() = KotlinDataClassBuilder.from(spec = this)
-// TODO fun KotlinDataClassSpec.toFileSpec() = KotlinFileSpecBuilder.builder(this).build()
+
 @ExperimentalKotlinPoetApi
-interface KotlinDataClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinDataClassSpec>, TypeSpecSupplier, WithClassName {
+fun KotlinDataClassSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(this.className) {
+  addType(this@toFileSpec)
+}
+
+@ExperimentalKotlinPoetApi
+interface KotlinDataClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinDataClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
 }

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ClassName
@@ -8,7 +10,7 @@ import io.toolisticon.kotlin.generation.support.GeneratedAnnotation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
+
 internal class KotlinDataClassTest {
 
   @Test
@@ -39,11 +41,7 @@ internal class KotlinDataClassTest {
        * @param x the x parameter
        * @param y the y parameter
        */
-      @jakarta.`annotation`.Generated(
-        value = "io.toolisticon.kotlin.generation.KotlinCodeGeneration",
-        date = "2024-07-02T10:01:33.205357100Z",
-        comments = "version = 1.2",
-      )
+      @jakarta.`annotation`.Generated(value = ["io.toolisticon.kotlin.generation.KotlinCodeGeneration"], date = "2024-07-02T10:01:33.205357100Z", comments = "version = 1.2")
       public data class Foo(
         /**
          * the x parameter

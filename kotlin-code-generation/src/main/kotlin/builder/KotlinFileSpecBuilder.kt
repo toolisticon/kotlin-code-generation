@@ -1,3 +1,5 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
@@ -8,17 +10,20 @@ import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder
 ) : BuilderSupplier<KotlinFileSpec, FileSpec>, KotlinFileSpecSupplier, DelegatingBuilder<KotlinFileSpecBuilder, FileSpecBuilderReceiver>,
-  KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinFileSpecBuilder> {
   companion object {
-    fun builder(className: ClassName): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
-      delegate = FileSpecBuilder.builder(className)
-    )
+    fun builder(className: ClassName): KotlinFileSpecBuilder {
+      require(className.packageName.isNotEmpty()) { "cannot build file for empty package." }
+      return KotlinFileSpecBuilder(delegate = FileSpecBuilder.builder(className))
+    }
 
     fun builder(memberName: MemberName): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(memberName)
@@ -38,8 +43,8 @@ class KotlinFileSpecBuilder internal constructor(
   }
 
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinFileSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinFileSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun addAliasedImport(kclass: KClass<*>, alias: String) = builder { this.addAliasedImport(kclass, alias) }
   fun addAliasedImport(className: ClassName, alias: String) = builder { this.addAliasedImport(className, alias) }
@@ -62,7 +67,6 @@ class KotlinFileSpecBuilder internal constructor(
   fun addKotlinDefaultImports(includeJvm: Boolean = true, includeJs: Boolean = true) = builder { this.addKotlinDefaultImports(includeJvm, includeJs) }
   fun addNamedCode(format: String, args: Map<String, *>) = builder { this.addNamedCode(format, args) }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
-  fun addType(typeSpecSupplier: TypeSpecSupplier) = builder { this.addType(typeSpecSupplier.get()) }
   fun addTypeAlias(typeAliasSpec: TypeAliasSpecSupplier) = builder { this.addTypeAlias(typeAliasSpec.get()) }
   fun beginControlFlow(controlFlow: String, vararg args: Any) = builder { this.beginControlFlow(controlFlow, *args) }
   fun nextControlFlow(controlFlow: String, vararg args: Any) = builder { this.nextControlFlow(controlFlow, *args) }

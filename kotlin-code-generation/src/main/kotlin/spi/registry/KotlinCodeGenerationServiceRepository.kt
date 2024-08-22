@@ -12,10 +12,8 @@ import kotlin.reflect.KClass
 /**
  * Holds all implementation instances of [KotlinCodeGenerationStrategy] and [KotlinCodeGenerationProcessor].
  *
- * Main Use-Case is loading these instances via [ServiceLoader], using [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry].
- *
- * To avoid too many ´META-INF/services` declarations, all [KotlinCodeGenerationSpi] instances are declared in
- * one single resource. The loading mechanism automatically sorts them into strategies and processors.
+ * Main Use-Case is loading these instances via [ServiceLoader] (implemented in [KotlinCodeGenerationServiceLoader],
+ * or short by [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry].
  */
 @ExperimentalKotlinPoetApi
 class KotlinCodeGenerationServiceRepository(

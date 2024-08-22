@@ -1,11 +1,13 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
-import io.toolisticon.kotlin.generation.poet.KDoc
-import io.toolisticon.kotlin.generation.poet.PoetSpec
-import io.toolisticon.kotlin.generation.poet.PoetSpecSupplier
-import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
+import io.toolisticon.kotlin.generation.WithClassName
+import io.toolisticon.kotlin.generation.poet.*
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 
 interface KotlinGeneratorSpecSupplier<GENERATOR_SPEC> {
   fun spec(): GENERATOR_SPEC
@@ -23,4 +25,11 @@ interface KotlinGeneratorTypeSpec<SELF : KotlinGeneratorTypeSpec<SELF>> : Kotlin
 @ExperimentalKotlinPoetApi
 interface KotlinDocumentableSpec {
   val kdoc: KDoc
+}
+
+interface ToFileTypeSpecSupplier : TypeSpecSupplier, WithClassName
+
+@ExperimentalKotlinPoetApi
+fun ToFileTypeSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(className) {
+  addType(this@toFileSpec)
 }

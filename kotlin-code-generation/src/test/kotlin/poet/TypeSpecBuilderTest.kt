@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.ClassName
@@ -7,9 +9,8 @@ import jakarta.annotation.Generated
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
-internal class TypeSpecBuilderTest {
 
+internal class TypeSpecBuilderTest {
 
   @Test
   fun `verify builder`() {

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ClassName
@@ -5,10 +7,10 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
-import io.toolisticon.kotlin.generation.spi.context.AbstractKotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
-import io.toolisticon.kotlin.generation.spi.strategy.DataClassSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -19,7 +21,6 @@ import java.time.Instant
 import java.util.*
 import kotlin.reflect.KClass
 
-@ExperimentalKotlinPoetApi
 object TestFixtures {
 
   // a fixed instant to be used in test with
@@ -116,15 +117,15 @@ object TestFixtures {
       val fields: Map<String, KClass<*>>
     )
 
-    class SpiTestContext(registry: KotlinCodeGenerationSpiRegistry) : AbstractKotlinCodeGenerationContext<SpiTestContext>(registry) {
+    class SpiTestContext(registry: KotlinCodeGenerationSpiRegistry) : KotlinCodeGenerationContextBase<SpiTestContext>(registry) {
       override val contextType = SpiTestContext::class
     }
 
-    abstract class DataClassAStrategy : DataClassSpecStrategy<EmptyContext, InputA>(
+    abstract class DataClassAStrategy : KotlinDataClassSpecStrategy<EmptyContext, InputA>(
       contextType = EmptyContext::class, inputType = InputA::class
     )
 
-    abstract class DataClassBStrategy : DataClassSpecStrategy<EmptyContext, InputB>(
+    abstract class DataClassBStrategy : KotlinDataClassSpecStrategy<EmptyContext, InputB>(
       contextType = EmptyContext::class, inputType = InputB::class
     )
 

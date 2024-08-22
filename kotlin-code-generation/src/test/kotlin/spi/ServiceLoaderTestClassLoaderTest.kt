@@ -1,25 +1,26 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.TestFixtures
-import org.assertj.core.api.Assertions
+import io.toolisticon.kotlin.generation.TestFixtures.ServiceLoaderTestClassLoader
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.ServiceLoader
 
-@ExperimentalKotlinPoetApi
 class ServiceLoaderTestClassLoaderTest {
 
   interface MyInterface {
     fun hello(): String
   }
+
   class MyClass : MyInterface {
     override fun hello(): String = "hello"
   }
 
   @Test
   fun `load myClass via fake serviceLoader`() {
-    val classLoader = TestFixtures.ServiceLoaderTestClassLoader(MyInterface::class, MyClass::class)
+    val classLoader = ServiceLoaderTestClassLoader(MyInterface::class, MyClass::class)
 
     val list = ServiceLoader.load(MyInterface::class.java, classLoader).toList()
 

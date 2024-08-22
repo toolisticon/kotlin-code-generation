@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -7,7 +9,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
 internal class KotlinCodeGenerationTest {
 
   @Nested

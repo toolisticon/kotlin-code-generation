@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <relativePath>../_mvn/parent/pom.xml</relativePath>
   </parent>
 
@@ -79,6 +79,14 @@
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

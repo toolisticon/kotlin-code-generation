@@ -1,44 +1,42 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinObjectSpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 class KotlinObjectSpecBuilder internal constructor(
+  private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec>,
   KotlinDocumentableBuilder<KotlinObjectSpecBuilder>,
-  KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinObjectSpecBuilder> {
   companion object {
-    fun builder(name: String): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(
-      delegate = TypeSpecBuilder.objectBuilder(name)
-    )
-
-    fun builder(className: ClassName): KotlinObjectSpecBuilder = builder(className.simpleName)
+    fun builder(name: String): KotlinObjectSpecBuilder = builder(simpleClassName(name))
+    fun builder(className: ClassName): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(className = className)
   }
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-
-  override fun addKdoc(kdoc: KDoc): KotlinObjectSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
-
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
-
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinObjectSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
+  internal constructor(className: ClassName) : this(className, TypeSpecBuilder.objectBuilder(className))
 
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
+  override fun addKdoc(kdoc: KDoc): KotlinObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+
+  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
+  fun contextReceivers(vararg receiverTypes: TypeName): KotlinObjectSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
+
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
@@ -64,7 +62,7 @@ class KotlinObjectSpecBuilder internal constructor(
     delegate.builder.block()
   }
 
-  override fun build(): KotlinObjectSpec = KotlinObjectSpec(spec = delegate.build())
+  override fun build(): KotlinObjectSpec = KotlinObjectSpec(className = className, spec = delegate.build())
 }
 
 @ExperimentalKotlinPoetApi

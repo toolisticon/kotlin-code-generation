@@ -1,11 +1,15 @@
+@file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
@@ -16,40 +20,31 @@ class KotlinClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
   KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
-  KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder> {
+  KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
   companion object {
-    fun builder(name: String): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
-      className = ClassName("", name),
-      delegate = TypeSpecBuilder.classBuilder(name)
-    )
-
-    fun builder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(
-      className = className,
-      delegate = TypeSpecBuilder.classBuilder(className.simpleName)
-    )
+    fun builder(name: String): KotlinClassSpecBuilder = builder(simpleClassName(name))
+    fun builder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(className = className)
   }
 
-  override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
+  internal constructor(className: ClassName) : this(className, TypeSpecBuilder.classBuilder(className))
+
+  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply { delegate.addKdoc(kdoc.get())  }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+
 
   fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = builder {
     delegate.addAnnotation(spec.get())
   }
 
-
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
-
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
