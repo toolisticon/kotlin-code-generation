@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -6,7 +8,6 @@ import org.junit.jupiter.api.Assumptions.assumeFalse
 import org.junit.jupiter.api.Test
 
 @Deprecated("not implemented yet")
-@ExperimentalKotlinPoetApi
 internal class KotlinObjectTest {
   @Test
   fun name() {

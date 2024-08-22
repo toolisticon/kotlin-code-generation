@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -11,7 +13,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
-@ExperimentalKotlinPoetApi
 internal class KotlinCodeGenerationServiceRepositoryTest {
 
   class TestContext(registry: KotlinCodeGenerationSpiRegistry) : KotlinCodeGenerationContextBase<TestContext>(registry) {

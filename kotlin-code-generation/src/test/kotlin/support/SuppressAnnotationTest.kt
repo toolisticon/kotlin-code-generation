@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.support
 
 import com.squareup.kotlinpoet.ClassName
@@ -7,7 +9,6 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
 internal class SuppressAnnotationTest {
   private val className = ClassName("foo", "Bar")
   private val typeBuilder = classBuilder(className)

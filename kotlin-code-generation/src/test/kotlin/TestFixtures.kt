@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ClassName
@@ -7,8 +9,8 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -19,7 +21,6 @@ import java.time.Instant
 import java.util.*
 import kotlin.reflect.KClass
 
-@ExperimentalKotlinPoetApi
 object TestFixtures {
 
   // a fixed instant to be used in test with
