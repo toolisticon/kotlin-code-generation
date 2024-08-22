@@ -10,6 +10,7 @@ class CodeBlockBuilder(
   companion object {
     private fun Builder.wrap() = CodeBlockBuilder(this)
     fun of(format: String, vararg args: Any?): CodeBlock = CodeBlock.of(format, *args)
+    fun codeBlock(format: String, vararg args: Any?): CodeBlock = of(format, *args)
     fun builder(): CodeBlockBuilder = CodeBlock.builder().wrap()
   }
 

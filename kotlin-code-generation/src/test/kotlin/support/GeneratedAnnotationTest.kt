@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinPoetApi::class)
+
 package io.toolisticon.kotlin.generation.support
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -5,7 +7,6 @@ import io.toolisticon.kotlin.generation.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@ExperimentalKotlinPoetApi
 internal class GeneratedAnnotationTest {
 
   @Test
