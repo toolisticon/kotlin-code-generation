@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat as assertThatCompilation
 
-// @Disabled("see issue #27")
+@Disabled("see issue #27")
 internal class MyCustomAnnotationSpecITest {
 
   @Test
