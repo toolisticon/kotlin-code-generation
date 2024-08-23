@@ -1,5 +1,6 @@
 # kotlin-code-generation
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e51df1e744ec4f9a9615c7b044058f4b)](https://app.codacy.com/gh/toolisticon/kotlin-code-generation?utm_source=github.com&utm_medium=referral&utm_content=toolisticon/kotlin-code-generation&utm_campaign=Badge_Grade)
 [![incubating](https://img.shields.io/badge/lifecycle-INCUBATING-orange.svg)](https://github.com/holisticon#open-source-lifecycle)
 [![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
 [![sponsored](https://img.shields.io/badge/sponsoredBy-Holisticon-RED.svg)](https://holisticon.de/)
