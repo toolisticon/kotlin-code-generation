@@ -127,5 +127,7 @@ object KotlinCodeGeneration {
     const val FORMAT_LITERAL = "%L"
 
     const val FORMAT_KCLASS = "$FORMAT_TYPE::class"
+
+    const val NBSP = "·"
   }
 }
