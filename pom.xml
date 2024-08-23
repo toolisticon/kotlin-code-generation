@@ -23,6 +23,7 @@
     <module>_mvn/bom</module>
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
+    <module>_mvn/report-generator</module>
   </modules>
 
   <properties/>
