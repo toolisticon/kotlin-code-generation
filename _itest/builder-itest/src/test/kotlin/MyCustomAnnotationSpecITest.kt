@@ -46,9 +46,7 @@ internal class MyCustomAnnotationSpecITest {
     val klass: KClass<out Any> = result.loadClass(name)
     assertThat(klass::class.asClassName()).isEqualTo(name)
 //    FIXME assertThat(klass.annotations).hasSize(1)
-//    val annotation: Annotation = klass.annotations[0]
-//
-//
-//    assertThat(annotation::class.asClassName()).isEqualTo(MyCustomAnnotationSpec.name)
+    val annotation: Annotation = klass.annotations[0]
+    assertThat(annotation::class.asClassName()).isEqualTo(MyCustomAnnotationSpec.name)
   }
 }
