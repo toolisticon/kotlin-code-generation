@@ -51,8 +51,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Upload test coverage to Codacy
-        if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Kotlin -r _mvn/report-generator/target/jacoco-aggregate/jacoco.xml
-        env:
-          CODACY_PROJECT_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
+#      - name: Upload test coverage to Codacy
+#        if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
+#        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Kotlin -r _mvn/report-generator/target/jacoco-aggregate/jacoco.xml
+#        env:
+#          CODACY_PROJECT_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
