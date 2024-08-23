@@ -4,6 +4,7 @@
 [![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
 [![sponsored](https://img.shields.io/badge/sponsoredBy-Holisticon-RED.svg)](https://holisticon.de/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e493c246c3684b95a2ef097ae912d45a)](https://app.codacy.com/gh/toolisticon/kotlin-code-generation/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 **Usage:**
 
