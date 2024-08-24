@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>report-generator</artifactId>
+  <name>report: ${project.artifactId}</name>
   <description>Generates aggregate reports.</description>
   <packaging>pom</packaging>
 

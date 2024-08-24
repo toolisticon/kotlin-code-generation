@@ -19,11 +19,13 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>_mvn/parent</module>
-    <module>_mvn/bom</module>
+    <module>_build/parent</module>
+    <module>kotlin-code-generation-bom</module>
+
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
-    <module>_mvn/report-generator</module>
+
+    <module>_build/report-generator</module>
   </modules>
 
   <properties/>
@@ -106,5 +108,4 @@
       <organizationUrl>https://holisticon.de</organizationUrl>
     </developer>
   </developers>
-
 </project>

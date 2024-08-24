@@ -13,5 +13,4 @@
   <name>test: ${project.artifactId}</name>
   <description>Integration Tests applied on specs, builders and compilation tests.</description>
 
-
 </project>
