@@ -1,5 +1,6 @@
 # kotlin-code-generation
 
+The one-stop lib for code generation for kotlin (jvm) and code generation testing. Based on [kotlin-poet](https://square.github.io/kotlinpoet/).
 
 
 [![incubating](https://img.shields.io/badge/lifecycle-INCUBATING-orange.svg)](https://github.com/holisticon#open-source-lifecycle)
