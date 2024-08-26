@@ -13,12 +13,10 @@ import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat as assertThatCompilation
 
-@Disabled("see issue #27")
 internal class MyCustomAnnotationSpecITest {
 
   @Test
@@ -37,16 +35,15 @@ internal class MyCustomAnnotationSpecITest {
       addType(myClass)
     }
 
-    println(myClass.code)
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(MyCustomAnnotationSpec.file).plus(file))
 
     assertThatCompilation(result).hasExitCode(KotlinCompilation.ExitCode.OK)
 
     val klass: KClass<out Any> = result.loadClass(name)
-    assertThat(klass::class.asClassName()).isEqualTo(name)
-//    FIXME assertThat(klass.annotations).hasSize(1)
+    assertThat(klass.asClassName()).isEqualTo(name)
+    assertThat(klass.annotations).hasSize(1)
     val annotation: Annotation = klass.annotations[0]
-    assertThat(annotation::class.asClassName()).isEqualTo(MyCustomAnnotationSpec.name)
+    assertThat(annotation).hasToString("@io.toolisticon.kotlin.generation.itest.created.MyCustomAnnotation(\"hello\")")
   }
 }
