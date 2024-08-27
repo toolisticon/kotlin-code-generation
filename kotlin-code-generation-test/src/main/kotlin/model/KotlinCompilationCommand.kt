@@ -6,6 +6,9 @@ import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.sourceFile
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
+/**
+ * Wraps all data needed for compilation.
+ */
 @ExperimentalKotlinPoetApi
 @ExperimentalCompilerApi
 data class KotlinCompilationCommand(
