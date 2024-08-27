@@ -5,8 +5,8 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.0.3</version>
-    <relativePath>../_mvn/parent/pom.xml</relativePath>
+    <version>0.0.4</version>
+    <relativePath>../_build/parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation</groupId>

@@ -3,7 +3,9 @@ package io.toolisticon.kotlin.generation.poet
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.CodeBlock.Builder
 
-
+/**
+ * Wraps [CodeBlock.Builder] for typesafe access.
+ */
 class CodeBlockBuilder(
   override val builder: Builder
 ) : PoetSpecBuilder<CodeBlockBuilder, Builder, CodeBlock, CodeBlockSupplier> {

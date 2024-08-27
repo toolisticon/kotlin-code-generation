@@ -5,13 +5,13 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2024.8.3</version>
+    <version>2024.8.4</version>
     <relativePath/>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation._</groupId>
   <artifactId>kotlin-code-generation-root</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 
   <name>pom: ${project.artifactId}</name>
   <description>Root of kotlin-code-generation</description>
@@ -19,10 +19,12 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>_mvn/parent</module>
-    <module>_mvn/bom</module>
+    <module>_build/parent</module>
+    <module>kotlin-code-generation-bom</module>
+
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
+
   </modules>
 
   <properties/>
@@ -51,6 +53,7 @@
       </activation>
       <modules>
         <module>_itest</module>
+        <module>_build/report-generator</module>
       </modules>
     </profile>
   </profiles>
@@ -105,5 +108,4 @@
       <organizationUrl>https://holisticon.de</organizationUrl>
     </developer>
   </developers>
-
 </project>

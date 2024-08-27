@@ -6,10 +6,12 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_KCLAS
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_LITERAL
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_MEMBER
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.support.CodeBlockArray
@@ -21,6 +23,9 @@ import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinAnnotationSpec].
+ */
 @ExperimentalKotlinPoetApi
 @Suppress(SUPPRESS_UNUSED)
 class KotlinAnnotationSpecBuilder internal constructor(
@@ -55,7 +60,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
       fun kclass(name: String, value: KClass<*>) = codeBlock("$name = $FORMAT_KCLASS", value)
       fun kclasses(name: String, vararg values: KClass<*>) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
 
-      fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value)
+      fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value.asMemberName())
       fun enums(name: String, vararg values: Enum<*>) = codeBlock("$name = $FORMAT_LITERAL", enumArray(*values).build())
     }
   }

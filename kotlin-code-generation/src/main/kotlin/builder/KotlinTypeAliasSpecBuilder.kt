@@ -6,31 +6,32 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpec
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpecSupplier
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinTypeAliasSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinTypeAliasSpecBuilder internal constructor(
   private val delegate: TypeAliasSpecBuilder
 ) : BuilderSupplier<KotlinTypeAliasSpec, TypeAliasSpec>,
   KotlinTypeAliasSpecSupplier,
   DelegatingBuilder<KotlinTypeAliasSpecBuilder, TypeAliasSpecBuilderReceiver>,
-KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder>{
+  KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder> {
 
   companion object {
-
-    fun builder(name: String, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(
-      delegate = TypeAliasSpecBuilder.builder(name, type)
-    )
-
+    fun builder(name: String, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(name, type)
     fun builder(name: String, type: KClass<*>): KotlinTypeAliasSpecBuilder = builder(name, type.asTypeName())
   }
 
+  internal constructor(name: String, type: TypeName) : this(delegate = TypeAliasSpecBuilder.builder(name, type))
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
-  override fun addKdoc(kdoc: KDoc): KotlinTypeAliasSpecBuilder = apply{
+  override fun addKdoc(kdoc: KDoc): KotlinTypeAliasSpecBuilder = apply {
     delegate.addKdoc(kdoc.get())
   }
 

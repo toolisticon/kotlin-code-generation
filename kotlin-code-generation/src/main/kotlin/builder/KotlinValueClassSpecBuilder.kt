@@ -5,14 +5,14 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
+import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinValueClassSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,

@@ -12,6 +12,9 @@ import mu.KLogging
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinDataClassSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,

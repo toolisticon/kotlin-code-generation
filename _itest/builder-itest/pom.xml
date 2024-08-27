@@ -5,13 +5,12 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-itest-root</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation.itest</groupId>
   <artifactId>builder-itest</artifactId>
   <name>test: ${project.artifactId}</name>
   <description>Integration Tests applied on specs, builders and compilation tests.</description>
-
 
 </project>

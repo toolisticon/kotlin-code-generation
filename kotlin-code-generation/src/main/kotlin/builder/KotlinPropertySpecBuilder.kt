@@ -5,12 +5,16 @@ import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinPropertySpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder

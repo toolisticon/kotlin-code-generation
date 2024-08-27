@@ -8,6 +8,9 @@ import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
 
+/**
+ * Assertj assertion for compilation result.
+ */
 @ExperimentalKotlinPoetApi
 @ExperimentalCompilerApi
 class KotlinCompilationAssert(

@@ -7,11 +7,15 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.ParameterSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpec
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinParameterSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinParameterSpecBuilder internal constructor(
   private val delegate: ParameterSpecBuilder

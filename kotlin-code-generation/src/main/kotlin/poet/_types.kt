@@ -26,6 +26,9 @@ sealed interface PoetSpecBuilder<SELF : PoetSpecBuilder<SELF, BUILDER, SPEC, SUP
   override fun get(): SPEC = build()
 }
 
+/**
+ * Typesafe wrapper for [Annotatable.Builder].
+ */
 sealed interface AnnotatableBuilder<SELF> {
 
   fun addAnnotation(annotationSpec: AnnotationSpec): SELF
@@ -39,12 +42,19 @@ sealed interface AnnotatableBuilder<SELF> {
   fun addAnnotation(annotationSupplier: AnnotationSpecSupplier): SELF = addAnnotation(annotationSupplier.get())
 }
 
+
+/**
+ * Typesafe wrapper for [TypeSpecHolder.Builder].
+ */
 sealed interface TypeSpecHolderBuilder<SELF> {
   fun addType(typeSpec: TypeSpec): SELF
 
   fun addTypes(typeSpecs: Iterable<TypeSpec>): SELF
 }
 
+/**
+ * Typesafe wrapper for [MemberSpecHolder.Builder].
+ */
 sealed interface MemberSpecHolderBuilder<SELF> {
   fun addFunction(funSpec: FunSpec): SELF
   fun addFunctions(funSpecs: Iterable<FunSpec>): SELF
@@ -58,15 +68,24 @@ sealed interface MemberSpecHolderBuilder<SELF> {
   fun addProperty(name: String, type: KClass<*>, modifiers: Iterable<KModifier>) = addProperty(name, type.asTypeName(), modifiers)
 }
 
+/**
+ * Typesafe wrapper for [OriginatingElementsHolder.Builder].
+ */
 sealed interface OriginatingElementsHolderBuilder<SELF> {
   fun addOriginatingElement(originatingElement: Element): SELF
 }
 
+/**
+ * Typesafe wrapper for [ContextReceivable.Builder].
+ */
 sealed interface ContextReceivableBuilder<SELF> {
   fun contextReceivers(receiverTypes: Iterable<TypeName>): SELF
   fun contextReceivers(vararg receiverTypes: TypeName): SELF
 }
 
+/**
+ * Typesafe wrapper for [Documentable.Builder].
+ */
 sealed interface DocumentableBuilder<SELF> {
   fun addKdoc(format: String, vararg args: Any): SELF
   fun addKdoc(block: CodeBlock): SELF

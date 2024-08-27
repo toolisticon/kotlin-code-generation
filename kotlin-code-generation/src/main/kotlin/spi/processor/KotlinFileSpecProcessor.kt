@@ -21,6 +21,7 @@ abstract class KotlinFileSpecProcessor<CONTEXT : KotlinCodeGenerationContext<CON
   builderType = KotlinFileSpecBuilder::class,
   order = order
 ) {
+  fun invoke(context: CONTEXT, builder: KotlinFileSpecBuilder): KotlinFileSpecBuilder = invoke(context,null,builder)
   abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinFileSpecBuilder): KotlinFileSpecBuilder
   override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
 }
