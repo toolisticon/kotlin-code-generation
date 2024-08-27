@@ -6,10 +6,14 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpec
 import io.toolisticon.kotlin.generation.spec.KotlinTypeAliasSpecSupplier
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinTypeAliasSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinTypeAliasSpecBuilder internal constructor(
   private val delegate: TypeAliasSpecBuilder

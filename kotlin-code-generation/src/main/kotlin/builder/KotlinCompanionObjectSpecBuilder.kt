@@ -12,13 +12,13 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinCompanionObjectSpec
-import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinCompanionObjectSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder

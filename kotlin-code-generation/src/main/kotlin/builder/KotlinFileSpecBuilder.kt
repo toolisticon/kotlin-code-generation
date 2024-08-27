@@ -6,13 +6,13 @@ import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilder.Companion.wrap
-import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
-import io.toolisticon.kotlin.generation.spec.KotlinFileSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
+import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinFileSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder

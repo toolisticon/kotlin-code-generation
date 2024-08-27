@@ -108,15 +108,44 @@ interface KotlinMemberSpecHolderBuilder<SELF> {
 
 }
 
+/**
+ * Typesafe wrapper for [com.squareup.kotlinpoet.TypeSpecHolder.Builder]
+ *
+ * * `addType`
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinTypeSpecHolderBuilder<SELF> {
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinAnnotationClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinDataClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinEnumClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinInterfaceSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinObjectSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
+  /**
+   * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
+   */
   fun addType(spec: KotlinValueClassSpecSupplier): SELF = addType(spec as TypeSpecSupplier)
 
+  /**
+   * Implementing builders must add this to their internal builder.
+   */
   fun addType(typeSpec: TypeSpecSupplier): SELF
 }

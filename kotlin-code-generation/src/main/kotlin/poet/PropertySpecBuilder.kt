@@ -5,6 +5,9 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [PropertySpec.Builder] for typesafe access.
+ */
 @ExperimentalKotlinPoetApi
 class PropertySpecBuilder(
   override val builder: PropertySpec.Builder

@@ -11,6 +11,9 @@ import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import javax.lang.model.element.Element
 
+/**
+ * Builder for [KotlinAnnotationClassSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,

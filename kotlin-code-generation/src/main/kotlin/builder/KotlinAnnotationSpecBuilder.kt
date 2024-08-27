@@ -11,6 +11,7 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.support.CodeBlockArray
@@ -22,6 +23,9 @@ import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinAnnotationSpec].
+ */
 @ExperimentalKotlinPoetApi
 @Suppress(SUPPRESS_UNUSED)
 class KotlinAnnotationSpecBuilder internal constructor(

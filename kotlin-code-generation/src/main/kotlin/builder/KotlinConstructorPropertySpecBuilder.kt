@@ -7,10 +7,14 @@ import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
 
+/**
+ * Builder for [KotlinConstructorPropertySpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinConstructorPropertySpecBuilder internal constructor(
   override val name: String,

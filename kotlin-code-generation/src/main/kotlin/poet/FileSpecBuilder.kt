@@ -5,6 +5,9 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.WithClassName
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [FileSpec.Builder] for typesafe access.
+ */
 @ExperimentalKotlinPoetApi
 class FileSpecBuilder(
   override val builder: FileSpec.Builder
