@@ -25,7 +25,6 @@
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
 
-    <module>_build/report-generator</module>
   </modules>
 
   <properties/>
@@ -54,6 +53,7 @@
       </activation>
       <modules>
         <module>_itest</module>
+        <module>_build/report-generator</module>
       </modules>
     </profile>
   </profiles>
