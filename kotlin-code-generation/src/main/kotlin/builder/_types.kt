@@ -16,10 +16,16 @@ import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
+/**
+ * Core builder interface with self reference for fluent builder methods with inheritance.
+ */
 interface DelegatingBuilder<SELF, RECEIVER> {
   fun builder(block: RECEIVER): SELF
 }
 
+/**
+ * Common interface for typeSpec builders.
+ */
 interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
   DelegatingBuilder<SELF, TypeSpecBuilderReceiver>,
   KotlinGeneratorSpecSupplier<SPEC> {
@@ -28,15 +34,27 @@ interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SP
   override fun get(): TypeSpec = spec().get()
 }
 
+/**
+ * All typeSpecs that provide support for constructor properties use this shared code.
+ */
 @ExperimentalKotlinPoetApi
 interface ConstructorPropertySupport<SELF> {
 
+  /**
+   * Implementing builder needs to store the spec provided and apply it to the build.
+   */
   fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): SELF
 
+  /**
+   * Allows inline declartion of constructor property.
+   */
   fun addConstructorProperty(name: String, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
 
+  /**
+   * Allows inline declartion of constructor property.
+   */
   fun addConstructorProperty(name: String, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}): SELF = addConstructorProperty(
     buildConstructorProperty(name, type, block)
   )
@@ -49,9 +67,27 @@ interface ConstructorPropertySupport<SELF> {
  */
 @ExperimentalKotlinPoetApi
 interface KotlinDocumentableBuilder<SELF> {
+  /**
+   * Implementing builders have to add this to their build.
+   */
   fun addKdoc(kdoc: KDoc): SELF
+
+  /**
+   * Wraps a codeBlock into a KDoc and adds it.
+   * @see KotlinDocumentableBuilder.addKdoc
+   */
   fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
+
+  /**
+   * Wraps a single string and adds it.
+   * @see KotlinDocumentableBuilder.addKdoc
+   */
   fun addKdoc(docs: String): SELF = addKdoc(KDoc.of(docs))
+
+  /**
+   * Creates a codeBlock using format and args and then addsIt.
+   * @see KotlinDocumentableBuilder.addKdoc
+   */
   fun addKdoc(format: String, first: String, vararg other: Any): SELF = addKdoc(KDoc.of(format, first, *other))
 }
 

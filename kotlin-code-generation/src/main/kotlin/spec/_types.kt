@@ -27,8 +27,14 @@ interface KotlinDocumentableSpec {
   val kdoc: KDoc
 }
 
+/**
+ * Marker interface for typeSpecs that provide a className and can be easily wrapped in a fileSpec.
+ */
 interface ToFileTypeSpecSupplier : TypeSpecSupplier, WithClassName
 
+/**
+ * Wraps supported typeSpec into a file without the need to create an extra builder.
+ */
 @ExperimentalKotlinPoetApi
 fun ToFileTypeSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(className) {
   addType(this@toFileSpec)
