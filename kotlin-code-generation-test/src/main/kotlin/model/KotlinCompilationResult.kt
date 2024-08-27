@@ -8,6 +8,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import kotlin.reflect.KClass
 
+/**
+ * Wraps the compilation result and provides useful tooling.
+ */
 @ExperimentalCompilerApi
 @ExperimentalKotlinPoetApi
 data class KotlinCompilationResult(

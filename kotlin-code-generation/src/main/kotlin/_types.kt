@@ -38,3 +38,13 @@ typealias SimpleName = String
  * A property name, the field name of a property.
  */
 typealias PropertyName = String
+
+/**
+ * A parameter name, the  name of fun parameter.
+ */
+typealias ParameterName = String
+
+/**
+ * A type alias name.
+ */
+typealias TypeAliasName = String

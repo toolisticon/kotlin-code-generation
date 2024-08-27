@@ -3,6 +3,9 @@ package io.toolisticon.kotlin.generation.poet
 import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [TypeAliasSpec.Builder] for typesafe access.
+ */
 class TypeAliasSpecBuilder(
   override val builder: TypeAliasSpec.Builder
 ) : PoetSpecBuilder<TypeAliasSpecBuilder, TypeAliasSpec.Builder, TypeAliasSpec, TypeAliasSpecSupplier>,

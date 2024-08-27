@@ -5,6 +5,9 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [FunSpec.Builder] for typesafe access.
+ */
 @ExperimentalKotlinPoetApi
 class FunSpecBuilder(
   override val builder: FunSpec.Builder

@@ -4,6 +4,9 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.AnnotationSpec.UseSiteTarget
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [AnnotationSpec.Builder] for typesafe access.
+ */
 class AnnotationSpecBuilder(
   override val builder: AnnotationSpec.Builder
 ) : PoetSpecBuilder<AnnotationSpecBuilder, AnnotationSpec.Builder, AnnotationSpec, AnnotationSpecSupplier> {

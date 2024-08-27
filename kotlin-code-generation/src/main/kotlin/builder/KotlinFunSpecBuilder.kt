@@ -7,6 +7,7 @@ import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.KDoc
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
@@ -14,6 +15,9 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/**
+ * Builder for [KotlinFunSpec].
+ */
 @ExperimentalKotlinPoetApi
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder

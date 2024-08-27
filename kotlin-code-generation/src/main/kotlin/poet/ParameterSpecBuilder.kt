@@ -4,6 +4,9 @@ import com.squareup.kotlinpoet.*
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
+/**
+ * Wraps [ParameterSpec.Builder] for typesafe access.
+ */
 class ParameterSpecBuilder(
   override val builder: ParameterSpec.Builder
 ) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier>,

@@ -3,15 +3,27 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.TestFixtures.notDeprecated
-import org.junit.jupiter.api.Assumptions.assumeFalse
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnonymousClass
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-@Deprecated("not implemented yet")
 internal class KotlinAnonymousClassTest {
   @Test
-  fun name() {
-    assumeFalse(this::class.notDeprecated())
-    TODO("Not yet implemented")
+  fun build() {
+
+    val r = buildAnonymousClass {
+      addSuperinterface(Runnable::class)
+      addFunction(buildFun("run"))
+    }
+
+    assertThat(r.code).isEqualToIgnoringWhitespace(
+      """
+      object : java.lang.Runnable {
+        public fun run() {
+        }
+      }
+    """.trimIndent()
+    )
   }
 }
