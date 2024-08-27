@@ -18,13 +18,13 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
   KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>{
+  KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder> {
 
   companion object {
-    fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder(
-      delegate = TypeSpecBuilder.anonymousClassBuilder()
-    )
+    fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder()
   }
+
+  internal constructor() : this(delegate = TypeSpecBuilder.anonymousClassBuilder())
 
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
