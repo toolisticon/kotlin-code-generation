@@ -22,7 +22,7 @@ internal class KotlinClassTest {
 
     val spec = builder.spec()
 
-    assertThat(spec.get().toString().trim()).isEqualToIgnoringWhitespace(
+    assertThat(spec.code).isEqualToIgnoringWhitespace(
       """public class Bar {
            public fun helloWorld(): kotlin.String = "Hello World!"
         }"""

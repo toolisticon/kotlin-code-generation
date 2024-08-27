@@ -28,19 +28,52 @@ import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_B
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
+/**
+ * Kotlin Code Generation is a wrapper lib for kotlin poet. This is the central class that allows access to builders and tools via simple static helpers.
+ */
 @ExperimentalKotlinPoetApi
 object KotlinCodeGeneration {
 
+  /**
+   * Build a [KotlinAnnotationSpec] using given type and receiver fn.
+   * @see [KotlinAnnotationSpecBuilder.builder]
+   */
   inline fun buildAnnotation(type: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = buildAnnotation(type.asClassName(), block)
+
+  /**
+   * Build a [KotlinAnnotationSpec] using given className and receiver fn.
+   * @see [KotlinAnnotationSpecBuilder.builder]
+   */
   inline fun buildAnnotation(className: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): KotlinAnnotationSpec = annotationBuilder(className).also(block).build()
 
+  /**
+   * Build a [KotlinAnnotationClassSpec] using given className and receiver fn.
+   * @see [KotlinAnnotationClassSpecBuilder.builder]
+   */
   inline fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = annotationClassBuilder(className).also(block).build()
-  inline fun buildAnnotationClass(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec =
-    buildAnnotationClass(className(packageName, simpleName), block)
 
+  /**
+   * Build a [KotlinAnnotationClassSpec] using given package- and simpleName and receiver fn.
+   * @see [KotlinAnnotationClassSpecBuilder.builder]
+   */
+  inline fun buildAnnotationClass(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = buildAnnotationClass(className(packageName, simpleName), block)
+
+  /**
+   * Build a [KotlinAnonymousClassSpec] using given receiver fn.
+   * @see [KotlinAnonymousClassSpecBuilder.builder]
+   */
   inline fun buildAnonymousClass(block: KotlinAnonymousClassSpecBuilderReceiver = {}) = anonymousClassBuilder().also(block).build()
 
+  /**
+   * Build a [KotlinClassSpec] using given className and receiver fn.
+   * @see [KotlinClassSpecBuilder.builder]
+   */
   inline fun buildClass(className: ClassName, block: KotlinClassSpecBuilderReceiver = {}) = classBuilder(className).also(block).build()
+
+  /**
+   * Build a [KotlinClassSpec] using given package- and simpleName and receiver fn.
+   * @see [KotlinClassSpecBuilder.builder]
+   */
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
 
   fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = CodeBlock.of(format, *args)
@@ -52,8 +85,7 @@ object KotlinCodeGeneration {
   inline fun buildConstructorProperty(name: PropertyName, type: KClass<*>, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = buildConstructorProperty(name, type.asTypeName(), block)
 
   inline fun buildDataClass(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = KotlinDataClassSpecBuilder.builder(className).also(block).build()
-  inline fun buildDataClass(packageName: PackageName, simpleName: SimpleName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec =
-    buildDataClass(className(packageName, simpleName), block)
+  inline fun buildDataClass(packageName: PackageName, simpleName: SimpleName, block: KotlinDataClassSpecBuilderReceiver = {}): KotlinDataClassSpec = buildDataClass(className(packageName, simpleName), block)
 
   inline fun buildEnumClass(className: ClassName, block: KotlinEnumClassSpecBuilderReceiver = {}) = KotlinEnumClassSpecBuilder.builder(className).also(block).build()
   inline fun buildEnumClass(packageName: PackageName, simpleName: SimpleName, block: KotlinEnumClassSpecBuilderReceiver = {}) = buildEnumClass(className(packageName, simpleName), block)
