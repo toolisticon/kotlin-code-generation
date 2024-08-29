@@ -27,6 +27,8 @@ value class KotlinCodeGenerationProcessorList(val list: List<UnboundKotlinCodeGe
   ): List<PROCESSOR> {
     return list.filterIsInstance(processorType.java)
   }
+
+  override fun toString(): String = "KotlinCodeGenerationProcessorList(processors=${list.map { it.name }})"
 }
 
 

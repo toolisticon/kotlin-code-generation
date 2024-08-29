@@ -24,12 +24,12 @@ import kotlin.reflect.KClass
 class TypeSpecBuilder(
   override val builder: TypeSpec.Builder
 ) : PoetSpecBuilder<TypeSpecBuilder, TypeSpec.Builder, TypeSpec, TypeSpecSupplier>,
-  AnnotatableBuilder<TypeSpecBuilder>,
-  ContextReceivableBuilder<TypeSpecBuilder>,
-  DocumentableBuilder<TypeSpecBuilder>,
-  MemberSpecHolderBuilder<TypeSpecBuilder>,
-  OriginatingElementsHolderBuilder<TypeSpecBuilder>,
-  TypeSpecHolderBuilder<TypeSpecBuilder> {
+  PoetAnnotatableBuilder<TypeSpecBuilder>,
+  PoetContextReceivableBuilder<TypeSpecBuilder>,
+  PoetDocumentableBuilder<TypeSpecBuilder>,
+  PoetMemberSpecHolderBuilder<TypeSpecBuilder>,
+  PoetOriginatingElementsHolderBuilder<TypeSpecBuilder>,
+  PoetTypeSpecHolderBuilder<TypeSpecBuilder> {
 
   companion object {
     internal fun TypeSpec.Builder.wrap() = TypeSpecBuilder(builder = this)

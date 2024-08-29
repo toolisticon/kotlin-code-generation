@@ -5,7 +5,7 @@ import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.poet.PropertySpecBuilder.Companion.wrap
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import java.lang.reflect.Type
@@ -19,11 +19,13 @@ import kotlin.reflect.KClass
 class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
-  KotlinPropertySpecSupplier,
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
-  KotlinDocumentableBuilder<KotlinPropertySpecBuilder> {
+  KotlinAnnotatableBuilder<KotlinPropertySpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinPropertySpecBuilder>,
+  KotlinDocumentableBuilder<KotlinPropertySpecBuilder>,
+  KotlinModifiableBuilder<KotlinPropertySpecBuilder>,
+  KotlinPropertySpecSupplier {
 
-  @ExperimentalKotlinPoetApi
   companion object {
 
     fun builder(name: PropertyName, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
@@ -51,20 +53,15 @@ class KotlinPropertySpecBuilder internal constructor(
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinPropertySpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
-  override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
-
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun mutable(mutable: Boolean = true) = builder { this.mutable(mutable) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  fun addModifiers(modifiers: Iterable<KModifier>) = builder { this.addModifiers(modifiers) }
+
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun initializer(format: String, vararg args: Any?) = builder { this.initializer(format, *args) }
@@ -76,15 +73,8 @@ class KotlinPropertySpecBuilder internal constructor(
   fun receiver(receiverType: TypeName?) = builder { this.receiver(receiverType) }
   fun receiver(receiverType: KClass<*>) = builder { this.receiver(receiverType) }
 
-  override fun builder(block: PropertySpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
-
-  override fun build(): KotlinPropertySpec {
-    val spec = delegate.build()
-    return KotlinPropertySpec(spec = spec)
-  }
-
+  override fun builder(block: PropertySpecBuilderReceiver) = apply { delegate.builder.block() }
+  override fun build(): KotlinPropertySpec = KotlinPropertySpec(spec = delegate.build())
   override fun spec(): KotlinPropertySpec = build()
   override fun get(): PropertySpec = build().get()
 }

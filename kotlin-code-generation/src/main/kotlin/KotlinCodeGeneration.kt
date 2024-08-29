@@ -21,18 +21,22 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassB
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
+import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
+import mu.KLogging
 import kotlin.reflect.KClass
 
 /**
  * Kotlin Code Generation is a wrapper lib for kotlin poet. This is the central class that allows access to builders and tools via simple static helpers.
  */
 @ExperimentalKotlinPoetApi
-object KotlinCodeGeneration {
+object KotlinCodeGeneration : KLogging() {
 
   /**
    * Build a [KotlinAnnotationSpec] using given type and receiver fn.
@@ -98,6 +102,7 @@ object KotlinCodeGeneration {
    * @see [KotlinConstructorPropertySpecBuilder.builder]
    */
   inline fun buildConstructorProperty(name: PropertyName, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = constructorPropertyBuilder(name, type).also(block).build()
+
   /**
    * Build [KotlinConstructorPropertySpec].
    * @see [KotlinConstructorPropertySpecBuilder.builder]
@@ -121,6 +126,7 @@ object KotlinCodeGeneration {
    * @see [KotlinEnumClassSpecBuilder.builder]
    */
   inline fun buildEnumClass(className: ClassName, block: KotlinEnumClassSpecBuilderReceiver = {}) = KotlinEnumClassSpecBuilder.builder(className).also(block).build()
+
   /**
    * Build [KotlinEnumClassSpec].
    * @see [KotlinEnumClassSpecBuilder.builder]
@@ -132,6 +138,7 @@ object KotlinCodeGeneration {
    * @see [KotlinFileSpecBuilder.builder]
    */
   inline fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
+
   /**
    * Build [KotlinFileSpec].
    * @see [KotlinFileSpecBuilder.builder]
@@ -149,6 +156,7 @@ object KotlinCodeGeneration {
    * @see [KotlinInterfaceSpecBuilder.builder]
    */
   inline fun buildInterface(className: ClassName, block: KotlinInterfaceSpecBuilderReceiver = {}): KotlinInterfaceSpec = interfaceBuilder(className).also(block).build()
+
   /**
    * Build [KotlinInterfaceSpec].
    * @see [KotlinInterfaceSpecBuilder.builder]
@@ -161,6 +169,7 @@ object KotlinCodeGeneration {
    * @see [KotlinObjectSpecBuilder.builder]
    */
   inline fun buildObject(className: ClassName, block: KotlinObjectSpecBuilderReceiver = {}): KotlinObjectSpec = objectBuilder(className).also(block).build()
+
   /**
    * Build [KotlinObjectSpec].
    * @see [KotlinObjectSpecBuilder.builder]
@@ -172,6 +181,7 @@ object KotlinCodeGeneration {
    * @see [KotlinParameterSpecBuilder.builder]
    */
   inline fun buildParameter(name: ParameterName, typeName: TypeName, block: KotlinParameterSpecBuilderReceiver = {}): KotlinParameterSpec = parameterBuilder(name, typeName).also(block).build()
+
   /**
    * Build [KotlinParameterSpec].
    * @see [KotlinParameterSpecBuilder.builder]
@@ -183,6 +193,7 @@ object KotlinCodeGeneration {
    * @see [KotlinPropertySpecBuilder.builder]
    */
   inline fun buildProperty(name: PropertyName, typeName: TypeName, block: KotlinPropertySpecBuilderReceiver = {}): KotlinPropertySpec = propertyBuilder(name, typeName).also(block).build()
+
   /**
    * Build [KotlinPropertySpec].
    * @see [KotlinPropertySpecBuilder.builder]
@@ -200,6 +211,7 @@ object KotlinCodeGeneration {
    * @see [KotlinValueClassSpecBuilder.builder]
    */
   inline fun buildValueClass(className: ClassName, block: KotlinValueClassSpecBuilderReceiver = {}): KotlinValueClassSpec = valueClassBuilder(className).also(block).build()
+
   /**
    * Build [KotlinValueClassSpec].
    * @see [KotlinValueClassSpecBuilder.builder]
@@ -217,6 +229,7 @@ object KotlinCodeGeneration {
      * @see KotlinAnnotationClassSpecBuilder
      */
     fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
+
     /**
      * @see KotlinAnnotationClassSpecBuilder
      */
@@ -226,6 +239,7 @@ object KotlinCodeGeneration {
      * @see KotlinAnnotationSpecBuilder
      */
     fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
+
     /**
      * @see KotlinAnnotationSpecBuilder
      */
@@ -240,6 +254,7 @@ object KotlinCodeGeneration {
      * @see KotlinClassSpecBuilder
      */
     fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className)
+
     /**
      * @see KotlinClassSpecBuilder
      */
@@ -259,6 +274,7 @@ object KotlinCodeGeneration {
      * @see KotlinDataClassSpecBuilder
      */
     fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className)
+
     /**
      * @see KotlinDataClassSpecBuilder
      */
@@ -268,10 +284,12 @@ object KotlinCodeGeneration {
      * @see KotlinEnumClassSpecBuilder
      */
     fun enumClassBuilder(name: SimpleName) = KotlinEnumClassSpecBuilder.builder(name)
+
     /**
      * @see KotlinEnumClassSpecBuilder
      */
     fun enumClassBuilder(packageName: PackageName, name: SimpleName) = enumClassBuilder(className(packageName, name))
+
     /**
      * @see KotlinEnumClassSpecBuilder
      */
@@ -281,6 +299,7 @@ object KotlinCodeGeneration {
      * @see KotlinFileSpecBuilder
      */
     fun fileBuilder(className: ClassName) = KotlinFileSpecBuilder.builder(className)
+
     /**
      * @see KotlinFileSpecBuilder
      */
@@ -295,6 +314,7 @@ object KotlinCodeGeneration {
      * @see KotlinInterfaceSpecBuilder
      */
     fun interfaceBuilder(className: ClassName) = KotlinInterfaceSpecBuilder.builder(className)
+
     /**
      * @see KotlinInterfaceSpecBuilder
      */
@@ -304,6 +324,7 @@ object KotlinCodeGeneration {
      * @see KotlinObjectSpecBuilder
      */
     fun objectBuilder(className: ClassName) = KotlinObjectSpecBuilder.builder(className)
+
     /**
      * @see KotlinObjectSpecBuilder
      */
@@ -313,6 +334,7 @@ object KotlinCodeGeneration {
      * @see KotlinParameterSpecBuilder
      */
     fun parameterBuilder(name: ParameterName, type: TypeName) = KotlinParameterSpecBuilder.builder(name, type)
+
     /**
      * @see KotlinParameterSpecBuilder
      */
@@ -322,6 +344,7 @@ object KotlinCodeGeneration {
      * @see KotlinPropertySpecBuilder
      */
     fun propertyBuilder(name: PropertyName, type: TypeName) = KotlinPropertySpecBuilder.builder(name, type)
+
     /**
      * @see KotlinPropertySpecBuilder
      */
@@ -331,6 +354,7 @@ object KotlinCodeGeneration {
      * @see KotlinTypeAliasSpecBuilder
      */
     fun typeAliasBuilder(name: TypeAliasName, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder.builder(name, type)
+
     /**
      * @see KotlinTypeAliasSpecBuilder
      */
@@ -340,6 +364,7 @@ object KotlinCodeGeneration {
      * @see KotlinValueClassSpecBuilder
      */
     fun valueClassBuilder(className: ClassName) = KotlinValueClassSpecBuilder.builder(className)
+
     /**
      * @see KotlinValueClassSpecBuilder
      */
@@ -350,6 +375,7 @@ object KotlinCodeGeneration {
    * Create [ClassName] for given package and simpleName.
    */
   fun className(packageName: PackageName, simpleName: SimpleName) = ClassName(packageName, simpleName)
+
   /**
    * Create [ClassName] with default packageName.
    */
@@ -370,8 +396,9 @@ object KotlinCodeGeneration {
      */
     fun registry(
       contextTypeUpperBound: KClass<*> = Any::class,
-      classLoader: ClassLoader = defaultClassLoader()
-    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader).invoke()
+      classLoader: ClassLoader = defaultClassLoader(),
+      exclusions: Set<String> = emptySet()
+    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader, exclusions = exclusions).invoke()
   }
 
   /**
@@ -414,5 +441,36 @@ object KotlinCodeGeneration {
     const val FORMAT_KCLASS = "$FORMAT_TYPE::class"
 
     const val NBSP = "·"
+  }
+
+
+  /**
+   * Generator Function that takes an input and generates source file(s).
+   *
+   * @param INPUT the type of the input (base source of generation)
+   * @param CONTEXT the context (containing registry, ...) used for generation.
+   * @param STRATEGY the [KotlinFileSpecStrategy] to apply (using `executeAll()`
+   * @param input the instance of the input
+   * @param contextFactory fn that creates the context based on input.
+   * @return list of [KotlinFileSpec]
+   * @throws IllegalStateException when no strategy is found.
+   */
+  inline fun <INPUT : Any,
+    CONTEXT : KotlinCodeGenerationContext<CONTEXT>,
+    reified STRATEGY : KotlinFileSpecStrategy<CONTEXT, INPUT>> generateFiles(
+    input: INPUT,
+    contextFactory: (INPUT) -> CONTEXT,
+  ): List<KotlinFileSpec> {
+    val context = contextFactory.invoke(input)
+    val strategies: List<STRATEGY> = context.registry.strategies.filter(STRATEGY::class).mapNotNull {
+      if (it.test(context, input)) {
+        it
+      } else {
+        logger.info { "strategy-filter: removing ${it.name}" }
+        null
+      }
+    }
+    check(strategies.isNotEmpty()) { "No applicable strategy found/filtered for `${STRATEGY::class}`." }
+    return context.registry.strategies.filter(STRATEGY::class).executeAll(context, input)
   }
 }

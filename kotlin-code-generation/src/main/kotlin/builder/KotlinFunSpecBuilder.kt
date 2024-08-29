@@ -2,12 +2,11 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.KDoc
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinParameterSpecSupplier
@@ -22,9 +21,12 @@ import kotlin.reflect.KClass
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
-  KotlinFunSpecSupplier,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
-  KotlinDocumentableBuilder<KotlinFunSpecBuilder> {
+  KotlinAnnotatableBuilder<KotlinFunSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinFunSpecBuilder>,
+  KotlinDocumentableBuilder<KotlinFunSpecBuilder>,
+  KotlinModifiableBuilder<KotlinFunSpecBuilder>,
+  KotlinFunSpecSupplier {
 
   companion object {
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
@@ -54,24 +56,14 @@ class KotlinFunSpecBuilder internal constructor(
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
-  override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply {
-    delegate.addKdoc(kdoc.get())
-  }
-
-  fun addKdoc(format: String, vararg args: Any) = builder { addKdoc(format, *args) }
-  fun addKdoc(block: CodeBlock) = builder { addKdoc(block) }
-
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFunSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
-
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
-
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
 
   fun receiver(receiverType: TypeName) = builder { this.receiver(receiverType) }
@@ -115,11 +107,7 @@ class KotlinFunSpecBuilder internal constructor(
   fun endControlFlow() = builder { this.endControlFlow() }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
 
-
-  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply {
-    delegate.builder.block()
-  }
-
+  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())
   override fun spec(): KotlinFunSpec = build()
   override fun get(): FunSpec = build().get()
