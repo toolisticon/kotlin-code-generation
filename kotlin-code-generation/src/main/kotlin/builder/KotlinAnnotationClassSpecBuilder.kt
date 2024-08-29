@@ -22,6 +22,7 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
+  KotlinAnnotatableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnnotationClassSpecBuilder> {
 
   companion object {
@@ -49,13 +50,12 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
     this._retention = retention
   }
 
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinAnnotationClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
@@ -91,6 +91,7 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
     return KotlinAnnotationClassSpec(className = className, spec = delegate.build())
   }
+
 
 }
 

@@ -17,6 +17,7 @@ import kotlin.reflect.KClass
 class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder
 ) : BuilderSupplier<KotlinFileSpec, FileSpec>, KotlinFileSpecSupplier, DelegatingBuilder<KotlinFileSpecBuilder, FileSpecBuilderReceiver>,
+  KotlinAnnotatableBuilder<KotlinFileSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinFileSpecBuilder> {
   companion object {
@@ -42,6 +43,7 @@ class KotlinFileSpecBuilder internal constructor(
     fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFileSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinFileSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinFileSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
@@ -50,7 +52,6 @@ class KotlinFileSpecBuilder internal constructor(
   fun addAliasedImport(className: ClassName, alias: String) = builder { this.addAliasedImport(className, alias) }
   fun addAliasedImport(className: ClassName, memberName: String, alias: String) = builder { this.addAliasedImport(className, memberName, alias) }
   fun addAliasedImport(memberName: MemberName, alias: String) = builder { this.addAliasedImport(memberName, alias) }
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinFileSpecBuilder = builder { this.addAnnotation(annotationSpec.get()) }
   fun addBodyComment(format: String, vararg args: Any) = builder { this.addBodyComment(format, *args) }
   fun addCode(format: String, vararg args: Any?) = builder { this.addCode(format, *args) }
   fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }

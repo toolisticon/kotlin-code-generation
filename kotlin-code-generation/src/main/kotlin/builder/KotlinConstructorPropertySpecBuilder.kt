@@ -7,7 +7,6 @@ import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
@@ -22,6 +21,7 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   private val propertyBuilder: KotlinPropertySpecBuilder,
   private val parameterBuilder: KotlinParameterSpecBuilder
 ) : Builder<KotlinConstructorPropertySpec>,
+  KotlinAnnotatableBuilder<KotlinConstructorPropertySpecBuilder>,
   KotlinConstructorPropertySpecSupplier,
   KotlinDocumentableBuilder<KotlinConstructorPropertySpecBuilder> {
 
@@ -50,13 +50,8 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
     }
   }
 
-  fun addAnnotation(annotationSpec: KotlinAnnotationSpecSupplier) = apply {
-    parameterBuilder.addAnnotation(annotationSpec)
-  }
-
-  override fun addKdoc(kdoc: KDoc): KotlinConstructorPropertySpecBuilder = apply {
-    parameterBuilder.addKdoc(kdoc)
-  }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addAnnotation(spec) }
+  override fun addKdoc(kdoc: KDoc): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addKdoc(kdoc) }
 
   override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()

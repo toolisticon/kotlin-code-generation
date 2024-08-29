@@ -4,9 +4,7 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
-import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.FunSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
@@ -23,6 +21,7 @@ import kotlin.reflect.KClass
 class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinCompanionObjectSpecBuilder, KotlinCompanionObjectSpec>,
+  KotlinAnnotatableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
@@ -33,16 +32,11 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
 
   internal constructor(name: String? = null) : this(TypeSpecBuilder.Companion.companionObjectBuilder(name))
 
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinCompanionObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { delegate.addType(typeSpec.get()) }
-
-  fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = builder {
-    delegate.addAnnotation(spec.get())
-  }
-
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { delegate.addAnnotation(annotationSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinCompanionObjectSpecBuilder = builder {
     delegate.contextReceivers(
@@ -114,13 +108,6 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
     delegate.addSuperinterface(
       superinterface,
       constructorParameter
-    )
-  }
-
-  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.Companion.anonymousClassBuilder().build()) = builder {
-    delegate.addEnumConstant(
-      name,
-      typeSpec
     )
   }
 

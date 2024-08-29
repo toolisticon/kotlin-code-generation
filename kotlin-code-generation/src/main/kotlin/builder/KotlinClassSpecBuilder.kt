@@ -20,6 +20,7 @@ class KotlinClassSpecBuilder internal constructor(
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
   KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
+  KotlinAnnotatableBuilder<KotlinClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
   companion object {
@@ -29,17 +30,11 @@ class KotlinClassSpecBuilder internal constructor(
 
   internal constructor(className: ClassName) : this(className, TypeSpecBuilder.classBuilder(className))
 
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply { delegate.addKdoc(kdoc.get())  }
+  override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
-
-  fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = builder {
-    delegate.addAnnotation(spec.get())
-  }
-
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
@@ -63,7 +58,6 @@ class KotlinClassSpecBuilder internal constructor(
   fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder { this.addSuperinterface(superinterface, constructorParameterName) }
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
 
-  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
 

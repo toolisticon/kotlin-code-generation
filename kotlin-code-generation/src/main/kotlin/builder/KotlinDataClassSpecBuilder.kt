@@ -21,6 +21,7 @@ class KotlinDataClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
   ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
+  KotlinAnnotatableBuilder<KotlinDataClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
@@ -40,13 +41,12 @@ class KotlinDataClassSpecBuilder internal constructor(
 
   private val constructorProperties = LinkedHashMap<String, KotlinConstructorPropertySpecSupplier>()
 
-
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { this.constructorProperties[spec.name] = spec }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinDataClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply {
     delegate.builder.block()
@@ -59,12 +59,6 @@ class KotlinDataClassSpecBuilder internal constructor(
 
     return KotlinDataClassSpec(className = className, spec = delegate.build())
   }
-
-  fun addAnnotation(annotation: KotlinAnnotationSpecSupplier): KotlinDataClassSpecBuilder = apply {
-    delegate.addAnnotation(annotation.get())
-  }
-
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier): KotlinDataClassSpecBuilder = builder { this.addAnnotation(annotationSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
@@ -88,7 +82,6 @@ class KotlinDataClassSpecBuilder internal constructor(
   fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder { this.addSuperinterface(superinterface, constructorParameterName) }
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
 
-  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 }
 

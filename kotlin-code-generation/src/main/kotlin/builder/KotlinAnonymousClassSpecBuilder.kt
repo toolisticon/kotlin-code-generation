@@ -4,7 +4,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
@@ -22,6 +22,7 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
   KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinAnnotatableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder> {
 
   companion object {
@@ -30,8 +31,7 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
 
   internal constructor() : this(delegate = TypeSpecBuilder.anonymousClassBuilder())
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
-
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }

@@ -1,4 +1,5 @@
 @file:Suppress(SUPPRESS_UNUSED)
+
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
@@ -19,9 +20,10 @@ class KotlinValueClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
   ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
+  KotlinAnnotatableBuilder<KotlinValueClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder>,
-  KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder>{
+  KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder> {
 
   companion object {
     fun builder(name: String): KotlinValueClassSpecBuilder = builder(simpleClassName(name))
@@ -30,15 +32,12 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   lateinit var constructorProperty: KotlinConstructorPropertySpecSupplier
 
-  internal constructor(className: ClassName) : this(
-    className = className,
-    delegate = TypeSpecBuilder.classBuilder(className)
-  ) {
+  internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder.classBuilder(className)) {
     delegate.addModifiers(KModifier.VALUE)
     delegate.builder.jvmInline()
   }
 
-
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { this.constructorProperty = spec }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
@@ -46,7 +45,6 @@ class KotlinValueClassSpecBuilder internal constructor(
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
@@ -66,7 +64,6 @@ class KotlinValueClassSpecBuilder internal constructor(
   fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder { this.addSuperinterface(superinterface, constructorParameterName) }
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
 
-  fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()) = builder { this.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
 

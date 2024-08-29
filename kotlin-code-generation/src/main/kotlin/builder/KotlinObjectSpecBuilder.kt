@@ -5,7 +5,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.poet.*
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinObjectSpec
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
@@ -21,6 +21,7 @@ class KotlinObjectSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec>,
+  KotlinAnnotatableBuilder<KotlinObjectSpecBuilder>,
   KotlinDocumentableBuilder<KotlinObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinObjectSpecBuilder> {
@@ -31,17 +32,15 @@ class KotlinObjectSpecBuilder internal constructor(
 
   internal constructor(className: ClassName) : this(className, TypeSpecBuilder.objectBuilder(className))
 
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-  fun addAnnotation(annotationSpec: AnnotationSpecSupplier) = builder { this.addAnnotation(annotationSpec.get()) }
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinObjectSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-
   fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
