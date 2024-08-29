@@ -23,10 +23,12 @@ class KotlinCodeGenerationServiceRepository(
 ) : KotlinCodeGenerationSpiRegistry {
   companion object : KLogging() {
 
-    fun load(contextTypeUpperBound: KClass<*>, classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader()): KotlinCodeGenerationSpiRegistry {
-      return KotlinCodeGenerationServiceLoader(contextTypeUpperBound, classLoader)()
+    fun load(contextTypeUpperBound: KClass<*>,
+             classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
+             exclusions: Set<String> = emptySet()
+    ): KotlinCodeGenerationSpiRegistry {
+      return KotlinCodeGenerationServiceLoader(contextTypeUpperBound, classLoader, exclusions)()
     }
-
   }
 
   init {

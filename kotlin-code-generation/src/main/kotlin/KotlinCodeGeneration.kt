@@ -396,8 +396,9 @@ object KotlinCodeGeneration : KLogging() {
      */
     fun registry(
       contextTypeUpperBound: KClass<*> = Any::class,
-      classLoader: ClassLoader = defaultClassLoader()
-    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader).invoke()
+      classLoader: ClassLoader = defaultClassLoader(),
+      exclusions: Set<String> = emptySet()
+    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader, exclusions = exclusions).invoke()
   }
 
   /**

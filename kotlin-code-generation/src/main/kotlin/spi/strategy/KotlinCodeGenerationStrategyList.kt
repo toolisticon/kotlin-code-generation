@@ -26,6 +26,8 @@ value class KotlinCodeGenerationStrategyList(private val list: List<UnboundKotli
   ): List<STRATEGY> {
     return list.filterIsInstance(strategyType.java)
   }
+
+  override fun toString(): String = "KotlinCodeGenerationStrategyList(strategies=${list.map { it.name }})"
 }
 
 @ExperimentalKotlinPoetApi

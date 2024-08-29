@@ -21,12 +21,14 @@ import kotlin.reflect.full.isSubclassOf
 @ExperimentalKotlinPoetApi
 class KotlinCodeGenerationServiceLoader(
   val contextTypeUpperBound: KClass<*> = Any::class,
-  val classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader()
+  val classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
+  val exclusions: Set<String> = emptySet()
 ) : () -> KotlinCodeGenerationSpiRegistry {
 
   override fun invoke(): KotlinCodeGenerationSpiRegistry {
     val serviceInstances: List<KotlinCodeGenerationSpi<*, *>> = ServiceLoader.load(KotlinCodeGenerationSpi::class.java, classLoader).toList()
-    require(serviceInstances.isNotEmpty()) { "No serviceInstances found, configure `${KotlinCodeGenerationSpi.metaInfServices}`." }
+      .filterNot { exclusions.contains(it::class.java.name) }
+    check(serviceInstances.isNotEmpty()) { "No serviceInstances found, configure `${KotlinCodeGenerationSpi.metaInfServices}`, and/or check your exclusions filter." }
 
     val withIllegalContextType = serviceInstances.filterNot { it.contextType.isSubclassOf(contextTypeUpperBound) }
 
