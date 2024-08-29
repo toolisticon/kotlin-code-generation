@@ -26,6 +26,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   KotlinDocumentableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinEnumClassSpecBuilder>,
   KotlinModifiableBuilder<KotlinEnumClassSpecBuilder>,
+  KotlinSuperInterfaceSupport<KotlinEnumClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinEnumClassSpecBuilder> {
 
   companion object {
@@ -52,19 +53,9 @@ class KotlinEnumClassSpecBuilder internal constructor(
 
   fun addTypeVariable(typeVariable: TypeVariableName): KotlinEnumClassSpecBuilder = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?): KotlinEnumClassSpecBuilder = builder { this.primaryConstructor(primaryConstructor?.get()) }
-  fun superclass(superclass: TypeName): KotlinEnumClassSpecBuilder = builder { this.superclass(superclass) }
-  fun superclass(superclass: KClass<*>): KotlinEnumClassSpecBuilder = builder { this.superclass(superclass) }
 
-  fun addSuperclassConstructorParameter(format: String, vararg args: Any): KotlinEnumClassSpecBuilder = builder { this.addSuperclassConstructorParameter(format, *args) }
-  fun addSuperclassConstructorParameter(codeBlock: CodeBlock): KotlinEnumClassSpecBuilder = builder { this.addSuperclassConstructorParameter(codeBlock) }
-
-  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>): KotlinEnumClassSpecBuilder = builder { this.addSuperinterfaces(superinterfaces) }
-  fun addSuperinterface(superinterface: TypeName): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface, constructorParameterName) }
-  fun addSuperinterface(superinterface: TypeName, constructorParameter: String): KotlinEnumClassSpecBuilder = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
 
   fun addInitializerBlock(block: CodeBlock): KotlinEnumClassSpecBuilder = builder { this.addInitializerBlock(block) }
 

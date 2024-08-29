@@ -23,6 +23,7 @@ class KotlinClassSpecBuilder internal constructor(
   KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
   KotlinModifiableBuilder<KotlinClassSpecBuilder>,
+  KotlinSuperInterfaceSupport<KotlinClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
   companion object {
@@ -49,18 +50,12 @@ class KotlinClassSpecBuilder internal constructor(
   fun addSuperclassConstructorParameter(format: String, vararg args: Any) = builder { this.addSuperclassConstructorParameter(format, *args) }
   fun addSuperclassConstructorParameter(codeBlock: CodeBlock) = builder { this.addSuperclassConstructorParameter(codeBlock) }
 
-  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>) = builder { this.addSuperinterfaces(superinterfaces) }
-  fun addSuperinterface(superinterface: TypeName) = builder { this.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>) = builder { this.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
-  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder { this.addSuperinterface(superinterface, constructorParameterName) }
-  fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
-
   override fun build(): KotlinClassSpec = KotlinClassSpec(className = className, spec = delegate.build())
 }
 

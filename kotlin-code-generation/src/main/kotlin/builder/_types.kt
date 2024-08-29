@@ -9,6 +9,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.BuilderSupplier
 import io.toolisticon.kotlin.generation.FunctionName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
@@ -17,6 +18,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
@@ -37,8 +39,8 @@ sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorType
   DelegatingBuilder<SELF, TypeSpecBuilderReceiver>,
   TypeSpecSupplier,
   KotlinGeneratorSpecSupplier<SPEC> {
-  override fun spec(): SPEC = build()
 
+  override fun spec(): SPEC = build()
   override fun get(): TypeSpec = spec().get()
 }
 
@@ -194,6 +196,17 @@ sealed interface KotlinContextReceivableBuilder<SELF> {
    * @see com.squareup.kotlinpoet.ContextReceivable.Builder.contextReceivers
    */
   fun contextReceivers(vararg receiverTypes: TypeName): SELF
+}
+
+sealed interface KotlinSuperInterfaceSupport<SELF> {
+
+  fun addSuperinterface(superinterface: TypeName, constructorParameter: String): SELF
+  fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock = CodeBlockBuilder.EMPTY_CODE_BLOCK): SELF
+
+  fun addSuperinterface(superinterface: KClass<*>, delegate: CodeBlock = CodeBlockBuilder.EMPTY_CODE_BLOCK) = addSuperinterface(superinterface.asTypeName(), delegate)
+  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>) = apply { superinterfaces.forEach(::addSuperinterface) }
+  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = addSuperinterface(superinterface.asTypeName(), constructorParameterName)
+
 }
 
 /**

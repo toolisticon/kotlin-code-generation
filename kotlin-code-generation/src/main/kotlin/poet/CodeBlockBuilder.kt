@@ -10,6 +10,7 @@ class CodeBlockBuilder(
   override val builder: Builder
 ) : PoetSpecBuilder<CodeBlockBuilder, Builder, CodeBlock, CodeBlockSupplier> {
   companion object {
+    val EMPTY_CODE_BLOCK = CodeBlock.builder().build()
     private fun Builder.wrap() = CodeBlockBuilder(this)
     fun of(format: String, vararg args: Any?): CodeBlock = CodeBlock.of(format, *args)
     fun codeBlock(format: String, vararg args: Any?): CodeBlock = of(format, *args)

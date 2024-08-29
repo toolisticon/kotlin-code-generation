@@ -26,6 +26,7 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
+  KotlinSuperInterfaceSupport<KotlinCompanionObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
 
   companion object {
@@ -71,41 +72,8 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
     )
   }
 
-  fun addSuperinterfaces(superinterfaces: Iterable<TypeName>) = builder {
-    delegate.addSuperinterfaces(
-      superinterfaces
-    )
-  }
-
-  fun addSuperinterface(superinterface: TypeName) = builder { delegate.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: TypeName, codeBlock: CodeBlock) = builder {
-    delegate.addSuperinterface(
-      superinterface,
-      codeBlock
-    )
-  }
-
-  fun addSuperinterface(superinterface: KClass<*>) = builder { delegate.addSuperinterface(superinterface) }
-  fun addSuperinterface(superinterface: KClass<*>, codeBlock: CodeBlock) = builder {
-    delegate.addSuperinterface(
-      superinterface,
-      codeBlock
-    )
-  }
-
-  fun addSuperinterface(superinterface: KClass<*>, constructorParameterName: String) = builder {
-    delegate.addSuperinterface(
-      superinterface,
-      constructorParameterName
-    )
-  }
-
-  fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder {
-    delegate.addSuperinterface(
-      superinterface,
-      constructorParameter
-    )
-  }
+  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { delegate.addInitializerBlock(block) }
 
