@@ -19,10 +19,12 @@ import kotlin.reflect.KClass
 class KotlinParameterSpecBuilder internal constructor(
   private val delegate: ParameterSpecBuilder
 ) : BuilderSupplier<KotlinParameterSpec, ParameterSpec>,
-  KotlinParameterSpecSupplier,
   DelegatingBuilder<KotlinParameterSpecBuilder, ParameterSpecBuilderReceiver>,
   KotlinAnnotatableBuilder<KotlinParameterSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinParameterSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinParameterSpecBuilder>,
+  KotlinModifiableBuilder<KotlinParameterSpecBuilder>,
+  KotlinParameterSpecSupplier {
+
   companion object {
 
     fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
@@ -54,8 +56,7 @@ class KotlinParameterSpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinParameterSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinParameterSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
-
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun defaultValue(format: String, vararg args: Any?) = builder { this.defaultValue(format, *args) }
   fun defaultValue(codeBlock: CodeBlock?) = builder { this.defaultValue(codeBlock) }

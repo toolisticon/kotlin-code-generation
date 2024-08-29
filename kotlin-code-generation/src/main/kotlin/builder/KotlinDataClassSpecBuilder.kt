@@ -24,6 +24,7 @@ class KotlinDataClassSpecBuilder internal constructor(
   KotlinAnnotatableBuilder<KotlinDataClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder>,
+  KotlinModifiableBuilder<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
     fun builder(name: String): KotlinDataClassSpecBuilder = builder(simpleClassName(name))
@@ -45,26 +46,14 @@ class KotlinDataClassSpecBuilder internal constructor(
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { this.constructorProperties[spec.name] = spec }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinDataClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
-  override fun builder(block: TypeSpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
-
-  override fun build(): KotlinDataClassSpec {
-    check(constructorProperties.isNotEmpty()) { "Data class must have at least one property." }
-
-    delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
-
-    return KotlinDataClassSpec(className = className, spec = delegate.build())
-  }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
@@ -83,6 +72,16 @@ class KotlinDataClassSpecBuilder internal constructor(
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
+
+  override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
+  override fun build(): KotlinDataClassSpec {
+    check(constructorProperties.isNotEmpty()) { "Data class must have at least one property." }
+
+    delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+
+    return KotlinDataClassSpec(className = className, spec = delegate.build())
+  }
+
 }
 
 @ExperimentalKotlinPoetApi

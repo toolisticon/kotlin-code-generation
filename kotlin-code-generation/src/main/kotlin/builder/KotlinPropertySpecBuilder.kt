@@ -19,10 +19,11 @@ import kotlin.reflect.KClass
 class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
-  KotlinPropertySpecSupplier,
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
   KotlinAnnotatableBuilder<KotlinPropertySpecBuilder>,
-  KotlinDocumentableBuilder<KotlinPropertySpecBuilder> {
+  KotlinDocumentableBuilder<KotlinPropertySpecBuilder>,
+  KotlinModifiableBuilder<KotlinPropertySpecBuilder>,
+  KotlinPropertySpecSupplier {
 
   companion object {
 
@@ -53,13 +54,13 @@ class KotlinPropertySpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinPropertySpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun mutable(mutable: Boolean = true) = builder { this.mutable(mutable) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  fun addModifiers(modifiers: Iterable<KModifier>) = builder { this.addModifiers(modifiers) }
+
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun initializer(format: String, vararg args: Any?) = builder { this.initializer(format, *args) }

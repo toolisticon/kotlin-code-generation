@@ -21,10 +21,11 @@ import kotlin.reflect.KClass
 class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
-  KotlinFunSpecSupplier,
-  KotlinAnnotatableBuilder<KotlinFunSpecBuilder>,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
-  KotlinDocumentableBuilder<KotlinFunSpecBuilder> {
+  KotlinAnnotatableBuilder<KotlinFunSpecBuilder>,
+  KotlinDocumentableBuilder<KotlinFunSpecBuilder>,
+  KotlinModifiableBuilder<KotlinFunSpecBuilder>,
+  KotlinFunSpecSupplier {
 
   companion object {
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
@@ -56,10 +57,10 @@ class KotlinFunSpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFunSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
@@ -104,7 +105,6 @@ class KotlinFunSpecBuilder internal constructor(
   fun nextControlFlow(controlFlow: String, vararg args: Any) = builder { this.nextControlFlow(controlFlow, *args) }
   fun endControlFlow() = builder { this.endControlFlow() }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
-
 
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())

@@ -24,6 +24,7 @@ class KotlinInterfaceSpecBuilder internal constructor(
   KotlinAnnotatableBuilder<KotlinInterfaceSpecBuilder>,
   KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinInterfaceSpecBuilder>,
+  KotlinModifiableBuilder<KotlinInterfaceSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinInterfaceSpecBuilder> {
   companion object {
     private const val DEFAULT_IS_FUNCTIONAL = false
@@ -39,12 +40,12 @@ class KotlinInterfaceSpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }
@@ -63,11 +64,7 @@ class KotlinInterfaceSpecBuilder internal constructor(
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
-
-  override fun builder(block: TypeSpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
-
+  override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(className = className, spec = delegate.build())
 }
 

@@ -17,10 +17,11 @@ import kotlin.reflect.KClass
 class KotlinTypeAliasSpecBuilder internal constructor(
   private val delegate: TypeAliasSpecBuilder
 ) : BuilderSupplier<KotlinTypeAliasSpec, TypeAliasSpec>,
-  KotlinTypeAliasSpecSupplier,
   DelegatingBuilder<KotlinTypeAliasSpecBuilder, TypeAliasSpecBuilderReceiver>,
   KotlinAnnotatableBuilder<KotlinTypeAliasSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder> {
+  KotlinDocumentableBuilder<KotlinTypeAliasSpecBuilder>,
+  KotlinModifiableBuilder<KotlinTypeAliasSpecBuilder>,
+  KotlinTypeAliasSpecSupplier {
 
   companion object {
     fun builder(name: String, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(name, type)
@@ -31,8 +32,7 @@ class KotlinTypeAliasSpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinTypeAliasSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinTypeAliasSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
-
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }

@@ -23,7 +23,8 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 ) : Builder<KotlinConstructorPropertySpec>,
   KotlinAnnotatableBuilder<KotlinConstructorPropertySpecBuilder>,
   KotlinConstructorPropertySpecSupplier,
-  KotlinDocumentableBuilder<KotlinConstructorPropertySpecBuilder> {
+  KotlinDocumentableBuilder<KotlinConstructorPropertySpecBuilder>,
+  KotlinModifiableBuilder<KotlinConstructorPropertySpecBuilder> {
 
   companion object {
     fun builder(name: String, type: TypeName): KotlinConstructorPropertySpecBuilder = KotlinConstructorPropertySpecBuilder(
@@ -44,14 +45,9 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
     }
   }
 
-  fun makePrivate() = apply {
-    propertyBuilder.builder {
-      addModifiers(KModifier.PRIVATE)
-    }
-  }
-
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addAnnotation(spec) }
   override fun addKdoc(kdoc: KDoc): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addKdoc(kdoc) }
+  override fun addModifiers(vararg modifiers: KModifier): KotlinConstructorPropertySpecBuilder = apply{ propertyBuilder.addModifiers(*modifiers) }
 
   override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()
@@ -63,9 +59,7 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
     return KotlinConstructorPropertySpec(parameter = parameter, property = property)
   }
-
   override fun spec(): KotlinConstructorPropertySpec = build()
-
 }
 
 @ExperimentalKotlinPoetApi

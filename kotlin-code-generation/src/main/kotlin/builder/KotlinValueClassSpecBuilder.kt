@@ -23,6 +23,7 @@ class KotlinValueClassSpecBuilder internal constructor(
   KotlinAnnotatableBuilder<KotlinValueClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder>,
+  KotlinModifiableBuilder<KotlinValueClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder> {
 
   companion object {
@@ -41,13 +42,12 @@ class KotlinValueClassSpecBuilder internal constructor(
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { this.constructorProperty = spec }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }

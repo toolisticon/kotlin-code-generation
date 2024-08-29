@@ -24,6 +24,7 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   KotlinAnnotatableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
+  KotlinModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
 
   companion object {
@@ -35,6 +36,7 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinCompanionObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { delegate.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { delegate.addType(typeSpec.get()) }
 
@@ -50,7 +52,6 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
     )
   }
 
-  fun addModifiers(vararg modifiers: KModifier) = builder { delegate.addModifiers(*modifiers) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { delegate.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder {
@@ -113,11 +114,9 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
 
   fun addInitializerBlock(block: CodeBlock) = builder { delegate.addInitializerBlock(block) }
 
-
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinCompanionObjectSpec = KotlinCompanionObjectSpec(spec = delegate.build())
 }
-
 
 @ExperimentalKotlinPoetApi
 typealias KotlinCompanionObjectSpecBuilderReceiver = KotlinCompanionObjectSpecBuilder.() -> Unit

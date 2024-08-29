@@ -24,6 +24,7 @@ class KotlinObjectSpecBuilder internal constructor(
   KotlinAnnotatableBuilder<KotlinObjectSpecBuilder>,
   KotlinDocumentableBuilder<KotlinObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder>,
+  KotlinModifiableBuilder<KotlinObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinObjectSpecBuilder> {
   companion object {
     fun builder(name: String): KotlinObjectSpecBuilder = builder(simpleClassName(name))
@@ -35,13 +36,13 @@ class KotlinObjectSpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinObjectSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
@@ -61,10 +62,7 @@ class KotlinObjectSpecBuilder internal constructor(
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
-  override fun builder(block: TypeSpecBuilderReceiver): KotlinObjectSpecBuilder = apply {
-    delegate.builder.block()
-  }
-
+  override fun builder(block: TypeSpecBuilderReceiver): KotlinObjectSpecBuilder = apply { delegate.builder.block() }
   override fun build(): KotlinObjectSpec = KotlinObjectSpec(className = className, spec = delegate.build())
 }
 

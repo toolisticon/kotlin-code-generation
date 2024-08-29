@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
@@ -25,14 +26,14 @@ import kotlin.reflect.KClass
 /**
  * Core builder interface with self reference for fluent builder methods with inheritance.
  */
-interface DelegatingBuilder<SELF, RECEIVER> {
+sealed interface DelegatingBuilder<SELF, RECEIVER> {
   fun builder(block: RECEIVER): SELF
 }
 
 /**
  * Common interface for typeSpec builders.
  */
-interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
+sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
   DelegatingBuilder<SELF, TypeSpecBuilderReceiver>,
   TypeSpecSupplier,
   KotlinGeneratorSpecSupplier<SPEC> {
@@ -45,7 +46,7 @@ interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SP
  * All typeSpecs that provide support for constructor properties use this shared code.
  */
 @ExperimentalKotlinPoetApi
-interface ConstructorPropertySupport<SELF> {
+sealed interface ConstructorPropertySupport<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.
@@ -149,7 +150,34 @@ sealed interface KotlinMemberSpecHolderBuilder<SELF> {
   fun addProperty(propertySpec: KotlinPropertySpecSupplier): SELF
   fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
   fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+}
 
+/**
+ * Shared wrapper fo all builders that support `addModifiers`
+ */
+sealed interface KotlinModifiableBuilder<SELF> {
+
+  /**
+   * Add modifiers.
+   *
+   * Implementing builders have to add this to their build.
+   */
+  fun addModifiers(vararg modifiers: KModifier): SELF
+
+  /**
+   * @see vararg KotlinModifiableBuilder.addModifiers(KModifier)
+   */
+  fun addModifiers(modifiers: Iterable<KModifier>): SELF = addModifiers(*(modifiers.toList().toTypedArray()))
+
+  /**
+   * Adds [KModifier#ABSTRACT].
+   */
+  fun makeAbstract(): SELF = addModifiers(KModifier.ABSTRACT)
+
+  /**
+   * Adds [KModifier#PRIVATE].
+   */
+  fun makePrivate(): SELF = addModifiers(KModifier.PRIVATE)
 }
 
 /**

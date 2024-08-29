@@ -19,11 +19,12 @@ import kotlin.reflect.KClass
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
-  DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver>,
+  KotlinAnnotatableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinAnnotatableBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder> {
+  KotlinModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
+  DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
 
   companion object {
     fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder()
@@ -34,14 +35,12 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-
   fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnonymousClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-
-  fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
