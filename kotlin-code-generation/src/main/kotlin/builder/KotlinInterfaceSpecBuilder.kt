@@ -22,6 +22,7 @@ class KotlinInterfaceSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinInterfaceSpecBuilder, KotlinInterfaceSpec>,
   KotlinAnnotatableBuilder<KotlinInterfaceSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinInterfaceSpecBuilder>,
   KotlinDocumentableBuilder<KotlinInterfaceSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinInterfaceSpecBuilder>,
   KotlinModifiableBuilder<KotlinInterfaceSpecBuilder>,
@@ -38,13 +39,13 @@ class KotlinInterfaceSpecBuilder internal constructor(
   )
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }

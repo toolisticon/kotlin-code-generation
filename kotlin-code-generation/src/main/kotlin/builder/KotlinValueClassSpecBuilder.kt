@@ -21,6 +21,7 @@ class KotlinValueClassSpecBuilder internal constructor(
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
   ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinValueClassSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinValueClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder>,
   KotlinModifiableBuilder<KotlinValueClassSpecBuilder>,
@@ -40,13 +41,13 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { this.constructorProperty = spec }
+  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }

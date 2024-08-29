@@ -87,6 +87,6 @@ sealed interface PoetContextReceivableBuilder<SELF> {
  * Typesafe wrapper for [Documentable.Builder].
  */
 sealed interface PoetDocumentableBuilder<SELF> {
-  fun addKdoc(format: String, vararg args: Any): SELF
   fun addKdoc(block: CodeBlock): SELF
+  fun addKdoc(format: String, vararg args: Any): SELF
 }

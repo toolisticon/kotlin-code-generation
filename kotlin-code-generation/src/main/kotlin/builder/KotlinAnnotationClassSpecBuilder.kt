@@ -21,6 +21,7 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
   ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinAnnotationClassSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinModifiableBuilder<KotlinAnnotationClassSpecBuilder>,
@@ -52,18 +53,14 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   }
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinAnnotationClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-
-
-
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinAnnotationClassSpec {

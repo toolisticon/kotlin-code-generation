@@ -21,6 +21,7 @@ class KotlinPropertySpecBuilder internal constructor(
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
   KotlinAnnotatableBuilder<KotlinPropertySpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinPropertySpecBuilder>,
   KotlinDocumentableBuilder<KotlinPropertySpecBuilder>,
   KotlinModifiableBuilder<KotlinPropertySpecBuilder>,
   KotlinPropertySpecSupplier {
@@ -53,10 +54,10 @@ class KotlinPropertySpecBuilder internal constructor(
   }
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinPropertySpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun mutable(mutable: Boolean = true) = builder { this.mutable(mutable) }

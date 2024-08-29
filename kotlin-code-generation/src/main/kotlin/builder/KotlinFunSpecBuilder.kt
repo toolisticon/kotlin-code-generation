@@ -23,6 +23,7 @@ class KotlinFunSpecBuilder internal constructor(
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
   KotlinAnnotatableBuilder<KotlinFunSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinFunSpecBuilder>,
   KotlinDocumentableBuilder<KotlinFunSpecBuilder>,
   KotlinModifiableBuilder<KotlinFunSpecBuilder>,
   KotlinFunSpecSupplier {
@@ -56,10 +57,10 @@ class KotlinFunSpecBuilder internal constructor(
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFunSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }

@@ -181,6 +181,22 @@ sealed interface KotlinModifiableBuilder<SELF> {
 }
 
 /**
+ * ContextReceivable for type-safe builders.
+ */
+sealed interface KotlinContextReceivableBuilder<SELF> {
+
+  /**
+   * @see KotlinContextReceivableBuilder#contextReceivers
+   */
+  fun contextReceivers(receiverTypes: Iterable<TypeName>): SELF = contextReceivers(*(receiverTypes.toList().toTypedArray()))
+
+  /**
+   * @see com.squareup.kotlinpoet.ContextReceivable.Builder.contextReceivers
+   */
+  fun contextReceivers(vararg receiverTypes: TypeName): SELF
+}
+
+/**
  * Typesafe wrapper for [com.squareup.kotlinpoet.TypeSpecHolder.Builder]
  *
  * * `addType`

@@ -22,6 +22,7 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinCompanionObjectSpecBuilder, KotlinCompanionObjectSpec>,
   KotlinAnnotatableBuilder<KotlinCompanionObjectSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
@@ -34,24 +35,18 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   internal constructor(name: String? = null) : this(TypeSpecBuilder.Companion.companionObjectBuilder(name))
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinCompanionObjectSpecBuilder = builder { delegate.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinCompanionObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { delegate.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { delegate.addType(typeSpec.get()) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinCompanionObjectSpecBuilder = builder {
-    delegate.contextReceivers(
-      *receiverTypes
-    )
-  }
-
   fun addOriginatingElement(originatingElement: Element) = builder {
     delegate.addOriginatingElement(
       originatingElement
     )
   }
-
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { delegate.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder {

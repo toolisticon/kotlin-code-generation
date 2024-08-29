@@ -22,6 +22,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinEnumClassSpecBuilder, KotlinEnumClassSpec>,
   KotlinAnnotatableBuilder<KotlinEnumClassSpecBuilder>,
+  KotlinContextReceivableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinEnumClassSpecBuilder>,
   KotlinModifiableBuilder<KotlinEnumClassSpecBuilder>,
@@ -37,6 +38,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   }
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinEnumClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinEnumClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinEnumClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinEnumClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier): KotlinEnumClassSpecBuilder = builder { this.addModifiers(*modifiers) }
@@ -46,7 +48,6 @@ class KotlinEnumClassSpecBuilder internal constructor(
   fun addEnumConstant(name: String): KotlinEnumClassSpecBuilder = apply { delegate.addEnumConstant(name) }
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): KotlinEnumClassSpecBuilder = builder { this.addEnumConstant(name, typeSpec) }
 
-  fun contextReceivers(vararg receiverTypes: TypeName): KotlinEnumClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   fun addOriginatingElement(originatingElement: Element): KotlinEnumClassSpecBuilder = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName): KotlinEnumClassSpecBuilder = builder { this.addTypeVariable(typeVariable) }
