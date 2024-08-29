@@ -12,10 +12,10 @@ import kotlin.reflect.KClass
 class PropertySpecBuilder(
   override val builder: PropertySpec.Builder
 ) : PoetSpecBuilder<PropertySpecBuilder, PropertySpec.Builder, PropertySpec, PropertySpecSupplier>,
-  AnnotatableBuilder<PropertySpecBuilder>,
-  ContextReceivableBuilder<PropertySpecBuilder>,
-  DocumentableBuilder<PropertySpecBuilder>,
-  OriginatingElementsHolderBuilder<PropertySpecBuilder> {
+  PoetAnnotatableBuilder<PropertySpecBuilder>,
+  PoetContextReceivableBuilder<PropertySpecBuilder>,
+  PoetDocumentableBuilder<PropertySpecBuilder>,
+  PoetOriginatingElementsHolderBuilder<PropertySpecBuilder> {
   companion object {
     fun PropertySpec.Builder.wrap() = PropertySpecBuilder(builder = this)
 

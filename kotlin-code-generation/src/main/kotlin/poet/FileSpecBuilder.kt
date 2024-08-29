@@ -12,9 +12,9 @@ import kotlin.reflect.KClass
 class FileSpecBuilder(
   override val builder: FileSpec.Builder
 ) : PoetSpecBuilder<FileSpecBuilder, FileSpec.Builder, FileSpec, FileSpecSupplier>,
-  AnnotatableBuilder<FileSpecBuilder>,
-  MemberSpecHolderBuilder<FileSpecBuilder>,
-  TypeSpecHolderBuilder<FileSpecBuilder>,
+  PoetAnnotatableBuilder<FileSpecBuilder>,
+  PoetMemberSpecHolderBuilder<FileSpecBuilder>,
+  PoetTypeSpecHolderBuilder<FileSpecBuilder>,
   WithClassName {
   companion object {
     internal fun FileSpec.Builder.wrap() = FileSpecBuilder(this)

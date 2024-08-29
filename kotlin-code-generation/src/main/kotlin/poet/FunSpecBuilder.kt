@@ -12,10 +12,10 @@ import kotlin.reflect.KClass
 class FunSpecBuilder(
   override val builder: FunSpec.Builder
 ) : PoetSpecBuilder<FunSpecBuilder, FunSpec.Builder, FunSpec, FunSpecSupplier>,
-  AnnotatableBuilder<FunSpecBuilder>,
-  ContextReceivableBuilder<FunSpecBuilder>,
-  DocumentableBuilder<FunSpecBuilder>,
-  OriginatingElementsHolderBuilder<FunSpecBuilder> {
+  PoetAnnotatableBuilder<FunSpecBuilder>,
+  PoetContextReceivableBuilder<FunSpecBuilder>,
+  PoetDocumentableBuilder<FunSpecBuilder>,
+  PoetOriginatingElementsHolderBuilder<FunSpecBuilder> {
   companion object {
     fun FunSpec.Builder.wrap() = FunSpecBuilder(this)
 

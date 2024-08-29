@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
 class ParameterSpecBuilder(
   override val builder: ParameterSpec.Builder
 ) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier>,
-  AnnotatableBuilder<ParameterSpecBuilder>,
-  DocumentableBuilder<ParameterSpecBuilder> {
+  PoetAnnotatableBuilder<ParameterSpecBuilder>,
+  PoetDocumentableBuilder<ParameterSpecBuilder> {
   companion object {
     fun ParameterSpec.Builder.wrap() = ParameterSpecBuilder(this)
 
