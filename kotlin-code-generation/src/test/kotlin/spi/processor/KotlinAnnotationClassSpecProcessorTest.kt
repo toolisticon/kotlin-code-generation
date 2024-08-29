@@ -4,6 +4,7 @@ package io.toolisticon.kotlin.generation.spi.processor
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation._test.MutableSpiRegistry
 import io.toolisticon.kotlin.generation._test.TestContext
 import io.toolisticon.kotlin.generation._test.TestInput
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationClassSpecBuilder
@@ -25,9 +26,9 @@ internal class KotlinAnnotationClassSpecProcessorTest {
 
   @Test
   fun `process builder`() {
-    val context = TestContext(className("foo", "Dummy"))
+    val context = TestContext(className("foo", "Dummy"), MutableSpiRegistry())
     assertThat(context.processors(AddRetentionProcessor::class)).isEmpty()
-    context.processorList.add(AddRetentionProcessor())
+    context.registry.processorList.add(AddRetentionProcessor())
     assertThat(context.processors(AddRetentionProcessor::class)).isNotEmpty
 
     val builder = KotlinAnnotationClassSpecBuilder.builder(context.rootClassName)
@@ -36,5 +37,4 @@ internal class KotlinAnnotationClassSpecProcessorTest {
 
     assertThat(builder.spec().toFileSpec().code).contains("@Retention")
   }
-
 }
