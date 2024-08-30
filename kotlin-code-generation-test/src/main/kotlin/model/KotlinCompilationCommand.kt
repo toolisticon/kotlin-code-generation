@@ -19,6 +19,5 @@ data class KotlinCompilationCommand(
 
   operator fun plus(fileSpec: KotlinFileSpec) = copy(fileSpecs = fileSpecs + fileSpec)
 
-
   val sourceFiles: List<SourceFile> by lazy { fileSpecs.map { it.sourceFile() } }
 }
