@@ -20,6 +20,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBu
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
+import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
@@ -271,6 +272,11 @@ object KotlinCodeGeneration : KLogging() {
     fun constructorPropertyBuilder(name: PropertyName, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
 
     /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.constructorBuilder()
+
+    /**
      * @see KotlinDataClassSpecBuilder
      */
     fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className)
@@ -311,6 +317,11 @@ object KotlinCodeGeneration : KLogging() {
     fun funBuilder(name: FunctionName) = KotlinFunSpecBuilder.builder(name)
 
     /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.getterBuilder()
+
+    /**
      * @see KotlinInterfaceSpecBuilder
      */
     fun interfaceBuilder(className: ClassName) = KotlinInterfaceSpecBuilder.builder(className)
@@ -349,6 +360,11 @@ object KotlinCodeGeneration : KLogging() {
      * @see KotlinPropertySpecBuilder
      */
     fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
+
+    /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.setterBuilder()
 
     /**
      * @see KotlinTypeAliasSpecBuilder
