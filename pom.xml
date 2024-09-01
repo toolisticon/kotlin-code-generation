@@ -5,13 +5,13 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2024.8.4</version>
+    <version>2024.9.0</version>
     <relativePath/>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation._</groupId>
   <artifactId>kotlin-code-generation-root</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
 
   <name>pom: ${project.artifactId}</name>
   <description>Root of kotlin-code-generation</description>
@@ -24,10 +24,13 @@
 
     <module>kotlin-code-generation</module>
     <module>kotlin-code-generation-test</module>
-
   </modules>
 
-  <properties/>
+  <properties>
+    <!-- use 1.9 because experimental kotlin poet and serialization led to Fir-errors. -->
+    <kotlin.compiler.apiVersion>1.9</kotlin.compiler.apiVersion>
+    <kotlin.compiler.languageVersion>1.9</kotlin.compiler.languageVersion>
+  </properties>
 
   <!-- this is the maven root, all dependencies have to be declared in the concrete modules -->
   <dependencyManagement/>

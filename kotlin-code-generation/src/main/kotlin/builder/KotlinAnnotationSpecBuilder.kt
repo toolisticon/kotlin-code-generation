@@ -83,6 +83,10 @@ class KotlinAnnotationSpecBuilder internal constructor(
   fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember(member.number(name, value))
   fun addNumberMembers(name: String, vararg values: Number): KotlinAnnotationSpecBuilder = addMember(member.numbers(name, *values))
 
+  fun clearMembers() = apply {
+    delegate.clearMembers();
+  }
+
   override fun builder(block: AnnotationSpecBuilderReceiver) = apply {
     delegate.builder.block()
   }

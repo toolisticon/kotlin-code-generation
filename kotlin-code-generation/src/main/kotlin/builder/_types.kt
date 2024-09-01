@@ -48,7 +48,7 @@ sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorType
  * All typeSpecs that provide support for constructor properties use this shared code.
  */
 @ExperimentalKotlinPoetApi
-sealed interface ConstructorPropertySupport<SELF> {
+sealed interface KotlinConstructorPropertySupport<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.

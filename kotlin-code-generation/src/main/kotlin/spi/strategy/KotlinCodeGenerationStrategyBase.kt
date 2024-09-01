@@ -18,7 +18,7 @@ abstract class KotlinCodeGenerationStrategyBase<CONTEXT : KotlinCodeGenerationCo
 ) : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC> {
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): SPEC
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   override val name: String by lazy { javaClass.name }
   override fun toString(): String = name

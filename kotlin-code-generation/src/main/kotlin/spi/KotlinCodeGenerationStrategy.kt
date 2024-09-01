@@ -32,7 +32,7 @@ interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CON
    * @return the generated spec
    */
   operator fun invoke(context: CONTEXT, input: INPUT): SPEC
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   /**
    * Checks if this strategy should be applied (using [test]) and then runs [invoke].

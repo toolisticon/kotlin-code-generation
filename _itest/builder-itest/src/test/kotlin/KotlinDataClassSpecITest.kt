@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class, ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.itest
 
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.full.primaryConstructor
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat as compileAssertThat
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class KotlinDataClassSpecITest {
 
   @Test

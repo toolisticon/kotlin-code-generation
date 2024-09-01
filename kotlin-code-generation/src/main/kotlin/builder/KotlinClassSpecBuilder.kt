@@ -4,6 +4,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
+import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
@@ -19,6 +20,7 @@ class KotlinClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
   KotlinAnnotatableBuilder<KotlinClassSpecBuilder>,
+  KotlinConstructorPropertySupport<KotlinClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
@@ -33,7 +35,11 @@ class KotlinClassSpecBuilder internal constructor(
 
   internal constructor(className: ClassName) : this(className, TypeSpecBuilder.classBuilder(className))
 
+  private val constructorProperties: LinkedHashMap<String, KotlinConstructorPropertySpecSupplier> = LinkedHashMap()
+  private var isSetPrimaryConstructor: Boolean = false
+
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
   override fun contextReceivers(vararg receiverTypes: TypeName): KotlinClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
@@ -43,7 +49,13 @@ class KotlinClassSpecBuilder internal constructor(
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
-  fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
+  fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = apply {
+    if (primaryConstructor != null) {
+      delegate.primaryConstructor(primaryConstructor.get())
+      isSetPrimaryConstructor = true
+    }
+  }
+
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }
   fun superclass(superclass: KClass<*>) = builder { this.superclass(superclass) }
 
@@ -56,7 +68,16 @@ class KotlinClassSpecBuilder internal constructor(
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
-  override fun build(): KotlinClassSpec = KotlinClassSpec(className = className, spec = delegate.build())
+  override fun build(): KotlinClassSpec {
+    val hasConstructorProperties = constructorProperties.isNotEmpty()
+    check(!(hasConstructorProperties && isSetPrimaryConstructor)) { "Decide if you want to use the constructorProperty support OR define a custom primary constructor, not both." }
+
+    if (hasConstructorProperties) {
+      delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+    }
+
+    return KotlinClassSpec(className = className, spec = delegate.build())
+  }
 }
 
 @ExperimentalKotlinPoetApi

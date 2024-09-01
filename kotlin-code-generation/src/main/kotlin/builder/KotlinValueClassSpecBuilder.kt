@@ -9,7 +9,6 @@ import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import javax.lang.model.element.Element
-import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinValueClassSpec].
@@ -19,7 +18,7 @@ class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
-  ConstructorPropertySupport<KotlinValueClassSpecBuilder>,
+  KotlinConstructorPropertySupport<KotlinValueClassSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinValueClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinValueClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
@@ -51,7 +50,6 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
-  fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
 
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
   override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }

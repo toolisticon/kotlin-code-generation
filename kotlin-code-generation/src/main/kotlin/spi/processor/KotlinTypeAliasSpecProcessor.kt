@@ -21,8 +21,8 @@ abstract class KotlinTypeAliasSpecProcessor<CONTEXT : KotlinCodeGenerationContex
   builderType = KotlinTypeAliasSpecBuilder::class,
   order = order
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinTypeAliasSpecBuilder): KotlinTypeAliasSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinTypeAliasSpecBuilder): KotlinTypeAliasSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

@@ -19,8 +19,8 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
-  ConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinAnnotationClassSpecBuilder>,
+  KotlinConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
@@ -42,7 +42,6 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   private var repeatable: Boolean = false
   private var mustBeDocumented: Boolean = false
 
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
 
   fun mustBeDocumented() = apply { this.mustBeDocumented = true }
   fun repeatable() = apply { this.repeatable = true }
@@ -53,6 +52,7 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   }
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
   override fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
   override fun addKdoc(kdoc: KDoc): KotlinAnnotationClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }

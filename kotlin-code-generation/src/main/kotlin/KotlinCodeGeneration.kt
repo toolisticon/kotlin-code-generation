@@ -243,6 +243,11 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinAnnotationSpecBuilder
      */
+    fun annotationBuilder(type: KClass<out Annotation>) = annotationBuilder(type.asClassName())
+
+    /**
+     * @see KotlinAnnotationSpecBuilder
+     */
     fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
 
     /**
@@ -269,6 +274,11 @@ object KotlinCodeGeneration : KLogging() {
      * @see KotlinConstructorPropertySpecBuilder
      */
     fun constructorPropertyBuilder(name: PropertyName, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+
+    /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.constructorBuilder()
 
     /**
      * @see KotlinDataClassSpecBuilder
@@ -311,6 +321,11 @@ object KotlinCodeGeneration : KLogging() {
     fun funBuilder(name: FunctionName) = KotlinFunSpecBuilder.builder(name)
 
     /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.getterBuilder()
+
+    /**
      * @see KotlinInterfaceSpecBuilder
      */
     fun interfaceBuilder(className: ClassName) = KotlinInterfaceSpecBuilder.builder(className)
@@ -349,6 +364,11 @@ object KotlinCodeGeneration : KLogging() {
      * @see KotlinPropertySpecBuilder
      */
     fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
+
+    /**
+     * @see KotlinFunSpecBuilder
+     */
+    fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.setterBuilder()
 
     /**
      * @see KotlinTypeAliasSpecBuilder
@@ -418,10 +438,6 @@ object KotlinCodeGeneration : KLogging() {
     fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
     fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
-
-    // FIXME: remove?
-    @Deprecated("not usable this way, fix or remove")
-    operator fun ClassName.plus(suffix: String?): ClassName = ClassName(this.packageName, this.simpleNames)
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
   }

@@ -24,5 +24,5 @@ abstract class KotlinAnnotationSpecStrategy<CONTEXT : KotlinCodeGenerationContex
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinAnnotationSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

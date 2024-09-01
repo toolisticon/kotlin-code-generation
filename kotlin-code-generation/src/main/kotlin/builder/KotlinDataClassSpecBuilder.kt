@@ -10,7 +10,6 @@ import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import mu.KLogging
 import javax.lang.model.element.Element
-import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinDataClassSpec].
@@ -20,7 +19,7 @@ class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
-  ConstructorPropertySupport<KotlinDataClassSpecBuilder>,
+  KotlinConstructorPropertySupport<KotlinDataClassSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinDataClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinDataClassSpecBuilder>,
   KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,

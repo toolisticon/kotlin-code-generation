@@ -24,5 +24,5 @@ abstract class KotlinDataClassSpecStrategy<CONTEXT : KotlinCodeGenerationContext
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinDataClassSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

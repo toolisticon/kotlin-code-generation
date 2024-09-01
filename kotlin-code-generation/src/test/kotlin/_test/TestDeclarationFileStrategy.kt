@@ -22,7 +22,7 @@ class TestDeclarationFileStrategy : KotlinFileSpecStrategy<TestContext, TestDecl
     })
   }
 
-  override fun test(context: TestContext, input: Any?): Boolean {
+  override fun test(context: TestContext, input: Any): Boolean {
     return super.test(context, input) && !fail
   }
 }

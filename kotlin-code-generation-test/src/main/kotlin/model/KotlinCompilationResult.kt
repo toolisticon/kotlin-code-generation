@@ -31,6 +31,16 @@ data class KotlinCompilationResult(
       }
   }
 
+  /**
+   * List all generated files
+   */
+  val generatedSources: List<String> by lazy {
+    result.messages.lines()
+      .filter { line -> line.endsWith(".kt") }
+      .distinct().sorted()
+      .map { "file://$it" }
+  }
+
   fun loadClass(className: ClassName): KClass<out Any> = result.classLoader.loadClass(className.canonicalName).kotlin
 
   fun shouldBeOk() {
@@ -39,5 +49,12 @@ data class KotlinCompilationResult(
       .isEqualTo(KotlinCompilation.ExitCode.OK)
   }
 
-  override fun toString() = "${this::class.simpleName}(cmd=$cmd, exitCode=$exitCode, errors=$errors)"
+  override fun toString() = toString(false)
+  fun toString(includeCommand: Boolean) = "${this::class.simpleName}(" +
+    if (includeCommand) {
+      "cmd=$cmd, "
+    } else {
+      ""
+    } +
+    "exitCode=$exitCode, errors=$errors, generatedSources=$generatedSources)"
 }

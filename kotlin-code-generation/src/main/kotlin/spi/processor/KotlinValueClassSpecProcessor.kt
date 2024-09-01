@@ -1,7 +1,6 @@
 package io.toolisticon.kotlin.generation.spi.processor
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.builder.KotlinDataClassSpecBuilder
 import io.toolisticon.kotlin.generation.builder.KotlinValueClassSpecBuilder
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
@@ -22,8 +21,8 @@ abstract class KotlinValueClassSpecProcessor<CONTEXT : KotlinCodeGenerationConte
   builderType = KotlinValueClassSpecBuilder::class,
   order = order
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinValueClassSpecBuilder): KotlinValueClassSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinValueClassSpecBuilder): KotlinValueClassSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 
