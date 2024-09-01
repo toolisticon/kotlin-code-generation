@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spi
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import java.util.function.BiPredicate
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 /**
  * Root interface for code generation spi.
@@ -55,5 +56,5 @@ sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CO
    * @param input the concrete work item, for the check this is unbound and nullable, so we can check against calling with unsupported types.
    * @return `true` when the spi shoud be applied.
    */
-  override fun test(context: CONTEXT, input: Any?): Boolean = input == null || inputType == input::class
+  override fun test(context: CONTEXT, input: Any?): Boolean = input == null || input::class.isSubclassOf(inputType)
 }
