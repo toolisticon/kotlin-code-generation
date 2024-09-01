@@ -17,8 +17,8 @@ abstract class KotlinCodeGenerationProcessorBase<CONTEXT : KotlinCodeGenerationC
   override val order: Int = KotlinCodeGenerationSpi.DEFAULT_ORDER,
 ) : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER> {
 
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER
-  override fun test(context: CONTEXT, input: Any?): Boolean =  super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: BUILDER): BUILDER
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   override val name: String by lazy { this.javaClass.name }
   override fun toString(): String = name

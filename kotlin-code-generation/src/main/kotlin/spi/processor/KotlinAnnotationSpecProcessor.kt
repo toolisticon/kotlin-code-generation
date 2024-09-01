@@ -21,8 +21,8 @@ abstract class KotlinAnnotationSpecProcessor<CONTEXT : KotlinCodeGenerationConte
   order = order,
   builderType = KotlinAnnotationSpecBuilder::class
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinAnnotationSpecBuilder): KotlinAnnotationSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinAnnotationSpecBuilder): KotlinAnnotationSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

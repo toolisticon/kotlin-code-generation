@@ -1,7 +1,6 @@
 package io.toolisticon.kotlin.generation.spi.strategy
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
@@ -24,5 +23,5 @@ abstract class KotlinValueClassSpecStrategy<CONTEXT : KotlinCodeGenerationContex
 ) {
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinValueClassSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

@@ -14,7 +14,7 @@ import kotlin.reflect.full.isSubclassOf
  * * [KotlinCodeGenerationProcessor] - visitor pattern to modify spec builders before the spec is build.
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any?> {
+sealed interface KotlinCodeGenerationSpi<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any> {
   companion object {
     val metaInfServices = "META-INF/services/${KotlinCodeGenerationSpi::class.qualifiedName}"
     const val DEFAULT_ORDER = 0
@@ -56,5 +56,5 @@ sealed interface KotlinCodeGenerationSpi<CONTEXT: KotlinCodeGenerationContext<CO
    * @param input the concrete work item, for the check this is unbound and nullable, so we can check against calling with unsupported types.
    * @return `true` when the spi shoud be applied.
    */
-  override fun test(context: CONTEXT, input: Any?): Boolean = input == null || input::class.isSubclassOf(inputType)
+  override fun test(context: CONTEXT, input: Any): Boolean = context::class.isSubclassOf(contextType) && input::class.isSubclassOf(inputType)
 }

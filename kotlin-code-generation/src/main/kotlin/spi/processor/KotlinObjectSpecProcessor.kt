@@ -21,8 +21,8 @@ abstract class KotlinObjectSpecProcessor<CONTEXT : KotlinCodeGenerationContext<C
   builderType = KotlinObjectSpecBuilder::class,
   order = order
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinObjectSpecBuilder): KotlinObjectSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinObjectSpecBuilder): KotlinObjectSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

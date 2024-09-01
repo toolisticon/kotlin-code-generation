@@ -25,8 +25,8 @@ interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CO
   /**
    * Input is nullable because we could use processors solely based on context.
    */
-  operator fun invoke(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  operator fun invoke(context: CONTEXT, input: INPUT, builder: BUILDER): BUILDER
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   /**
    * Checks if this strategy should be applied (using `test`) and then runs `invoke`.
@@ -39,7 +39,7 @@ interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CO
    * @param builder the builder to modify
    * @return the passed builder instance for fluent usage
    */
-  fun execute(context: CONTEXT, input: INPUT?, builder: BUILDER): BUILDER = if (test(context, input)) {
+  fun execute(context: CONTEXT, input: INPUT, builder: BUILDER): BUILDER = if (test(context, input)) {
     invoke(context, input, builder)
   } else {
     builder

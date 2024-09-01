@@ -36,11 +36,13 @@ data class CodeBlockArray<T>(
     fun numberArray(vararg items: Number): CodeBlockArray<Number> = CodeBlockArray(FORMAT_LITERAL, items.toList())
   }
 
-  constructor(format: String,
-              items: Collection<T> = emptyList(),
-              separator: CharSequence = ", ",
-              prefix: CharSequence = "[",
-              suffix: CharSequence = "]",) : this(format = Format(format, separator = separator), items = items)
+  constructor(
+    format: String,
+    items: Collection<T> = emptyList(),
+    separator: CharSequence = ", ",
+    prefix: CharSequence = "[",
+    suffix: CharSequence = "]",
+  ) : this(format = Format(format = format, separator = separator, prefix = prefix, suffix = suffix), items = items)
 
   constructor(format: String, item: T) : this(format, listOf(item))
 

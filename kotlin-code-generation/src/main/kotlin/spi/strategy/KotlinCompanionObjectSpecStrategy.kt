@@ -24,5 +24,5 @@ abstract class KotlinCompanionObjectSpecStrategy<CONTEXT : KotlinCodeGenerationC
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinCompanionObjectSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

@@ -20,7 +20,6 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBu
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
-import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
@@ -439,10 +438,6 @@ object KotlinCodeGeneration : KLogging() {
     fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
     fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
-
-    // FIXME: remove?
-    @Deprecated("not usable this way, fix or remove")
-    operator fun ClassName.plus(suffix: String?): ClassName = ClassName(this.packageName, this.simpleNames)
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
   }

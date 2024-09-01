@@ -24,5 +24,5 @@ abstract class KotlinPropertySpecStrategy<CONTEXT : KotlinCodeGenerationContext<
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinPropertySpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

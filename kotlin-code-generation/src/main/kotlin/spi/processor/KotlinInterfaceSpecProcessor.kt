@@ -21,8 +21,8 @@ abstract class KotlinInterfaceSpecProcessor<CONTEXT : KotlinCodeGenerationContex
   builderType = KotlinInterfaceSpecBuilder::class,
   order = order
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinInterfaceSpecBuilder): KotlinInterfaceSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinInterfaceSpecBuilder): KotlinInterfaceSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

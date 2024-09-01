@@ -21,8 +21,8 @@ abstract class KotlinEnumClassSpecProcessor<CONTEXT : KotlinCodeGenerationContex
   builderType = KotlinEnumClassSpecBuilder::class,
   order = order
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinEnumClassSpecBuilder): KotlinEnumClassSpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinEnumClassSpecBuilder): KotlinEnumClassSpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

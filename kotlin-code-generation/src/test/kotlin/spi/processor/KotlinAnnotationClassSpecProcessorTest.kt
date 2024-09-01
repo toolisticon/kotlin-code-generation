@@ -17,11 +17,11 @@ internal class KotlinAnnotationClassSpecProcessorTest {
   class AddRetentionProcessor : KotlinAnnotationClassSpecProcessor<TestContext, TestInput>(
     contextType = TestContext::class, inputType = TestInput::class
   ) {
-    override fun invoke(context: TestContext, input: TestInput?, builder: KotlinAnnotationClassSpecBuilder): KotlinAnnotationClassSpecBuilder {
+    override fun invoke(context: TestContext, input: TestInput, builder: KotlinAnnotationClassSpecBuilder): KotlinAnnotationClassSpecBuilder {
       return builder.retention(AnnotationRetention.BINARY)
     }
 
-    override fun test(context: TestContext, input: Any?): Boolean = true
+    override fun test(context: TestContext, input: Any): Boolean = true
   }
 
   @Test

@@ -24,5 +24,5 @@ abstract class KotlinFileSpecStrategy<CONTEXT : KotlinCodeGenerationContext<CONT
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinFileSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

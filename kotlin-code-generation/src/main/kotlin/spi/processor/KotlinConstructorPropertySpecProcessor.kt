@@ -2,7 +2,6 @@ package io.toolisticon.kotlin.generation.spi.processor
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi
 import kotlin.reflect.KClass
@@ -22,8 +21,8 @@ abstract class KotlinConstructorPropertySpecProcessor<CONTEXT : KotlinCodeGenera
   order = order,
   builderType = KotlinConstructorPropertySpecBuilder::class
 ) {
-  abstract override fun invoke(context: CONTEXT, input: INPUT?, builder: KotlinConstructorPropertySpecBuilder): KotlinConstructorPropertySpecBuilder
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  abstract override fun invoke(context: CONTEXT, input: INPUT, builder: KotlinConstructorPropertySpecBuilder): KotlinConstructorPropertySpecBuilder
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }
 
 

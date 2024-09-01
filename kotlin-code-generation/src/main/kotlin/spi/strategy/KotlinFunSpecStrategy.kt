@@ -24,5 +24,5 @@ abstract class KotlinFunSpecStrategy<CONTEXT : KotlinCodeGenerationContext<CONTE
 
   abstract override fun invoke(context: CONTEXT, input: INPUT): KotlinFunSpec
 
-  override fun test(context: CONTEXT, input: Any?): Boolean = super.test(context, input)
+  override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 }

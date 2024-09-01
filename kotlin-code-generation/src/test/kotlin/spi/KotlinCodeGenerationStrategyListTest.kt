@@ -80,7 +80,7 @@ class KotlinCodeGenerationStrategyListTest {
           input.fields.map { (k, v) -> buildConstructorProperty(k, v) }.forEach(this::addConstructorProperty)
         }
 
-        override fun test(context: EmptyContext, input: Any?): Boolean = false
+        override fun test(context: EmptyContext, input: Any): Boolean = false
       },
       object : DataClassAStrategy() {
         override fun invoke(context: EmptyContext, input: InputA): KotlinDataClassSpec = buildDataClass(className(input.packageName, input.simpleName + "XXX")) {
