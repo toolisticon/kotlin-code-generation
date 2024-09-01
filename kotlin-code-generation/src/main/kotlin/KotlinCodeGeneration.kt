@@ -244,6 +244,11 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinAnnotationSpecBuilder
      */
+    fun annotationBuilder(type: KClass<out Annotation>) = annotationBuilder(type.asClassName())
+
+    /**
+     * @see KotlinAnnotationSpecBuilder
+     */
     fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
 
     /**

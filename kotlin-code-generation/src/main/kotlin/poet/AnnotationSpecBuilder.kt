@@ -28,6 +28,12 @@ class AnnotationSpecBuilder(
   fun addMember(codeBlock: CodeBlock) = apply { builder.addMember(codeBlock) }
   fun useSiteTarget(useSiteTarget: UseSiteTarget?) = apply { builder.useSiteTarget(useSiteTarget) }
 
+  /**
+   * Remove all registered members.
+   */
+  fun clearMembers() = apply {
+    builder.members.clear()
+  }
 
   override fun build(): AnnotationSpec = builder.build()
 }
