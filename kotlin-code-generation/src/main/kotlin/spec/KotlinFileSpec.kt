@@ -22,3 +22,19 @@ data class KotlinFileSpec(
 interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, FileSpecSupplier, WithClassName {
   override fun get(): FileSpec = spec().get()
 }
+
+/**
+ * List that contains multiple [KotlinFileSpec]s.
+ */
+@JvmInline
+value class KotlinFileSpecs(private val fileSpecs: List<KotlinFileSpec>) : List<KotlinFileSpec> by fileSpecs {
+  companion object {
+    val EMPTY = KotlinFileSpecs(emptyList())
+
+    fun collect(vararg fns: () -> KotlinFileSpec) = fns.fold(EMPTY) { acc, cur -> acc + cur() }
+  }
+
+  constructor(fileSpec : KotlinFileSpec) : this(listOf(fileSpec))
+
+  operator fun plus(fileSpec : KotlinFileSpec): KotlinFileSpecs = KotlinFileSpecs(fileSpecs + fileSpec)
+}
