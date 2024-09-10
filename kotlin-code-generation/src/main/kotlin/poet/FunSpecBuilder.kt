@@ -15,6 +15,7 @@ class FunSpecBuilder(
   PoetAnnotatableBuilder<FunSpecBuilder>,
   PoetContextReceivableBuilder<FunSpecBuilder>,
   PoetDocumentableBuilder<FunSpecBuilder>,
+  PoetTaggableBuilder<FunSpecBuilder>,
   PoetOriginatingElementsHolderBuilder<FunSpecBuilder> {
   companion object {
     fun FunSpec.Builder.wrap() = FunSpecBuilder(this)
@@ -99,6 +100,8 @@ class FunSpecBuilder(
   fun addStatement(format: String, vararg args: Any): FunSpecBuilder = apply { builder.addStatement(format, *args) }
 
   fun clearBody(): FunSpecBuilder = apply { builder.clearBody() }
+
+  override fun tag(type: KClass<*>, tag: Any?): FunSpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): FunSpec = builder.build()
 }

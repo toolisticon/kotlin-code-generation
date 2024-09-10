@@ -21,11 +21,9 @@ import kotlin.reflect.KClass
 class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinCompanionObjectSpecBuilder, KotlinCompanionObjectSpec>,
-  KotlinAnnotatableBuilder<KotlinCompanionObjectSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinCompanionObjectSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
-  KotlinModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinCompanionObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
 
@@ -35,13 +33,14 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
 
   internal constructor(name: String? = null) : this(TypeSpecBuilder.Companion.companionObjectBuilder(name))
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinCompanionObjectSpecBuilder = builder { delegate.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinCompanionObjectSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { delegate.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { delegate.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinCompanionObjectSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { delegate.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder {
     delegate.addOriginatingElement(

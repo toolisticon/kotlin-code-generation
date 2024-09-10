@@ -4,13 +4,15 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import io.toolisticon.kotlin.generation.WithClassName
 import io.toolisticon.kotlin.generation.poet.FileSpecSupplier
+import kotlin.reflect.KClass
 
 data class KotlinFileSpec(
   private val spec: FileSpec
-) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier {
+) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, TaggableSpec {
 
   val packageName: String = spec.packageName
   val rootName: String = spec.name
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val className: ClassName = ClassName(packageName, rootName)
   val fqn: String = "$packageName.$rootName"
   val fileName: String = "$fqn.kt"

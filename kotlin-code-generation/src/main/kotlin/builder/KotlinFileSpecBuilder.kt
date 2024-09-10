@@ -43,10 +43,11 @@ class KotlinFileSpecBuilder internal constructor(
     fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFileSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinFileSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinFileSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addAliasedImport(kclass: KClass<*>, alias: String) = builder { this.addAliasedImport(kclass, alias) }
   fun addAliasedImport(className: ClassName, alias: String) = builder { this.addAliasedImport(className, alias) }

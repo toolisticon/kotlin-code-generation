@@ -16,15 +16,13 @@ import kotlin.reflect.KClass
  */
 @ExperimentalKotlinPoetApi
 class KotlinClassSpecBuilder internal constructor(
-  private val className: ClassName,
+  internal val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
-  KotlinAnnotatableBuilder<KotlinClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
@@ -38,17 +36,20 @@ class KotlinClassSpecBuilder internal constructor(
   private val constructorProperties: LinkedHashMap<String, KotlinConstructorPropertySpecSupplier> = LinkedHashMap()
   private var isSetPrimaryConstructor: Boolean = false
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
+
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = apply {
     if (primaryConstructor != null) {
       delegate.primaryConstructor(primaryConstructor.get())
@@ -62,8 +63,6 @@ class KotlinClassSpecBuilder internal constructor(
   fun addSuperclassConstructorParameter(format: String, vararg args: Any) = builder { this.addSuperclassConstructorParameter(format, *args) }
   fun addSuperclassConstructorParameter(codeBlock: CodeBlock) = builder { this.addSuperclassConstructorParameter(codeBlock) }
 
-  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
-  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 

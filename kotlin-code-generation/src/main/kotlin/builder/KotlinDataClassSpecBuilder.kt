@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import mu.KLogging
 import javax.lang.model.element.Element
+import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinDataClassSpec].
@@ -19,12 +20,10 @@ class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinDataClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinDataClassSpecBuilder>,
-  KotlinAnnotatableBuilder<KotlinDataClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinDataClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinDataClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
@@ -43,15 +42,15 @@ class KotlinDataClassSpecBuilder internal constructor(
 
   private val constructorProperties = LinkedHashMap<String, KotlinConstructorPropertySpecSupplier>()
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { this.constructorProperties[spec.name] = spec }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { this.constructorProperties[spec.name] = spec }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinDataClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinDataClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }

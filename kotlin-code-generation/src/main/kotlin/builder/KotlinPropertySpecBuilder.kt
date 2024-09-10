@@ -20,10 +20,8 @@ class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
-  KotlinAnnotatableBuilder<KotlinPropertySpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinPropertySpecBuilder>,
   KotlinContextReceivableBuilder<KotlinPropertySpecBuilder>,
-  KotlinDocumentableBuilder<KotlinPropertySpecBuilder>,
-  KotlinModifiableBuilder<KotlinPropertySpecBuilder>,
   KotlinPropertySpecSupplier {
 
   companion object {
@@ -53,10 +51,11 @@ class KotlinPropertySpecBuilder internal constructor(
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinPropertySpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 

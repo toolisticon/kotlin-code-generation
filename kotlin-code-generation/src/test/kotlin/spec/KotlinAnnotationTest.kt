@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
@@ -12,6 +13,7 @@ import kotlin.reflect.KClass
 @OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinAnnotationTest {
 
+  @SuppressWarnings(SUPPRESS_UNUSED)
   annotation class Foo(
     val bar: String,
     val x: String = "",
@@ -25,7 +27,7 @@ internal class KotlinAnnotationTest {
       addKClassMember("type", String::class)
     }
 
-    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class)""");
+    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class)""")
   }
 
   @Test

@@ -19,11 +19,9 @@ import kotlin.reflect.KClass
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
-  KotlinAnnotatableBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinAnonymousClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
@@ -34,13 +32,14 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
 
   internal constructor() : this(delegate = TypeSpecBuilder.anonymousClassBuilder())
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnonymousClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinAnonymousClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnonymousClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 

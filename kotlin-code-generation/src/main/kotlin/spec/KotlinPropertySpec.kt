@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.PropertySpecSupplier
+import kotlin.reflect.KClass
 
 @JvmInline
 @ExperimentalKotlinPoetApi
@@ -20,6 +21,7 @@ value class KotlinPropertySpec(private val spec: PropertySpec) : KotlinGenerator
 
   val mutable: Boolean get() = spec.mutable
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
   override fun spec(): KotlinPropertySpec = this

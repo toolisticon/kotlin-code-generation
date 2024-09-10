@@ -16,9 +16,12 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.interfaceBu
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.objectBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.parameterBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.runtimeExceptionClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
 import io.toolisticon.kotlin.generation.builder.*
+import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilder
+import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
@@ -81,6 +84,16 @@ object KotlinCodeGeneration : KLogging() {
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
 
   /**
+   * @see RuntimeExceptionSpecBuilder
+   */
+  inline fun buildRuntimeExceptionClass(packageName: PackageName, simpleName: SimpleName, block: RuntimeExceptionSpecBuilderReceiver = {}) = buildRuntimeExceptionClass(className(packageName, simpleName), block)
+
+  /**
+   * @see RuntimeExceptionSpecBuilder
+   */
+  inline fun buildRuntimeExceptionClass(className: ClassName, block: RuntimeExceptionSpecBuilderReceiver = {}) = runtimeExceptionClassBuilder(className).also(block).build()
+
+  /**
    * @see [CodeBlock.of]
    */
   fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = CodeBlock.of(format, *args)
@@ -137,7 +150,7 @@ object KotlinCodeGeneration : KLogging() {
    * Build [KotlinFileSpec].
    * @see [KotlinFileSpecBuilder.builder]
    */
-  inline fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = fileBuilder(className).also(block).build()
+  inline fun buildFile(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}) = fileBuilder(className).also(block).build()
 
   /**
    * Build [KotlinFileSpec].
@@ -304,6 +317,11 @@ object KotlinCodeGeneration : KLogging() {
      * @see KotlinEnumClassSpecBuilder
      */
     fun enumClassBuilder(className: ClassName) = KotlinEnumClassSpecBuilder.builder(className)
+
+    /**
+     * @see KotlinExceptionClassSpecBuilder
+     */
+    fun runtimeExceptionClassBuilder(className: ClassName) = RuntimeExceptionSpecBuilder.builder(className)
 
     /**
      * @see KotlinFileSpecBuilder
