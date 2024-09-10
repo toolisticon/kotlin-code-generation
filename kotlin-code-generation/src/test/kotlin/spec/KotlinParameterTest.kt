@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.spec
 
@@ -7,6 +6,7 @@ import io.toolisticon.kotlin.generation.TestFixtures.notDeprecated
 import org.junit.jupiter.api.Assumptions.assumeFalse
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 @Deprecated("not implemented yet")
 internal class KotlinParameterTest {
   @Test

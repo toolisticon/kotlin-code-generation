@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation
 
@@ -18,6 +17,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinCodeGenerationTest {
 
   @Nested

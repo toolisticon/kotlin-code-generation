@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation
 
@@ -21,6 +20,7 @@ import java.time.Instant
 import java.util.*
 import kotlin.reflect.KClass
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 object TestFixtures {
 
   // a fixed instant to be used in test with

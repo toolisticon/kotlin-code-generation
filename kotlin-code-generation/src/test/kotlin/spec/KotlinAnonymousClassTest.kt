@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.spec
 
@@ -8,6 +7,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFun
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinAnonymousClassTest {
   @Test
   fun build() {

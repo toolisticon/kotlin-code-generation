@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation._test
 
@@ -10,6 +9,7 @@ import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProces
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import kotlin.reflect.KClass
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 class MutableSpiRegistry(
   val strategyList: MutableList<UnboundKotlinCodeGenerationStrategy> = mutableListOf(),
   val processorList: MutableList<UnboundKotlinCodeGenerationProcessor> = mutableListOf(),

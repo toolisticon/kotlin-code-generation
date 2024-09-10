@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.poet
 
@@ -10,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class TypeSpecBuilderTest {
 
   @Test

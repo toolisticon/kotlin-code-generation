@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
@@ -8,6 +7,7 @@ import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class KotlinFileSpecITest {
 
   @Target(AnnotationTarget.FILE)

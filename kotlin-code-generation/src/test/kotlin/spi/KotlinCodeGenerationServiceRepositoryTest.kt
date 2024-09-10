@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
-
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -7,12 +5,13 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
+import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinCodeGenerationServiceRepositoryTest {
 
   class TestContext(registry: KotlinCodeGenerationSpiRegistry) : KotlinCodeGenerationContextBase<TestContext>(registry) {
