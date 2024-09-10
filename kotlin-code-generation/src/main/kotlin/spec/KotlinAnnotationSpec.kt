@@ -24,7 +24,6 @@ data class KotlinAnnotationSpec(
   override fun toString(): String {
     return "KotlinAnnotationSpec(typeName=$typeName, members=$members)"
   }
-
 }
 
 interface KotlinAnnotationSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationSpec>, AnnotationSpecSupplier {

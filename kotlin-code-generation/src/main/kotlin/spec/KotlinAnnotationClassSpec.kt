@@ -9,7 +9,7 @@ import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 @ExperimentalKotlinPoetApi
 data class KotlinAnnotationClassSpec(
   override val className: ClassName,
-  private val spec: TypeSpec,
+  private val spec: TypeSpec
 ) : KotlinGeneratorTypeSpec<KotlinAnnotationClassSpec>, TypeSpecSupplier, KotlinAnnotationClassSpecSupplier,
   KotlinDocumentableSpec {
 

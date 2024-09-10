@@ -56,10 +56,11 @@ class KotlinFunSpecBuilder internal constructor(
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinFunSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addKdoc(kdoc: KDoc): KotlinFunSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addKdoc(kdoc: KDoc)= apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun tag(type: KClass<*>, tag: Any?)= builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }

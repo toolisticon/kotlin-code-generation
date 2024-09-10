@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpec
 import io.toolisticon.kotlin.generation.spec.KotlinConstructorPropertySpecSupplier
+import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinConstructorPropertySpec].
@@ -45,9 +46,10 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
     }
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addAnnotation(spec) }
-  override fun addKdoc(kdoc: KDoc): KotlinConstructorPropertySpecBuilder = apply { parameterBuilder.addKdoc(kdoc) }
-  override fun addModifiers(vararg modifiers: KModifier): KotlinConstructorPropertySpecBuilder = apply{ propertyBuilder.addModifiers(*modifiers) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { parameterBuilder.addAnnotation(spec) }
+  override fun addKdoc(kdoc: KDoc) = apply { parameterBuilder.addKdoc(kdoc) }
+  override fun addModifiers(vararg modifiers: KModifier) = apply{ propertyBuilder.addModifiers(*modifiers) }
+  override fun tag(type: KClass<*>, tag: Any?) = apply { propertyBuilder.tag(type, tag) }
 
   override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()

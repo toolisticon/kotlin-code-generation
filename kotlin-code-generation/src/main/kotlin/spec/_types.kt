@@ -39,3 +39,14 @@ interface ToFileTypeSpecSupplier : TypeSpecSupplier, WithClassName
 fun ToFileTypeSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(className) {
   addType(this@toFileSpec)
 }
+
+enum class ClassSpecType {
+  ANNOTATION,
+  ANONYMOUS,
+  DATA,
+  VALUE,
+  MAP,
+  LIST,
+  REGULAR,
+  EXCEPTION
+}

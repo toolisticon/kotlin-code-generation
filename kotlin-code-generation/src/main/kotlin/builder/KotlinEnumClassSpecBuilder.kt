@@ -38,13 +38,14 @@ class KotlinEnumClassSpecBuilder internal constructor(
     delegate.addModifiers(KModifier.ENUM)
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinEnumClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinEnumClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinEnumClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinEnumClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier): KotlinEnumClassSpecBuilder = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinEnumClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
-  override fun addType(typeSpec: TypeSpecSupplier): KotlinEnumClassSpecBuilder = builder { this.addType(typeSpec.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?)= builder { this.tag(type, tag) }
 
   fun addEnumConstant(name: String): KotlinEnumClassSpecBuilder = apply { delegate.addEnumConstant(name) }
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): KotlinEnumClassSpecBuilder = builder { this.addEnumConstant(name, typeSpec) }

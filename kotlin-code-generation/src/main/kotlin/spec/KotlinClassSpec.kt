@@ -8,7 +8,7 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 @ExperimentalKotlinPoetApi
 data class KotlinClassSpec(
   override val className: ClassName,
-  private val spec: TypeSpec
+  private val spec: TypeSpec,
 ) : KotlinGeneratorTypeSpec<KotlinClassSpec>, KotlinClassSpecSupplier, KotlinDocumentableSpec {
 
   override val kdoc: KDoc get() = KDoc(spec.kdoc)

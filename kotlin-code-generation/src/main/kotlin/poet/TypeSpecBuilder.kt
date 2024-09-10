@@ -27,6 +27,7 @@ class TypeSpecBuilder(
   PoetAnnotatableBuilder<TypeSpecBuilder>,
   PoetContextReceivableBuilder<TypeSpecBuilder>,
   PoetDocumentableBuilder<TypeSpecBuilder>,
+  PoetTaggableBuilder<TypeSpecBuilder>,
   PoetMemberSpecHolderBuilder<TypeSpecBuilder>,
   PoetOriginatingElementsHolderBuilder<TypeSpecBuilder>,
   PoetTypeSpecHolderBuilder<TypeSpecBuilder> {
@@ -63,7 +64,6 @@ class TypeSpecBuilder(
     fun anonymousClassBuilder(): TypeSpecBuilder = TypeSpec.anonymousClassBuilder().wrap()
   }
 
-
   // AnnotatableBuilder
   override fun addAnnotation(annotationSpec: AnnotationSpec) = apply { builder.addAnnotation(annotationSpec) }
   override fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>) = apply { builder.addAnnotations(annotationSpecs) }
@@ -89,7 +89,6 @@ class TypeSpecBuilder(
   override fun addType(typeSpec: TypeSpec) = apply { builder.addType(typeSpec) }
   override fun addTypes(typeSpecs: Iterable<TypeSpec>) = apply { builder.addTypes(typeSpecs) }
 
-
   fun addModifiers(vararg modifiers: KModifier): TypeSpecBuilder = apply { builder.addModifiers(*modifiers) }
   fun addModifiers(modifiers: Iterable<KModifier>): TypeSpecBuilder = apply { builder.addModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>): TypeSpecBuilder = apply { builder.addTypeVariables(typeVariables) }
@@ -111,6 +110,8 @@ class TypeSpecBuilder(
 
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): TypeSpecBuilder = apply { builder.addEnumConstant(name, typeSpec) }
   fun addInitializerBlock(block: CodeBlock): TypeSpecBuilder = apply { builder.addInitializerBlock(block) }
+
+  override fun tag(type: KClass<*>, tag: Any?): TypeSpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): TypeSpec = builder.build()
 }

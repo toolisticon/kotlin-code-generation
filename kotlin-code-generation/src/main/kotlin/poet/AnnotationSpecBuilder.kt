@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
  */
 class AnnotationSpecBuilder(
   override val builder: AnnotationSpec.Builder
-) : PoetSpecBuilder<AnnotationSpecBuilder, AnnotationSpec.Builder, AnnotationSpec, AnnotationSpecSupplier> {
+) : PoetSpecBuilder<AnnotationSpecBuilder, AnnotationSpec.Builder, AnnotationSpec, AnnotationSpecSupplier>, PoetTaggableBuilder<AnnotationSpecBuilder> {
   companion object {
     fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
 
@@ -21,7 +21,7 @@ class AnnotationSpecBuilder(
   }
 
   // Taggable
-  fun tag(type: KClass<*>, tag: Any?) = apply { builder.tag(type, tag) }
+  override fun tag(type: KClass<*>, tag: Any?) = apply { builder.tag(type, tag) }
 
   // Annotatable
   fun addMember(format: String, vararg args: Any) = apply { builder.addMember(CodeBlock.of(format, *args)) }

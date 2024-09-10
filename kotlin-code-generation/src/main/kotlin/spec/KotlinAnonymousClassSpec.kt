@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 value class KotlinAnonymousClassSpec(private val spec: TypeSpec) : KotlinGeneratorTypeSpec<KotlinAnonymousClassSpec>,
   KotlinAnonymousClassSpecSupplier,
   KotlinDocumentableSpec {
+
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
   override fun spec(): KotlinAnonymousClassSpec = this
   override fun get(): TypeSpec = spec

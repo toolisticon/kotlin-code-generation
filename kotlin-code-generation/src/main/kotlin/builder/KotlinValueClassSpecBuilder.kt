@@ -9,6 +9,7 @@ import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import javax.lang.model.element.Element
+import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinValueClassSpec].
@@ -39,14 +40,15 @@ class KotlinValueClassSpecBuilder internal constructor(
     delegate.builder.jvmInline()
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { this.constructorProperty = spec }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinValueClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinValueClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { this.constructorProperty = spec }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinValueClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }

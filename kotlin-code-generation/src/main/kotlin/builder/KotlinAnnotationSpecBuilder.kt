@@ -30,6 +30,7 @@ import kotlin.reflect.KClass
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
+  KotlinTaggableBuilder<KotlinAnnotationSpecBuilder>,
   KotlinAnnotationSpecSupplier,
   DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
 
@@ -67,6 +68,8 @@ class KotlinAnnotationSpecBuilder internal constructor(
 
   private var multiLine = false
   private val members: MutableList<CodeBlock> = mutableListOf()
+
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun multiLine() = apply { multiLine = true }
 

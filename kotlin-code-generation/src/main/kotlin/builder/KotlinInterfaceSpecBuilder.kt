@@ -39,13 +39,14 @@ class KotlinInterfaceSpecBuilder internal constructor(
     delegate = if (funInterface) TypeSpecBuilder.funInterfaceBuilder(className) else TypeSpecBuilder.interfaceBuilder(className)
   )
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinInterfaceSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinInterfaceSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinInterfaceSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun tag(type: KClass<*>, tag: Any?)= builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }

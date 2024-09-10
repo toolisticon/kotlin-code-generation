@@ -10,7 +10,6 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.anonymousCl
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.companionObjectBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.exceptionClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.funBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.interfaceBuilder
@@ -20,7 +19,6 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBui
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
 import io.toolisticon.kotlin.generation.builder.*
-import io.toolisticon.kotlin.generation.builder.KotlinExceptionClassSpecBuilder.Companion.runtimeExceptionName
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
@@ -81,44 +79,44 @@ object KotlinCodeGeneration : KLogging() {
    * @see [KotlinClassSpecBuilder.builder]
    */
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
-
-  /**
-   * @see KotlinExceptionClassSpecBuilder
-   */
-  inline fun buildExceptionClass(
-    packageName: PackageName,
-    simpleName: SimpleName,
-    extends: TypeName = runtimeExceptionName,
-    block: KotlinExceptionClassSpecBuilderReceiver = {}
-  ) = buildExceptionClass(className(packageName, simpleName), extends, block)
-
-  /**
-   * @see KotlinExceptionClassSpecBuilder
-   */
-  inline fun buildExceptionClass(
-    packageName: PackageName,
-    simpleName: SimpleName,
-    extends: KClass<out Exception>,
-    block: KotlinExceptionClassSpecBuilderReceiver = {}
-  ) = buildExceptionClass(className(packageName, simpleName), extends, block)
-
-  /**
-   * @see KotlinExceptionClassSpecBuilder
-   */
-  inline fun buildExceptionClass(
-    className: ClassName,
-    extends: KClass<out Exception>,
-    block: KotlinExceptionClassSpecBuilderReceiver = {}
-  ) = buildExceptionClass(className, extends.asTypeName(), block)
-
-  /**
-   * @see KotlinExceptionClassSpecBuilder
-   */
-  inline fun buildExceptionClass(
-    className: ClassName,
-    extends: TypeName = runtimeExceptionName,
-    block: KotlinExceptionClassSpecBuilderReceiver = {}
-  ) = exceptionClassBuilder(className, extends).also(block).build()
+//
+//  /**
+//   * @see KotlinExceptionClassSpecBuilder
+//   */
+//  inline fun buildExceptionClass(
+//    packageName: PackageName,
+//    simpleName: SimpleName,
+//    extends: TypeName = runtimeExceptionName,
+//    block: KotlinExceptionClassSpecBuilderReceiver = {}
+//  ) = buildExceptionClass(className(packageName, simpleName), extends, block)
+//
+//  /**
+//   * @see KotlinExceptionClassSpecBuilder
+//   */
+//  inline fun buildExceptionClass(
+//    packageName: PackageName,
+//    simpleName: SimpleName,
+//    extends: KClass<out Exception>,
+//    block: KotlinExceptionClassSpecBuilderReceiver = {}
+//  ) = buildExceptionClass(className(packageName, simpleName), extends, block)
+//
+//  /**
+//   * @see KotlinExceptionClassSpecBuilder
+//   */
+//  inline fun buildExceptionClass(
+//    className: ClassName,
+//    extends: KClass<out Exception>,
+//    block: KotlinExceptionClassSpecBuilderReceiver = {}
+//  ) = buildExceptionClass(className, extends.asTypeName(), block)
+//
+//  /**
+//   * @see KotlinExceptionClassSpecBuilder
+//   */
+//  inline fun buildExceptionClass(
+//    className: ClassName,
+//    extends: TypeName = runtimeExceptionName,
+//    block: KotlinExceptionClassSpecBuilderReceiver = {}
+//  ) = exceptionClassBuilder(className, extends).also(block).build()
 
   /**
    * @see [CodeBlock.of]
@@ -344,11 +342,11 @@ object KotlinCodeGeneration : KLogging() {
      * @see KotlinEnumClassSpecBuilder
      */
     fun enumClassBuilder(className: ClassName) = KotlinEnumClassSpecBuilder.builder(className)
-
-    /**
-     * @see KotlinExceptionClassSpecBuilder
-     */
-    fun exceptionClassBuilder(className: ClassName, extends: TypeName) = KotlinExceptionClassSpecBuilder.builder(className, extends)
+//
+//    /**
+//     * @see KotlinExceptionClassSpecBuilder
+//     */
+//    fun exceptionClassBuilder(className: ClassName, extends: TypeName) = KotlinExceptionClassSpecBuilder.builder(className, extends)
 
     /**
      * @see KotlinFileSpecBuilder
