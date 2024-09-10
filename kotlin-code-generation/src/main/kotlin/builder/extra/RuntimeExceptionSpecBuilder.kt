@@ -100,11 +100,7 @@ class RuntimeExceptionSpecBuilder internal constructor(
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc) }
   override fun addModifiers(vararg modifiers: KModifier) = apply { delegate.addModifiers(*modifiers) }
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = apply { delegate.addSuperinterface(superinterface, constructorParameter) }
-  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock): RuntimeExceptionSpecBuilder {
-    TODO("Not yet implemented")
-  }
-
-  //override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) : RuntimeExceptionSpecBuilder= apply { delegate.addS }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) : RuntimeExceptionSpecBuilder= apply { this.delegate.addSuperinterface(superinterface, delegate) }
   override fun tag(type: KClass<*>, tag: Any?) = apply { delegate.tag(type, tag) }
   override fun builder(block: TypeSpec.Builder.() -> Unit): RuntimeExceptionSpecBuilder = apply { delegate.builder(block) }
   // </overrides>
