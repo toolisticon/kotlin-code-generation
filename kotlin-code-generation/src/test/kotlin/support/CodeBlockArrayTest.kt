@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.support
 
@@ -11,6 +10,7 @@ import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.stringA
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class CodeBlockArrayTest {
 
   @Test

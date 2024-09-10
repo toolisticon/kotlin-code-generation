@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_KCLASS
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_LITERAL
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_MEMBER
@@ -11,7 +12,6 @@ import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationClassSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.support.CodeBlockArray
@@ -20,14 +20,13 @@ import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.kclassA
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.numberArray
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.stringArray
 import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
-import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinAnnotationSpec].
  */
 @ExperimentalKotlinPoetApi
-@Suppress(SUPPRESS_UNUSED)
+//@Suppress(SUPPRESS_UNUSED)
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
@@ -63,13 +62,19 @@ class KotlinAnnotationSpecBuilder internal constructor(
       fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value.asMemberName())
       fun enums(name: String, vararg values: Enum<*>) = codeBlock("$name = $FORMAT_LITERAL", enumArray(*values).build())
     }
+
   }
 
-  fun addMember(format: String, vararg args: Any): KotlinAnnotationSpecBuilder = apply { delegate.addMember(format, *args) }
-  fun addMember(codeBlock: CodeBlock): KotlinAnnotationSpecBuilder = apply { delegate.addMember(codeBlock) }
+  private var multiLine = false
+  private val members: MutableList<CodeBlock> = mutableListOf()
 
-  fun addMember(memberName: MemberName): KotlinAnnotationSpecBuilder = addMember("%M", memberName)
-  private fun addArrayMember(name: String, array: CodeBlockArray<*>): KotlinAnnotationSpecBuilder = addMember("$name = $FORMAT_LITERAL", array.build())
+  fun multiLine() = apply { multiLine = true }
+
+  fun addMember(codeBlock: CodeBlock): KotlinAnnotationSpecBuilder = apply { members.add(codeBlock) }
+
+  fun addMember(format: String, vararg args: Any): KotlinAnnotationSpecBuilder = addMember(buildCodeBlock(format, *args))
+
+  fun addNameMember(memberName: MemberName): KotlinAnnotationSpecBuilder = addMember("%M", memberName)
 
   fun addKClassMember(name: String, value: KClass<*>) = addMember(member.kclass(name, value))
   fun addKClassMembers(name: String, vararg values: KClass<*>) = addMember(member.kclasses(name, *values))
@@ -83,15 +88,21 @@ class KotlinAnnotationSpecBuilder internal constructor(
   fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember(member.number(name, value))
   fun addNumberMembers(name: String, vararg values: Number): KotlinAnnotationSpecBuilder = addMember(member.numbers(name, *values))
 
-  fun clearMembers() = apply {
-    delegate.clearMembers();
+  fun clearMembers() = apply { members.clear() }
+
+  override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
+
+  override fun build(): KotlinAnnotationSpec {
+    if (members.isNotEmpty()) {
+      if (multiLine) {
+        members.forEach(delegate::addMember)
+      } else {
+        delegate.addMember(CodeBlockArray.codeBlockArray(items = members.toTypedArray()).build())
+      }
+    }
+    return KotlinAnnotationSpec(spec = delegate.build())
   }
 
-  override fun builder(block: AnnotationSpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
-
-  override fun build(): KotlinAnnotationSpec = KotlinAnnotationSpec(spec = delegate.build())
   override fun spec(): KotlinAnnotationSpec = build()
   override fun get(): AnnotationSpec = build().get()
 }
