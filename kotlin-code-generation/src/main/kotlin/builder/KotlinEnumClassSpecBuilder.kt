@@ -21,11 +21,9 @@ class KotlinEnumClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinEnumClassSpecBuilder, KotlinEnumClassSpec>,
-  KotlinAnnotatableBuilder<KotlinEnumClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinEnumClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinEnumClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinEnumClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinEnumClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinEnumClassSpecBuilder> {
 
@@ -45,7 +43,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-  override fun tag(type: KClass<*>, tag: Any?)= builder { this.tag(type, tag) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addEnumConstant(name: String): KotlinEnumClassSpecBuilder = apply { delegate.addEnumConstant(name) }
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): KotlinEnumClassSpecBuilder = builder { this.addEnumConstant(name, typeSpec) }

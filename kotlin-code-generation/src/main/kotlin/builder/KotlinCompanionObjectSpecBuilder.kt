@@ -21,11 +21,9 @@ import kotlin.reflect.KClass
 class KotlinCompanionObjectSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinCompanionObjectSpecBuilder, KotlinCompanionObjectSpec>,
-  KotlinAnnotatableBuilder<KotlinCompanionObjectSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinCompanionObjectSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinCompanionObjectSpecBuilder>,
-  KotlinModifiableBuilder<KotlinCompanionObjectSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinCompanionObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
 

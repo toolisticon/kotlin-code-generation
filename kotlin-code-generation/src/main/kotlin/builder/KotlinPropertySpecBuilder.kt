@@ -20,11 +20,8 @@ class KotlinPropertySpecBuilder internal constructor(
   private val delegate: PropertySpecBuilder
 ) : BuilderSupplier<KotlinPropertySpec, PropertySpec>,
   DelegatingBuilder<KotlinPropertySpecBuilder, PropertySpecBuilderReceiver>,
-  KotlinAnnotatableBuilder<KotlinPropertySpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinPropertySpecBuilder>,
   KotlinContextReceivableBuilder<KotlinPropertySpecBuilder>,
-  KotlinDocumentableBuilder<KotlinPropertySpecBuilder>,
-  KotlinModifiableBuilder<KotlinPropertySpecBuilder>,
-  KotlinTaggableBuilder<KotlinPropertySpecBuilder>,
   KotlinPropertySpecSupplier {
 
   companion object {

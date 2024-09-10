@@ -19,12 +19,10 @@ class KotlinValueClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinValueClassSpecBuilder, KotlinValueClassSpec>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinValueClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinValueClassSpecBuilder>,
-  KotlinAnnotatableBuilder<KotlinValueClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinValueClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinValueClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinValueClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinValueClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinValueClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder> {
 

@@ -22,10 +22,8 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   private val propertyBuilder: KotlinPropertySpecBuilder,
   private val parameterBuilder: KotlinParameterSpecBuilder
 ) : Builder<KotlinConstructorPropertySpec>,
-  KotlinAnnotatableBuilder<KotlinConstructorPropertySpecBuilder>,
-  KotlinConstructorPropertySpecSupplier,
-  KotlinDocumentableBuilder<KotlinConstructorPropertySpecBuilder>,
-  KotlinModifiableBuilder<KotlinConstructorPropertySpecBuilder> {
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinConstructorPropertySpecBuilder>,
+  KotlinConstructorPropertySpecSupplier {
 
   companion object {
     fun builder(name: String, type: TypeName): KotlinConstructorPropertySpecBuilder = KotlinConstructorPropertySpecBuilder(
@@ -48,7 +46,7 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { parameterBuilder.addAnnotation(spec) }
   override fun addKdoc(kdoc: KDoc) = apply { parameterBuilder.addKdoc(kdoc) }
-  override fun addModifiers(vararg modifiers: KModifier) = apply{ propertyBuilder.addModifiers(*modifiers) }
+  override fun addModifiers(vararg modifiers: KModifier) = apply { propertyBuilder.addModifiers(*modifiers) }
   override fun tag(type: KClass<*>, tag: Any?) = apply { propertyBuilder.tag(type, tag) }
 
   override fun build(): KotlinConstructorPropertySpec {
@@ -61,6 +59,7 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
 
     return KotlinConstructorPropertySpec(parameter = parameter, property = property)
   }
+
   override fun spec(): KotlinConstructorPropertySpec = build()
 }
 

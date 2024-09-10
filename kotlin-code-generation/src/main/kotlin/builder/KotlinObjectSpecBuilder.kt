@@ -21,11 +21,9 @@ class KotlinObjectSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinObjectSpecBuilder, KotlinObjectSpec>,
-  KotlinAnnotatableBuilder<KotlinObjectSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinObjectSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinObjectSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinObjectSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinObjectSpecBuilder>,
-  KotlinModifiableBuilder<KotlinObjectSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinObjectSpecBuilder> {
   companion object {

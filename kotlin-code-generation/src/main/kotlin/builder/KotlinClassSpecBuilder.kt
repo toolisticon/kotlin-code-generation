@@ -16,15 +16,13 @@ import kotlin.reflect.KClass
  */
 @ExperimentalKotlinPoetApi
 class KotlinClassSpecBuilder internal constructor(
-  private val className: ClassName,
+  internal val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinClassSpecBuilder, KotlinClassSpec>,
-  KotlinAnnotatableBuilder<KotlinClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
@@ -45,6 +43,8 @@ class KotlinClassSpecBuilder internal constructor(
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
+  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
   override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
@@ -63,8 +63,6 @@ class KotlinClassSpecBuilder internal constructor(
   fun addSuperclassConstructorParameter(format: String, vararg args: Any) = builder { this.addSuperclassConstructorParameter(format, *args) }
   fun addSuperclassConstructorParameter(codeBlock: CodeBlock) = builder { this.addSuperclassConstructorParameter(codeBlock) }
 
-  override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
-  override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 

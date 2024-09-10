@@ -20,12 +20,10 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
-  KotlinAnnotatableBuilder<KotlinAnnotationClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnnotationClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnnotationClassSpecBuilder> {
 
   companion object {

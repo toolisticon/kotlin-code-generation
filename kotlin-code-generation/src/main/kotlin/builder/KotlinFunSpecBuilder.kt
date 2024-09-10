@@ -22,10 +22,8 @@ class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
-  KotlinAnnotatableBuilder<KotlinFunSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinFunSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinFunSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinFunSpecBuilder>,
-  KotlinModifiableBuilder<KotlinFunSpecBuilder>,
   KotlinFunSpecSupplier {
 
   companion object {
@@ -58,9 +56,9 @@ class KotlinFunSpecBuilder internal constructor(
 
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addKdoc(kdoc: KDoc)= apply { delegate.addKdoc(kdoc.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun tag(type: KClass<*>, tag: Any?)= builder { this.tag(type, tag) }
+  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }

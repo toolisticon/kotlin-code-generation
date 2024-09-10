@@ -19,11 +19,9 @@ import kotlin.reflect.KClass
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
-  KotlinAnnotatableBuilder<KotlinAnonymousClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinAnonymousClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {

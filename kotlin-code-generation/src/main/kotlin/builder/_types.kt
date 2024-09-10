@@ -35,7 +35,7 @@ sealed interface DelegatingBuilder<SELF, RECEIVER> {
 /**
  * Common interface for typeSpec builders.
  */
-sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
+interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
   DelegatingBuilder<SELF, TypeSpecBuilderReceiver>, TypeSpecSupplier,
   KotlinGeneratorSpecSupplier<SPEC> {
 
@@ -73,7 +73,7 @@ sealed interface KotlinConstructorPropertySupport<SELF> : KotlinTaggableBuilder<
  * Typesafe wrapper for [Annotatable.Builder].
  */
 @OptIn(ExperimentalKotlinPoetApi::class)
-sealed interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
+interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.
@@ -111,7 +111,7 @@ sealed interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
  * * `addKdoc`
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinDocumentableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
+interface KotlinDocumentableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   /**
    * Implementing builders have to add this to their build.
    */
@@ -155,7 +155,7 @@ sealed interface KotlinMemberSpecHolderBuilder<SELF> : KotlinTaggableBuilder<SEL
 /**
  * Shared wrapper fo all builders that support `addModifiers`
  */
-sealed interface KotlinModifiableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
+interface KotlinModifiableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Add modifiers.
@@ -196,7 +196,7 @@ sealed interface KotlinContextReceivableBuilder<SELF> : KotlinTaggableBuilder<SE
   fun contextReceivers(vararg receiverTypes: TypeName): SELF
 }
 
-sealed interface KotlinSuperInterfaceSupport<SELF> : KotlinTaggableBuilder<SELF> {
+interface KotlinSuperInterfaceSupport<SELF> : KotlinTaggableBuilder<SELF> {
 
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String): SELF
   fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock = CodeBlockBuilder.EMPTY_CODE_BLOCK): SELF
@@ -272,3 +272,12 @@ sealed interface KotlinTaggableBuilder<SELF> {
 
   fun removeTag(type: KClass<*>): SELF = tag(type, null)
 }
+
+/**
+ * Groups the features of [KotlinAnnotatableBuilder], [KotlinDocumentableBuilder] and [KotlinModifiableBuilder].
+ */
+@ExperimentalKotlinPoetApi
+interface KotlinAnnotatableDocumentableModifiableBuilder<SELF> :
+  KotlinAnnotatableBuilder<SELF>,
+  KotlinDocumentableBuilder<SELF>,
+  KotlinModifiableBuilder<SELF>

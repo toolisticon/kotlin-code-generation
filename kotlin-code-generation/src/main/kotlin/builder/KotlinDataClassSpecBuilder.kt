@@ -20,12 +20,10 @@ class KotlinDataClassSpecBuilder internal constructor(
   private val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinDataClassSpecBuilder, KotlinDataClassSpec>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinDataClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinDataClassSpecBuilder>,
-  KotlinAnnotatableBuilder<KotlinDataClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinDataClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinDataClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinDataClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
