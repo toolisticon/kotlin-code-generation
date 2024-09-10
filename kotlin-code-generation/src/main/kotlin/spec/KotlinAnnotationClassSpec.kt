@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
+import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 data class KotlinAnnotationClassSpec(
@@ -13,6 +14,7 @@ data class KotlinAnnotationClassSpec(
 ) : KotlinGeneratorTypeSpec<KotlinAnnotationClassSpec>, TypeSpecSupplier, KotlinAnnotationClassSpecSupplier,
   KotlinDocumentableSpec {
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override fun spec(): KotlinAnnotationClassSpec = this
   override fun get(): TypeSpec = spec
   override val kdoc: KDoc get() = KDoc(spec.kdoc)

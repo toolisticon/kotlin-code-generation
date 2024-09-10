@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isDataClass
 import io.toolisticon.kotlin.generation.poet.KDoc
+import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 data class KotlinDataClassSpec(
@@ -18,6 +19,7 @@ data class KotlinDataClassSpec(
     require(spec.isDataClass) { "Not a dataClass spec: $spec." }
   }
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
   override fun spec(): KotlinDataClassSpec = this

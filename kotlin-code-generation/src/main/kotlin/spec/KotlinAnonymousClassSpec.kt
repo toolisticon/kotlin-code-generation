@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
+import kotlin.reflect.KClass
 
 @JvmInline
 @ExperimentalKotlinPoetApi
@@ -11,6 +12,7 @@ value class KotlinAnonymousClassSpec(private val spec: TypeSpec) : KotlinGenerat
   KotlinAnonymousClassSpecSupplier,
   KotlinDocumentableSpec {
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
   override fun spec(): KotlinAnonymousClassSpec = this
   override fun get(): TypeSpec = spec
