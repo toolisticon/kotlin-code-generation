@@ -11,10 +11,6 @@ data class KotlinClassSpec(
   private val spec: TypeSpec
 ) : KotlinGeneratorTypeSpec<KotlinClassSpec>, KotlinClassSpecSupplier, KotlinDocumentableSpec {
 
-  init {
-    //require(spec.is) { "Not a dataClass spec: $spec." }
-  }
-
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
   override fun spec(): KotlinClassSpec = this
   override fun get(): TypeSpec = spec

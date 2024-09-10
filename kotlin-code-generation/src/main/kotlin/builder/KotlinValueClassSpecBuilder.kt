@@ -56,9 +56,7 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
-  override fun builder(block: TypeSpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
+  override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
 
   override fun build(): KotlinValueClassSpec {
     check(::constructorProperty.isInitialized) { "Value class must have exactly one property." }

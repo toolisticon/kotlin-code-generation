@@ -28,7 +28,7 @@ data class CodeBlockArray<T>(
     /**
      * Special format for concatenating codeBlocks.
      */
-    val CODE_BLOCK_FORMAT = CodeBlockArray.Companion.Format(format = "", prefix = "", suffix = "")
+    private val CODE_BLOCK_FORMAT = Format(format = "", prefix = "", suffix = "")
 
     fun codeBlockArray(format: Format = CODE_BLOCK_FORMAT, vararg items: CodeBlock) = CodeBlockArray<CodeBlock>(format, items.toList())
 
