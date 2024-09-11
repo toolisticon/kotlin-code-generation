@@ -263,14 +263,14 @@ sealed interface KotlinTaggableBuilder<SELF> {
   /**
    * @see com.squareup.kotlinpoet.Taggable#Builder#tag
    */
-  fun tag(type: KClass<*>, tag: Any?): SELF
+  fun addTag(type: KClass<*>, tag: Any?): SELF
 
   /**
    * Store tag under key of ::class.
    */
-  fun <T : Any> tag(tag: T): SELF = tag(tag::class, tag)
+  fun <T : Any> addTag(tag: T): SELF = addTag(tag::class, tag)
 
-  fun removeTag(type: KClass<*>): SELF = tag(type, null)
+  fun removeTag(type: KClass<*>): SELF = addTag(type, null)
 }
 
 /**

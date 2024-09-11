@@ -33,7 +33,7 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   override fun builder(block: TypeAliasSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build() = KotlinTypeAliasSpec(spec = delegate.build())

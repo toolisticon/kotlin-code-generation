@@ -5,6 +5,7 @@ package io.toolisticon.kotlin.generation.builder
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.jvm.jvmInline
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
+import io.toolisticon.kotlin.generation.builder.KotlinFunSpecBuilder.Companion.constructorBuilder
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
@@ -31,7 +32,7 @@ class KotlinValueClassSpecBuilder internal constructor(
     fun builder(className: ClassName): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(className)
   }
 
-  lateinit var constructorProperty: KotlinConstructorPropertySpecSupplier
+  internal lateinit var constructorProperty: KotlinConstructorPropertySpecSupplier
 
   internal constructor(className: ClassName) : this(className = className, delegate = TypeSpecBuilder.classBuilder(className)) {
     delegate.addModifiers(KModifier.VALUE)
@@ -46,7 +47,7 @@ class KotlinValueClassSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
@@ -58,15 +59,19 @@ class KotlinValueClassSpecBuilder internal constructor(
 
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
 
-  override fun build(): KotlinValueClassSpec {
+  override fun build(): KotlinValueClassSpec  = build {  }
+
+  fun build(block: KotlinValueClassSpecBuilderReceiver): KotlinValueClassSpec {
     check(::constructorProperty.isInitialized) { "Value class must have exactly one property." }
 
-    val constructor = KotlinFunSpecBuilder.constructorBuilder()
+    val constructor = constructorBuilder()
       .addParameter(this.constructorProperty.spec().parameter)
       .build()
 
     delegate.addProperty(constructorProperty.spec().property.get())
     delegate.builder.primaryConstructor(constructor.get())
+
+    block()
 
     return KotlinValueClassSpec(className = className, spec = delegate.build())
   }

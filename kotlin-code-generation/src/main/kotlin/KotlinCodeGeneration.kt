@@ -1,4 +1,4 @@
-@file:Suppress(SUPPRESS_UNUSED)
+@file:Suppress("unused")
 
 package io.toolisticon.kotlin.generation
 
@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.anonymousCl
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.companionObjectBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.delegateListValueClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.funBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.interfaceBuilder
@@ -20,6 +21,8 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.runtimeExce
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
 import io.toolisticon.kotlin.generation.builder.*
+import io.toolisticon.kotlin.generation.builder.extra.DelegateListValueClassSpecBuilder
+import io.toolisticon.kotlin.generation.builder.extra.DelegateListValueClassSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilder
 import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
@@ -29,7 +32,6 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
-import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import mu.KLogging
@@ -57,13 +59,14 @@ object KotlinCodeGeneration : KLogging() {
    * Build a [KotlinAnnotationClassSpec] using given className and receiver fn.
    * @see [KotlinAnnotationClassSpecBuilder.builder]
    */
-  inline fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = annotationClassBuilder(className).also(block).build()
+  inline fun buildAnnotationClass(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}) = annotationClassBuilder(className).also(block).build()
 
   /**
    * Build a [KotlinAnnotationClassSpec] using given package- and simpleName and receiver fn.
    * @see [KotlinAnnotationClassSpecBuilder.builder]
    */
-  inline fun buildAnnotationClass(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}): KotlinAnnotationClassSpec = buildAnnotationClass(className(packageName, simpleName), block)
+  @SuppressWarnings("unused")
+  inline fun buildAnnotationClass(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}) = buildAnnotationClass(className(packageName, simpleName), block)
 
   /**
    * Build a [KotlinAnonymousClassSpec] using given receiver fn.
@@ -84,6 +87,39 @@ object KotlinCodeGeneration : KLogging() {
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
 
   /**
+   * @see [DelegateListValueClassSpecBuilder]
+   */
+  inline fun buildDelegateListValueClass(
+    packageName: PackageName,
+    simpleName: SimpleName,
+    items: KClass<*>,
+    block: DelegateListValueClassSpecBuilderReceiver = {}
+  ) = buildDelegateListValueClass(className = className(packageName, simpleName), items = items.asTypeName(), block = block)
+
+  /**
+   * @see [DelegateListValueClassSpecBuilder]
+   */
+  inline fun buildDelegateListValueClass(
+    packageName: PackageName,
+    simpleName: SimpleName,
+    items: TypeName,
+    block: DelegateListValueClassSpecBuilderReceiver = {}
+  ) = delegateListValueClassBuilder(
+    className = className(packageName, simpleName),
+    items = items
+  ).also(block).build()
+
+
+  /**
+   * @see [DelegateListValueClassSpecBuilder]
+   */
+  inline fun buildDelegateListValueClass(
+    className: ClassName,
+    items: TypeName,
+    block: DelegateListValueClassSpecBuilderReceiver = {}
+  ) = delegateListValueClassBuilder(className, items).also(block).build()
+
+  /**
    * @see RuntimeExceptionSpecBuilder
    */
   inline fun buildRuntimeExceptionClass(packageName: PackageName, simpleName: SimpleName, block: RuntimeExceptionSpecBuilderReceiver = {}) = buildRuntimeExceptionClass(className(packageName, simpleName), block)
@@ -102,6 +138,7 @@ object KotlinCodeGeneration : KLogging() {
    * Build codeBlock using receiver-fn.
    * @see [CodeBlock.of]
    */
+  @SuppressWarnings("unused")
   inline fun buildCodeBlock(block: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().also(block).build()
 
   /**
@@ -144,6 +181,7 @@ object KotlinCodeGeneration : KLogging() {
    * Build [KotlinEnumClassSpec].
    * @see [KotlinEnumClassSpecBuilder.builder]
    */
+  @SuppressWarnings("unused")
   inline fun buildEnumClass(packageName: PackageName, simpleName: SimpleName, block: KotlinEnumClassSpecBuilderReceiver = {}) = buildEnumClass(className(packageName, simpleName), block)
 
   /**
@@ -156,6 +194,7 @@ object KotlinCodeGeneration : KLogging() {
    * Build [KotlinFileSpec].
    * @see [KotlinFileSpecBuilder.builder]
    */
+  @SuppressWarnings("unused")
   inline fun buildFile(packageName: PackageName, simpleName: SimpleName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = buildFile(className(packageName, simpleName), block)
 
   /**
@@ -174,6 +213,7 @@ object KotlinCodeGeneration : KLogging() {
    * Build [KotlinInterfaceSpec].
    * @see [KotlinInterfaceSpecBuilder.builder]
    */
+  @SuppressWarnings("unused")
   inline fun buildInterface(packageName: PackageName, simpleName: SimpleName, block: KotlinInterfaceSpecBuilderReceiver = {}): KotlinInterfaceSpec =
     buildInterface(className(packageName, simpleName), block)
 
@@ -193,12 +233,13 @@ object KotlinCodeGeneration : KLogging() {
    * Build [KotlinParameterSpec].
    * @see [KotlinParameterSpecBuilder.builder]
    */
-  inline fun buildParameter(name: ParameterName, typeName: TypeName, block: KotlinParameterSpecBuilderReceiver = {}): KotlinParameterSpec = parameterBuilder(name, typeName).also(block).build()
+  inline fun buildParameter(name: ParameterName, typeName: TypeName, block: KotlinParameterSpecBuilderReceiver = {}) = parameterBuilder(name, typeName).also(block).build()
 
   /**
    * Build [KotlinParameterSpec].
    * @see [KotlinParameterSpecBuilder.builder]
    */
+  @SuppressWarnings("unused")
   inline fun buildParameter(name: ParameterName, type: KClass<*>, block: KotlinParameterSpecBuilderReceiver = {}): KotlinParameterSpec = buildParameter(name, type.asTypeName(), block)
 
   /**
@@ -236,7 +277,7 @@ object KotlinCodeGeneration : KLogging() {
    * Static access for all builders.
    */
   @ExperimentalKotlinPoetApi
-  @Suppress(SUPPRESS_CLASS_NAME, SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
+  @Suppress("ClassName", SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     /**
      * @see KotlinAnnotationClassSpecBuilder
@@ -246,6 +287,7 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinAnnotationClassSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName) = annotationClassBuilder(className(packageName, simpleName))
 
     /**
@@ -256,11 +298,13 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinAnnotationSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun annotationBuilder(type: KClass<out Annotation>) = annotationBuilder(type.asClassName())
 
     /**
      * @see KotlinAnnotationSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
 
     /**
@@ -301,16 +345,21 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinDataClassSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName) = dataClassBuilder(className(packageName, simpleName))
+
+    fun delegateListValueClassBuilder(className: ClassName, items: TypeName) = DelegateListValueClassSpecBuilder.builder(className, items)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun enumClassBuilder(name: SimpleName) = KotlinEnumClassSpecBuilder.builder(name)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun enumClassBuilder(packageName: PackageName, name: SimpleName) = enumClassBuilder(className(packageName, name))
 
     /**
@@ -319,7 +368,7 @@ object KotlinCodeGeneration : KLogging() {
     fun enumClassBuilder(className: ClassName) = KotlinEnumClassSpecBuilder.builder(className)
 
     /**
-     * @see KotlinExceptionClassSpecBuilder
+     * @see RuntimeExceptionSpecBuilder
      */
     fun runtimeExceptionClassBuilder(className: ClassName) = RuntimeExceptionSpecBuilder.builder(className)
 
@@ -376,27 +425,29 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinPropertySpecBuilder
      */
+    @SuppressWarnings("unused")
     fun propertyBuilder(name: PropertyName, type: TypeName) = KotlinPropertySpecBuilder.builder(name, type)
 
     /**
      * @see KotlinPropertySpecBuilder
      */
+    @SuppressWarnings("unused")
     fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
 
     /**
      * @see KotlinFunSpecBuilder
      */
-    fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.setterBuilder()
+    fun setterBuilder() = KotlinFunSpecBuilder.setterBuilder()
 
     /**
      * @see KotlinTypeAliasSpecBuilder
      */
-    fun typeAliasBuilder(name: TypeAliasName, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder.builder(name, type)
+    fun typeAliasBuilder(name: TypeAliasName, type: TypeName) = KotlinTypeAliasSpecBuilder.builder(name, type)
 
     /**
      * @see KotlinTypeAliasSpecBuilder
      */
-    fun typeAliasBuilder(name: String, type: KClass<*>): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder.builder(name, type)
+    fun typeAliasBuilder(name: String, type: KClass<*>) = KotlinTypeAliasSpecBuilder.builder(name, type)
 
     /**
      * @see KotlinValueClassSpecBuilder
@@ -406,6 +457,7 @@ object KotlinCodeGeneration : KLogging() {
     /**
      * @see KotlinValueClassSpecBuilder
      */
+    @SuppressWarnings("unused")
     fun valueClassBuilder(packageName: PackageName, simpleName: SimpleName) = valueClassBuilder(className(packageName, simpleName))
   }
 
@@ -422,7 +474,7 @@ object KotlinCodeGeneration : KLogging() {
   /**
    * Static to spi.
    */
-  @Suppress(SUPPRESS_CLASS_NAME)
+  @Suppress("ClassName")
   object spi {
     /**
      * The default classLoader supplier fn.
@@ -442,7 +494,7 @@ object KotlinCodeGeneration : KLogging() {
   /**
    * TypeSpec helpers.
    */
-  @Suppress(SUPPRESS_CLASS_NAME)
+  @Suppress("ClassName")
   object typeSpec {
 
     fun TypeSpec.hasModifier(modifier: KModifier) = this.modifiers.contains(modifier)
@@ -451,7 +503,7 @@ object KotlinCodeGeneration : KLogging() {
     val TypeSpec.isValueClass: Boolean get() = hasModifier(KModifier.VALUE)
   }
 
-  @Suppress(SUPPRESS_CLASS_NAME)
+  @Suppress("ClassName")
   object name {
     fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
@@ -463,7 +515,7 @@ object KotlinCodeGeneration : KLogging() {
   /**
    * Constants for kotlin-poet formats.
    */
-  @Suppress(SUPPRESS_CLASS_NAME)
+  @Suppress("ClassName")
   object format {
     const val FORMAT_STRING = "%S"
     const val FORMAT_STRING_TEMPLATE = "%P"

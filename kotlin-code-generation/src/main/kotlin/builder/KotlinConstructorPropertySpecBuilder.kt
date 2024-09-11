@@ -47,7 +47,7 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { parameterBuilder.addAnnotation(spec) }
   override fun addKdoc(kdoc: KDoc) = apply { parameterBuilder.addKdoc(kdoc) }
   override fun addModifiers(vararg modifiers: KModifier) = apply { propertyBuilder.addModifiers(*modifiers) }
-  override fun tag(type: KClass<*>, tag: Any?) = apply { propertyBuilder.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = apply { propertyBuilder.addTag(type, tag) }
 
   override fun build(): KotlinConstructorPropertySpec {
     val parameter = parameterBuilder.build()

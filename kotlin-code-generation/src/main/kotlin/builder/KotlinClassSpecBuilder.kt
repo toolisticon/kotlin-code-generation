@@ -46,7 +46,7 @@ class KotlinClassSpecBuilder internal constructor(
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
   override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
 

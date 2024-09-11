@@ -55,7 +55,7 @@ class KotlinParameterSpecBuilder internal constructor(
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun defaultValue(format: String, vararg args: Any?) = builder { this.defaultValue(format, *args) }
   fun defaultValue(codeBlock: CodeBlock?) = builder { this.defaultValue(codeBlock) }

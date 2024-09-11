@@ -69,7 +69,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
   private var multiLine = false
   private val members: MutableList<CodeBlock> = mutableListOf()
 
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun multiLine() = apply { multiLine = true }
 

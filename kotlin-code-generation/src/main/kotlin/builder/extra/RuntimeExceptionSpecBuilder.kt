@@ -53,7 +53,7 @@ class RuntimeExceptionSpecBuilder internal constructor(
   private val _messageTemplateParameters = LinkedHashMap<String, TypeName>()
 
   internal constructor(className: ClassName) : this(delegate = KotlinClassSpecBuilder(className = className)) {
-    tag(ClassSpecType.EXCEPTION)
+    addTag(ClassSpecType.EXCEPTION)
     delegate.superclass(RuntimeException::class)
   }
 
@@ -101,7 +101,7 @@ class RuntimeExceptionSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = apply { delegate.addModifiers(*modifiers) }
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = apply { delegate.addSuperinterface(superinterface, constructorParameter) }
   override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) : RuntimeExceptionSpecBuilder= apply { this.delegate.addSuperinterface(superinterface, delegate) }
-  override fun tag(type: KClass<*>, tag: Any?) = apply { delegate.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = apply { delegate.addTag(type, tag) }
   override fun builder(block: TypeSpec.Builder.() -> Unit): RuntimeExceptionSpecBuilder = apply { delegate.builder(block) }
   // </overrides>
 }

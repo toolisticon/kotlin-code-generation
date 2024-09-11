@@ -40,7 +40,7 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = builder { delegate.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { delegate.addType(typeSpec.get()) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder {
     delegate.addOriginatingElement(
