@@ -28,7 +28,14 @@ class KotlinEnumClassSpecBuilder internal constructor(
   KotlinTypeSpecHolderBuilder<KotlinEnumClassSpecBuilder> {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinEnumClassSpecBuilder = builder(simpleClassName(name))
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinEnumClassSpecBuilder = KotlinEnumClassSpecBuilder(className)
   }
 
@@ -39,7 +46,7 @@ class KotlinEnumClassSpecBuilder internal constructor(
   fun addEnumConstant(name: String): KotlinEnumClassSpecBuilder = apply { delegate.addEnumConstant(name) }
   fun addEnumConstant(name: String, typeSpec: TypeSpec = TypeSpec.anonymousClassBuilder().build()): KotlinEnumClassSpecBuilder = builder { this.addEnumConstant(name, typeSpec) }
 
-  fun addOriginatingElement(originatingElement: Element): KotlinEnumClassSpecBuilder = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element): KotlinEnumClassSpecBuilder = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName): KotlinEnumClassSpecBuilder = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?): KotlinEnumClassSpecBuilder = builder { this.primaryConstructor(primaryConstructor?.get()) }

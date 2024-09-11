@@ -24,6 +24,10 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
   KotlinConstructorPropertySpecSupplier {
 
   companion object {
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName): KotlinConstructorPropertySpecBuilder = KotlinConstructorPropertySpecBuilder(
       name = name,
       type = type,

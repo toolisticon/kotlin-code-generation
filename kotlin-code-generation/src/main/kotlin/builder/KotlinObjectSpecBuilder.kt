@@ -27,13 +27,21 @@ class KotlinObjectSpecBuilder internal constructor(
   KotlinSuperInterfaceSupport<KotlinObjectSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinObjectSpecBuilder> {
   companion object {
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinObjectSpecBuilder = builder(simpleClassName(name))
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinObjectSpecBuilder = KotlinObjectSpecBuilder(className = className)
   }
 
   internal constructor(className: ClassName) : this(className, TypeSpecBuilder.objectBuilder(className))
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }

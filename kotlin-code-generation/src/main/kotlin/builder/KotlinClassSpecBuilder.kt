@@ -28,7 +28,14 @@ class KotlinClassSpecBuilder internal constructor(
   KotlinTypeSpecHolderBuilder<KotlinClassSpecBuilder> {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinClassSpecBuilder = builder(simpleClassName(name))
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinClassSpecBuilder = KotlinClassSpecBuilder(className = className)
   }
 
@@ -37,7 +44,7 @@ class KotlinClassSpecBuilder internal constructor(
   internal val constructorProperties: LinkedHashMap<PropertyName, KotlinConstructorPropertySpecSupplier> = LinkedHashMap()
   private var isSetPrimaryConstructor: Boolean = false
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
 
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = apply {

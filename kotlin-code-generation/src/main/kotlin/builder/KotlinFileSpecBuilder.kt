@@ -24,25 +24,43 @@ class KotlinFileSpecBuilder internal constructor(
   KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinFileSpecBuilder> {
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinFileSpecBuilder {
       require(className.packageName.isNotEmpty()) { "cannot build file for empty package." }
       return KotlinFileSpecBuilder(delegate = FileSpecBuilder.builder(className))
     }
 
+    /**
+     * Creates new builder.
+     */
     fun builder(memberName: MemberName): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(memberName)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(packageName: String, fileName: String): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.builder(packageName, fileName)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun scriptBuilder(fileName: String, packageName: String = ""): KotlinFileSpecBuilder = KotlinFileSpecBuilder(
       delegate = FileSpecBuilder.scriptBuilder(fileName, packageName)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinFileSpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
@@ -70,7 +88,6 @@ class KotlinFileSpecBuilder internal constructor(
   fun beginControlFlow(controlFlow: String, vararg args: Any) = builder { this.beginControlFlow(controlFlow, *args) }
   fun nextControlFlow(controlFlow: String, vararg args: Any) = builder { this.nextControlFlow(controlFlow, *args) }
   fun endControlFlow() = builder { this.endControlFlow() }
-
 
   override fun build(): KotlinFileSpec {
     val spec = delegate.build()

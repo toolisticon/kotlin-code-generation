@@ -27,34 +27,55 @@ class KotlinFunSpecBuilder internal constructor(
   KotlinFunSpecSupplier {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(name)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(memberName: MemberName): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(memberName)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.constructorBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.getterBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.setterBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinFunSpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: FunSpec) = KotlinFunSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }

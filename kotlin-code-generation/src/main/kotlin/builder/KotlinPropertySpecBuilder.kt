@@ -26,33 +26,54 @@ class KotlinPropertySpecBuilder internal constructor(
 
   companion object {
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: PropertyName, type: TypeName, vararg modifiers: KModifier): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, *modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: PropertyName, type: Type, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(
       name = name,
       type = type.asTypeName(),
       modifiers = modifiers
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: PropertyName, type: KClass<*>, vararg modifiers: KModifier): KotlinPropertySpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: PropertyName, type: TypeName, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type, modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: PropertyName, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinPropertySpecBuilder = KotlinPropertySpecBuilder(
       delegate = PropertySpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinPropertySpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun mutable(mutable: Boolean = true) = builder { this.mutable(mutable) }
 

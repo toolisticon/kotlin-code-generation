@@ -25,30 +25,54 @@ class KotlinParameterSpecBuilder internal constructor(
 
   companion object {
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, *modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: Type, vararg modifiers: KModifier): KotlinParameterSpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), *modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: Type, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinParameterSpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: ParameterSpec) = KotlinParameterSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 

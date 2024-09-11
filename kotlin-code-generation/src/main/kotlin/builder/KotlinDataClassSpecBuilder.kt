@@ -27,7 +27,14 @@ class KotlinDataClassSpecBuilder internal constructor(
   KotlinSuperInterfaceSupport<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
   companion object : KLogging() {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinDataClassSpecBuilder = builder(simpleClassName(name))
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(className)
   }
 
@@ -42,7 +49,7 @@ class KotlinDataClassSpecBuilder internal constructor(
 
   private val constructorProperties = LinkedHashMap<String, KotlinConstructorPropertySpecSupplier>()
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }

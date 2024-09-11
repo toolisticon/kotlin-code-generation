@@ -28,12 +28,15 @@ class KotlinCompanionObjectSpecBuilder internal constructor(
   KotlinTypeSpecHolderBuilder<KotlinCompanionObjectSpecBuilder> {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String? = null): KotlinCompanionObjectSpecBuilder = KotlinCompanionObjectSpecBuilder(name)
   }
 
   internal constructor(name: String? = null) : this(TypeSpecBuilder.Companion.companionObjectBuilder(name))
 
-  fun addOriginatingElement(originatingElement: Element) = builder {
+  internal fun addOriginatingElement(originatingElement: Element) = builder {
     delegate.addOriginatingElement(
       originatingElement
     )

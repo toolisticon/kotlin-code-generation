@@ -27,15 +27,20 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   DelegatingBuilder<KotlinAnonymousClassSpecBuilder, TypeSpecBuilderReceiver> {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(): KotlinAnonymousClassSpecBuilder = KotlinAnonymousClassSpecBuilder()
   }
 
   internal constructor() : this(delegate = TypeSpecBuilder.anonymousClassBuilder())
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
+
   fun primaryConstructor(primaryConstructor: FunSpecSupplier?) = builder { this.primaryConstructor(primaryConstructor?.get()) }
+
   fun superclass(superclass: TypeName) = builder { this.superclass(superclass) }
   fun superclass(superclass: KClass<*>) = builder { this.superclass(superclass) }
 

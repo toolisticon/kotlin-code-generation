@@ -28,7 +28,15 @@ class KotlinInterfaceSpecBuilder internal constructor(
   KotlinTypeSpecHolderBuilder<KotlinInterfaceSpecBuilder> {
   companion object {
     private const val DEFAULT_IS_FUNCTIONAL = false
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, isFunctionInterface: Boolean = DEFAULT_IS_FUNCTIONAL): KotlinInterfaceSpecBuilder = builder(simpleClassName(name), isFunctionInterface)
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName, isFunctionInterface: Boolean = DEFAULT_IS_FUNCTIONAL): KotlinInterfaceSpecBuilder = KotlinInterfaceSpecBuilder(className, isFunctionInterface)
   }
 
@@ -37,7 +45,7 @@ class KotlinInterfaceSpecBuilder internal constructor(
     delegate = if (funInterface) TypeSpecBuilder.funInterfaceBuilder(className) else TypeSpecBuilder.interfaceBuilder(className)
   )
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }

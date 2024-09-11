@@ -31,7 +31,15 @@ class KotlinValueClassSpecBuilder internal constructor(
   KotlinTypeSpecHolderBuilder<KotlinValueClassSpecBuilder> {
 
   companion object {
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinValueClassSpecBuilder = builder(simpleClassName(name))
+
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinValueClassSpecBuilder = KotlinValueClassSpecBuilder(className)
   }
 
@@ -42,11 +50,10 @@ class KotlinValueClassSpecBuilder internal constructor(
     delegate.builder.jvmInline()
   }
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
 
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
-
 
   override fun build(): KotlinValueClassSpec = build { }
 
