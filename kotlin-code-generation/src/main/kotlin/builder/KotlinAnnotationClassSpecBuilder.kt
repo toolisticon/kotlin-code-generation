@@ -28,8 +28,14 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
   companion object {
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinAnnotationClassSpecBuilder = builder(simpleClassName(name))
 
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinAnnotationClassSpecBuilder = KotlinAnnotationClassSpecBuilder(className = className)
   }
 
@@ -41,14 +47,28 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   private var repeatable: Boolean = false
   private var mustBeDocumented: Boolean = false
 
-
+  /**
+   * Add mustBeDocumented.
+   */
   fun mustBeDocumented() = apply { this.mustBeDocumented = true }
+
+  /**
+   * Add repeatable.
+   */
   fun repeatable() = apply { this.repeatable = true }
+
+  /**
+   * Add retention.
+   */
   fun retention(retention: AnnotationRetention) = apply { this._retention = retention }
+
+  /**
+   * Add target.
+   */
   fun target(vararg targets: AnnotationTarget) = apply { this.targets.addAll(targets) }
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   override fun build(): KotlinAnnotationClassSpec {
     if (constructorProperties.isNotEmpty()) {
