@@ -1,18 +1,19 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
-
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
 import io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinAnnotationTest {
 
+  @SuppressWarnings(SUPPRESS_UNUSED)
   annotation class Foo(
     val bar: String,
     val x: String = "",
@@ -26,12 +27,34 @@ internal class KotlinAnnotationTest {
       addKClassMember("type", String::class)
     }
 
-    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class)""");
+    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class)""")
   }
 
+  @Test
+  fun `create Foo annotation - multiline`() {
+    val spec = KotlinAnnotationSpecBuilder.builder(Foo::class)
+      .addMember("bar = %S", "hello world")
+      .addStringMember("x", "foo")
+      .addKClassMember("type", Long::class)
+      .multiLine()
+      .build()
+
+    assertThat(spec.code).isEqualTo("""@io.toolisticon.kotlin.generation.spec.KotlinAnnotationTest.Foo(bar = "hello world", x = "foo", type = kotlin.Long::class)""")
+    assertThat(spec.members).hasSize(3)
+
+    assertThat(spec).hasToString(
+      "KotlinAnnotationSpec(" +
+        "typeName=io.toolisticon.kotlin.generation.spec.KotlinAnnotationTest.Foo, " +
+        "members=[" +
+        "bar = \"hello world\", " +
+        "x = \"foo\", " +
+        "type = kotlin.Long::class]" +
+        ")"
+    )
+  }
 
   @Test
-  fun `create Foo annotation`() {
+  fun `create Foo annotation - singleline`() {
     val spec = KotlinAnnotationSpecBuilder.builder(Foo::class)
       .addMember("bar = %S", "hello world")
       .addStringMember("x", "foo")
@@ -39,7 +62,7 @@ internal class KotlinAnnotationTest {
       .build()
 
     assertThat(spec.code).isEqualTo("""@io.toolisticon.kotlin.generation.spec.KotlinAnnotationTest.Foo(bar = "hello world", x = "foo", type = kotlin.Long::class)""")
-    assertThat(spec.members).hasSize(3)
+    assertThat(spec.members).hasSize(1)
 
     assertThat(spec).hasToString(
       "KotlinAnnotationSpec(" +

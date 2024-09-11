@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FunSpec
 import io.toolisticon.kotlin.generation.poet.FunSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
+import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
 data class KotlinFunSpec(
@@ -14,6 +15,7 @@ data class KotlinFunSpec(
 
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override fun spec(): KotlinFunSpec = this
   override fun get(): FunSpec = spec
 }

@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.spi.processor
 
@@ -12,6 +11,7 @@ import io.toolisticon.kotlin.generation.spec.toFileSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinAnnotationClassSpecProcessorTest {
 
   class AddRetentionProcessor : KotlinAnnotationClassSpecProcessor<TestContext, TestInput>(

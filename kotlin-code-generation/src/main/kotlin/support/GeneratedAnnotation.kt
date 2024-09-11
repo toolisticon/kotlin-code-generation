@@ -1,12 +1,9 @@
 package io.toolisticon.kotlin.generation.support
 
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.asTypeName
-import com.squareup.kotlinpoet.joinToCode
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
-import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder.Companion.member
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import jakarta.annotation.Generated
@@ -26,12 +23,10 @@ data class GeneratedAnnotation(
   fun comment(comment: Pair<String, String>) = copy(comments = this.comments + "${comment.first} = ${comment.second}")
 
   override fun spec(): KotlinAnnotationSpec = buildAnnotation(Generated::class) {
-    addMember(buildList<CodeBlock> {
-      add(member.strings("value", value))
-      add(member.string("date", date.toString()))
-      if (comments.isNotEmpty()) {
-        add(member.string("comments", comments.joinToString(separator = "; ")))
-      }
-    }.joinToCode())
+    addStringMembers("value", value)
+    addStringMember("date", date.toString())
+    if (comments.isNotEmpty()) {
+      addStringMember("comments", comments.joinToString(separator = "; "))
+    }
   }
 }

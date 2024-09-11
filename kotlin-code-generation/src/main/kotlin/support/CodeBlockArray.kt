@@ -1,10 +1,6 @@
 package io.toolisticon.kotlin.generation.support
 
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.joinToCode
+import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.Builder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_KCLASS
@@ -14,6 +10,9 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRIN
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import kotlin.reflect.KClass
 
+/**
+ * Allows concatenating and wrapping of multiple codeBlocks or format/value pairs.
+ */
 @ExperimentalKotlinPoetApi
 data class CodeBlockArray<T>(
   val format: Format,
@@ -21,9 +20,17 @@ data class CodeBlockArray<T>(
 ) : Builder<CodeBlock> {
   companion object {
 
+    /**
+     * Holds formatting values as kotlin poet format, pre- and suffix, separator.
+     */
     data class Format(val format: String, val separator: CharSequence = ", ", val prefix: CharSequence = "[", val suffix: CharSequence = "]")
 
-    fun codeBlockArray(format: Format, vararg items: CodeBlock) = CodeBlockArray<CodeBlock>(format, items.toList())
+    /**
+     * Special format for concatenating codeBlocks.
+     */
+    private val CODE_BLOCK_FORMAT = Format(format = "", prefix = "", suffix = "")
+
+    fun codeBlockArray(format: Format = CODE_BLOCK_FORMAT, vararg items: CodeBlock) = CodeBlockArray<CodeBlock>(format, items.toList())
 
     fun stringArray(vararg items: String) = CodeBlockArray(FORMAT_STRING, items.toList())
 

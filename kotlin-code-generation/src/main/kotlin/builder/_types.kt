@@ -35,9 +35,8 @@ sealed interface DelegatingBuilder<SELF, RECEIVER> {
 /**
  * Common interface for typeSpec builders.
  */
-sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
-  DelegatingBuilder<SELF, TypeSpecBuilderReceiver>,
-  TypeSpecSupplier,
+interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SPEC>> : BuilderSupplier<SPEC, TypeSpec>,
+  DelegatingBuilder<SELF, TypeSpecBuilderReceiver>, TypeSpecSupplier,
   KotlinGeneratorSpecSupplier<SPEC> {
 
   override fun spec(): SPEC = build()
@@ -48,7 +47,7 @@ sealed interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorType
  * All typeSpecs that provide support for constructor properties use this shared code.
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinConstructorPropertySupport<SELF> {
+interface KotlinConstructorPropertySupport<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.
@@ -74,7 +73,7 @@ sealed interface KotlinConstructorPropertySupport<SELF> {
  * Typesafe wrapper for [Annotatable.Builder].
  */
 @OptIn(ExperimentalKotlinPoetApi::class)
-sealed interface KotlinAnnotatableBuilder<SELF> {
+interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.
@@ -106,14 +105,13 @@ sealed interface KotlinAnnotatableBuilder<SELF> {
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier): SELF = addAnnotation(annotationSpec.get())
 }
 
-
 /**
  * Typesafe wrapper for [com.squareup.kotlinpoet.Documentable.Builder]. Marks anything that can have `kdoc` documentation.
  *
  * * `addKdoc`
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinDocumentableBuilder<SELF> {
+interface KotlinDocumentableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   /**
    * Implementing builders have to add this to their build.
    */
@@ -145,7 +143,7 @@ sealed interface KotlinDocumentableBuilder<SELF> {
  * * `addProperty`
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinMemberSpecHolderBuilder<SELF> {
+sealed interface KotlinMemberSpecHolderBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   fun addFunction(funSpec: KotlinFunSpecSupplier): SELF
   fun addFunction(name: FunctionName, block: KotlinFunSpecBuilderReceiver): SELF = addFunction(funSpec = buildFun(name, block))
 
@@ -157,7 +155,7 @@ sealed interface KotlinMemberSpecHolderBuilder<SELF> {
 /**
  * Shared wrapper fo all builders that support `addModifiers`
  */
-sealed interface KotlinModifiableBuilder<SELF> {
+interface KotlinModifiableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Add modifiers.
@@ -185,7 +183,7 @@ sealed interface KotlinModifiableBuilder<SELF> {
 /**
  * ContextReceivable for type-safe builders.
  */
-sealed interface KotlinContextReceivableBuilder<SELF> {
+sealed interface KotlinContextReceivableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * @see KotlinContextReceivableBuilder#contextReceivers
@@ -198,7 +196,7 @@ sealed interface KotlinContextReceivableBuilder<SELF> {
   fun contextReceivers(vararg receiverTypes: TypeName): SELF
 }
 
-sealed interface KotlinSuperInterfaceSupport<SELF> {
+interface KotlinSuperInterfaceSupport<SELF> : KotlinTaggableBuilder<SELF> {
 
   fun addSuperinterface(superinterface: TypeName, constructorParameter: String): SELF
   fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock = CodeBlockBuilder.EMPTY_CODE_BLOCK): SELF
@@ -215,7 +213,7 @@ sealed interface KotlinSuperInterfaceSupport<SELF> {
  * * `addType`
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinTypeSpecHolderBuilder<SELF> {
+sealed interface KotlinTypeSpecHolderBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   /**
    * @see KotlinTypeSpecHolderBuilder.addType(TypeSpecSupplier)
    */
@@ -256,3 +254,30 @@ sealed interface KotlinTypeSpecHolderBuilder<SELF> {
    */
   fun addType(typeSpec: TypeSpecSupplier): SELF
 }
+
+/**
+ * Support tagging.
+ * @see com.squareup.kotlinpoet.Taggable#Builder
+ */
+sealed interface KotlinTaggableBuilder<SELF> {
+  /**
+   * @see com.squareup.kotlinpoet.Taggable#Builder#tag
+   */
+  fun addTag(type: KClass<*>, tag: Any?): SELF
+
+  /**
+   * Store tag under key of ::class.
+   */
+  fun <T : Any> addTag(tag: T): SELF = addTag(tag::class, tag)
+
+  fun removeTag(type: KClass<*>): SELF = addTag(type, null)
+}
+
+/**
+ * Groups the features of [KotlinAnnotatableBuilder], [KotlinDocumentableBuilder] and [KotlinModifiableBuilder].
+ */
+@ExperimentalKotlinPoetApi
+interface KotlinAnnotatableDocumentableModifiableBuilder<SELF> :
+  KotlinAnnotatableBuilder<SELF>,
+  KotlinDocumentableBuilder<SELF>,
+  KotlinModifiableBuilder<SELF>

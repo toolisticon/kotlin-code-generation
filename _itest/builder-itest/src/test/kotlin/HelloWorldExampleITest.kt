@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 
 package io.toolisticon.kotlin.generation.itest
 
@@ -14,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class HelloWorldExampleITest {
 
   @Test
@@ -34,7 +34,6 @@ internal class HelloWorldExampleITest {
     val file = buildFile(name) {
       addType(type)
     }
-    println(file.code)
 
     assertThat(file.packageName).isEqualTo("foo.bar")
 

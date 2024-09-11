@@ -12,9 +12,11 @@ import kotlin.reflect.KClass
 class FileSpecBuilder(
   override val builder: FileSpec.Builder
 ) : PoetSpecBuilder<FileSpecBuilder, FileSpec.Builder, FileSpec, FileSpecSupplier>,
+  FileSpecSupplier,
   PoetAnnotatableBuilder<FileSpecBuilder>,
   PoetMemberSpecHolderBuilder<FileSpecBuilder>,
   PoetTypeSpecHolderBuilder<FileSpecBuilder>,
+  PoetTaggableBuilder<FileSpecBuilder>,
   WithClassName {
   companion object {
     internal fun FileSpec.Builder.wrap() = FileSpecBuilder(this)
@@ -68,6 +70,8 @@ class FileSpecBuilder(
   fun endControlFlow(): FileSpecBuilder = apply { builder.endControlFlow() }
   fun addStatement(format: String, vararg args: Any): FileSpecBuilder = apply { builder.addStatement(format, *args) }
   fun clearBody(): FileSpecBuilder = apply { builder.clearBody() }
+
+  override fun tag(type: KClass<*>, tag: Any?): FileSpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): FileSpec = builder.build()
   override val className: ClassName = className(builder.packageName, builder.name)

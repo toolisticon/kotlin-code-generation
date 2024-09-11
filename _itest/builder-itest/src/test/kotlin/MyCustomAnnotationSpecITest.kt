@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 
 package io.toolisticon.kotlin.generation.itest
 
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat as assertThatCompilation
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class MyCustomAnnotationSpecITest {
 
   @Test

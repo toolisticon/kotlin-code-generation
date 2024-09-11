@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation._test
 
@@ -8,6 +7,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildFile
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 class TestDeclarationFileStrategy : KotlinFileSpecStrategy<TestContext, TestDeclaration>(
   contextType = TestContext::class, TestDeclaration::class
 ) {

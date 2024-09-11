@@ -90,3 +90,7 @@ sealed interface PoetDocumentableBuilder<SELF> {
   fun addKdoc(block: CodeBlock): SELF
   fun addKdoc(format: String, vararg args: Any): SELF
 }
+
+sealed interface PoetTaggableBuilder<SELF> {
+  fun tag(type: KClass<*>, tag: Any?): SELF
+}

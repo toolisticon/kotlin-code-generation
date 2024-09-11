@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
-
 package io.toolisticon.kotlin.generation.itest.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -15,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class SpiITest {
 
   @Test

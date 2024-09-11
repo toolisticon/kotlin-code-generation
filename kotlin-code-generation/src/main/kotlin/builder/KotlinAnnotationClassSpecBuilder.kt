@@ -10,6 +10,7 @@ import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBui
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import javax.lang.model.element.Element
+import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinAnnotationClassSpec].
@@ -19,18 +20,22 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   val className: ClassName,
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnnotationClassSpecBuilder, KotlinAnnotationClassSpec>,
-  KotlinAnnotatableBuilder<KotlinAnnotationClassSpecBuilder>,
+  KotlinAnnotatableDocumentableModifiableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinConstructorPropertySupport<KotlinAnnotationClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnnotationClassSpecBuilder>,
-  KotlinDocumentableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnnotationClassSpecBuilder>,
-  KotlinModifiableBuilder<KotlinAnnotationClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinAnnotationClassSpecBuilder> {
 
   companion object {
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinAnnotationClassSpecBuilder = builder(simpleClassName(name))
 
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName): KotlinAnnotationClassSpecBuilder = KotlinAnnotationClassSpecBuilder(className = className)
   }
 
@@ -42,30 +47,33 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
   private var repeatable: Boolean = false
   private var mustBeDocumented: Boolean = false
 
-
+  /**
+   * Add mustBeDocumented.
+   */
   fun mustBeDocumented() = apply { this.mustBeDocumented = true }
+
+  /**
+   * Add repeatable.
+   */
   fun repeatable() = apply { this.repeatable = true }
+
+  /**
+   * Add retention.
+   */
+  fun retention(retention: AnnotationRetention) = apply { this._retention = retention }
+
+  /**
+   * Add target.
+   */
   fun target(vararg targets: AnnotationTarget) = apply { this.targets.addAll(targets) }
 
-  fun retention(retention: AnnotationRetention) = apply {
-    this._retention = retention
-  }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addAnnotation(spec.get()) }
-  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
-  override fun contextReceivers(vararg receiverTypes: TypeName): KotlinAnnotationClassSpecBuilder = builder { this.contextReceivers(*receiverTypes) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addFunction(funSpec.get()) }
-  override fun addKdoc(kdoc: KDoc): KotlinAnnotationClassSpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier): KotlinAnnotationClassSpecBuilder = apply { delegate.addProperty(propertySpec.get()) }
-  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-
-  override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinAnnotationClassSpec {
     if (constructorProperties.isNotEmpty()) {
-      delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+      val constructor = delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+      delegate.primaryConstructor(constructor.build())
     }
     if (targets.isNotEmpty()) {
       delegate.addAnnotation(buildAnnotation(Target::class) {
@@ -87,6 +95,19 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
 
     return KotlinAnnotationClassSpec(className = className, spec = delegate.build())
   }
+
+  // <overrides>
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

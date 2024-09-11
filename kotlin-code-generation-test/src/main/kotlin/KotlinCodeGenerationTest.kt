@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
-
 package io.toolisticon.kotlin.generation.test
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -34,6 +32,7 @@ import java.io.ByteArrayOutputStream
  *  ```
  */
 @ExperimentalCompilerApi
+@ExperimentalKotlinPoetApi
 object KotlinCodeGenerationTest {
 
   fun assertThat(actual: KotlinCompilationResult): KotlinCompilationAssert = KotlinCompilationAssert(actual)

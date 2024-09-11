@@ -12,8 +12,10 @@ import kotlin.reflect.KClass
 class PropertySpecBuilder(
   override val builder: PropertySpec.Builder
 ) : PoetSpecBuilder<PropertySpecBuilder, PropertySpec.Builder, PropertySpec, PropertySpecSupplier>,
+  PropertySpecSupplier,
   PoetAnnotatableBuilder<PropertySpecBuilder>,
   PoetContextReceivableBuilder<PropertySpecBuilder>,
+  PoetTaggableBuilder<PropertySpecBuilder>,
   PoetDocumentableBuilder<PropertySpecBuilder>,
   PoetOriginatingElementsHolderBuilder<PropertySpecBuilder> {
   companion object {
@@ -65,6 +67,7 @@ class PropertySpecBuilder(
   fun receiver(receiverType: TypeName?): PropertySpecBuilder = apply { builder.receiver(receiverType) }
   fun receiver(receiverType: KClass<*>): PropertySpecBuilder = apply { builder.receiver(receiverType) }
 
+  override fun tag(type: KClass<*>, tag: Any?): PropertySpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): PropertySpec = builder.build()
 }

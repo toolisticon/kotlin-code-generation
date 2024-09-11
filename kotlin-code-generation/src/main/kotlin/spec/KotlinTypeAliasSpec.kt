@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeAliasSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecSupplier
+import kotlin.reflect.KClass
 
 
 @ExperimentalKotlinPoetApi
@@ -14,6 +15,7 @@ value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinGenerat
   KotlinTypeAliasSpecSupplier,
   KotlinDocumentableSpec {
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
   override fun spec(): KotlinTypeAliasSpec = this

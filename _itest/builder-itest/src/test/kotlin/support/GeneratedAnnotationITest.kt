@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 
 package io.toolisticon.kotlin.generation.itest.support
 
@@ -12,6 +11,7 @@ import io.toolisticon.kotlin.generation.test.model.KotlinCompilationResult
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class, ExperimentalCompilerApi::class)
 internal class GeneratedAnnotationITest {
 
   @Test

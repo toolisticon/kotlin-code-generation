@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.ParameterSpecSupplier
+import kotlin.reflect.KClass
 
 @JvmInline
 @ExperimentalKotlinPoetApi
@@ -19,6 +20,7 @@ value class KotlinParameterSpec(
   val name: String get() = spec.name
   val type: TypeName get() = spec.type
 
+  override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
   override fun spec(): KotlinParameterSpec = this

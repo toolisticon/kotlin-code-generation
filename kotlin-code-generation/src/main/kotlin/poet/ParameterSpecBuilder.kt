@@ -10,7 +10,9 @@ import kotlin.reflect.KClass
 class ParameterSpecBuilder(
   override val builder: ParameterSpec.Builder
 ) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier>,
+  ParameterSpecSupplier,
   PoetAnnotatableBuilder<ParameterSpecBuilder>,
+  PoetTaggableBuilder<ParameterSpecBuilder>,
   PoetDocumentableBuilder<ParameterSpecBuilder> {
   companion object {
     fun ParameterSpec.Builder.wrap() = ParameterSpecBuilder(this)
@@ -47,6 +49,8 @@ class ParameterSpecBuilder(
   fun addModifiers(modifiers: Iterable<KModifier>): ParameterSpecBuilder = apply { builder.addModifiers(modifiers) }
   fun defaultValue(format: String, vararg args: Any?): ParameterSpecBuilder = apply { builder.defaultValue(format, *args) }
   fun defaultValue(codeBlock: CodeBlock?): ParameterSpecBuilder = apply { builder.defaultValue(codeBlock) }
+
+  override fun tag(type: KClass<*>, tag: Any?): ParameterSpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): ParameterSpec = builder.build()
 }

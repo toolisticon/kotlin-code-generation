@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.spi
 
@@ -18,6 +17,7 @@ import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 class KotlinCodeGenerationStrategyListTest {
 
   class AStrategy : DataClassAStrategy() {

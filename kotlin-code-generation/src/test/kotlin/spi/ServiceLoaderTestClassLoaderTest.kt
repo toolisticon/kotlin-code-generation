@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalKotlinPoetApi::class)
 
 package io.toolisticon.kotlin.generation.spi
 
@@ -8,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.ServiceLoader
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 class ServiceLoaderTestClassLoaderTest {
 
   interface MyInterface {
