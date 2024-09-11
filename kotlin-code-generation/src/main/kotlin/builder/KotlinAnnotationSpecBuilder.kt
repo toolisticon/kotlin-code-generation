@@ -69,7 +69,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
   private var multiLine = false
   private val members: MutableList<CodeBlock> = mutableListOf()
 
-  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+
 
   fun multiLine() = apply { multiLine = true }
 
@@ -93,7 +93,6 @@ class KotlinAnnotationSpecBuilder internal constructor(
 
   fun clearMembers() = apply { members.clear() }
 
-  override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
 
   override fun build(): KotlinAnnotationSpec {
     if (members.isNotEmpty()) {
@@ -106,8 +105,12 @@ class KotlinAnnotationSpecBuilder internal constructor(
     return KotlinAnnotationSpec(spec = delegate.build())
   }
 
-  override fun spec(): KotlinAnnotationSpec = build()
+  // <overrides>
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): AnnotationSpec = build().get()
+  override fun spec(): KotlinAnnotationSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

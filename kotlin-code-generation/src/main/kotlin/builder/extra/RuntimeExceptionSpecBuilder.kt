@@ -13,15 +13,13 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_NAME
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING_TEMPLATE
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.nullable
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
-import io.toolisticon.kotlin.generation.builder.KotlinAnnotatableDocumentableModifiableBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinClassSpecBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinFunSpecBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinGeneratorTypeSpecBuilder
-import io.toolisticon.kotlin.generation.builder.KotlinSuperInterfaceSupport
+import io.toolisticon.kotlin.generation.builder.*
+import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
+import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
+import io.toolisticon.kotlin.generation.poet.FunSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
-import io.toolisticon.kotlin.generation.spec.ClassSpecType
-import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
-import io.toolisticon.kotlin.generation.spec.KotlinClassSpec
+import io.toolisticon.kotlin.generation.spec.*
+import io.toolisticon.kotlin.generation.spec.toList
 import kotlin.reflect.KClass
 
 /**
@@ -33,6 +31,7 @@ class RuntimeExceptionSpecBuilder internal constructor(
   private val delegate: KotlinClassSpecBuilder,
 ) : KotlinGeneratorTypeSpecBuilder<RuntimeExceptionSpecBuilder, KotlinClassSpec>,
   KotlinAnnotatableDocumentableModifiableBuilder<RuntimeExceptionSpecBuilder>,
+  KotlinConstructorPropertySupport<RuntimeExceptionSpecBuilder>,
   KotlinSuperInterfaceSupport<RuntimeExceptionSpecBuilder> {
   companion object {
     private val NULLABLE_THROWABLE = Throwable::class.asTypeName().nullable()
@@ -79,8 +78,16 @@ class RuntimeExceptionSpecBuilder internal constructor(
     require(::_messageTemplate.isInitialized) { "Message template must be initialized." }
     delegate.addSuperclassConstructorParameter(FORMAT_STRING_TEMPLATE, _messageTemplate)
 
-    val constructorBuilder: KotlinFunSpecBuilder = _messageTemplateParameters.entries.fold(constructorBuilder()) { acc, cur ->
-      acc.addParameter(cur.key, cur.value)
+    val constructorProperties = delegate.constructorProperties
+
+    val constructorBuilder: FunSpecBuilder = if (constructorProperties.isNotEmpty()) {
+      delegate.delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
+    } else {
+      FunSpecBuilder.constructorBuilder()
+    }
+
+    _messageTemplateParameters.entries.filterNot { constructorProperties.containsKey(it.key) }.forEach { (name, type) ->
+      constructorBuilder.addParameter(name, type)
     }
 
     if (_cause.first) {
@@ -89,14 +96,21 @@ class RuntimeExceptionSpecBuilder internal constructor(
         defaultValue("null")
       }
 
-      constructorBuilder.addParameter(nullableCauseParameter)
+      constructorBuilder.addParameter(nullableCauseParameter.get())
     }
 
-    return delegate.primaryConstructor(constructorBuilder).build()
+    // TODO bypass classSpecBuild until issue 47 is solved
+    return KotlinClassSpec(
+      className = delegate.className,
+      spec = delegate.delegate
+        .primaryConstructor(constructorBuilder.build())
+        .build()
+    )
   }
 
   // <overrides>
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec) }
+  override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { delegate.addConstructorProperty(spec) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc) }
   override fun addModifiers(vararg modifiers: KModifier) = apply { delegate.addModifiers(*modifiers) }
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = apply { delegate.addSuperinterface(superinterface, constructorParameter) }

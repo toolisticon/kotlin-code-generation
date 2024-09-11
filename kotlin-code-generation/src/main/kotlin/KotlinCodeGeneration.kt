@@ -11,6 +11,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilde
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.companionObjectBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.constructorPropertyBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.delegateListValueClassBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.delegateMapValueClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.funBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.interfaceBuilder
@@ -20,11 +21,10 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBui
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.runtimeExceptionClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.builder.*
-import io.toolisticon.kotlin.generation.builder.extra.DelegateListValueClassSpecBuilder
-import io.toolisticon.kotlin.generation.builder.extra.DelegateListValueClassSpecBuilderReceiver
-import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilder
-import io.toolisticon.kotlin.generation.builder.extra.RuntimeExceptionSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.builder.extra.*
+import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
@@ -33,7 +33,6 @@ import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationService
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
-import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import mu.KLogging
 import kotlin.reflect.KClass
 
@@ -118,6 +117,29 @@ object KotlinCodeGeneration : KLogging() {
     items: TypeName,
     block: DelegateListValueClassSpecBuilderReceiver = {}
   ) = delegateListValueClassBuilder(className, items).also(block).build()
+
+
+  /**
+   * @see [DelegateMapValueClassSpecBuilder]
+   */
+  inline fun buildDelegateMapValueClass(
+    packageName: PackageName,
+    simpleName: SimpleName,
+    keyType: TypeName = DEFAULT_KEY_TYPE,
+    valueType: TypeName,
+    block: DelegateMapValueClassSpecBuilderReceiver = {}
+  ) = buildDelegateMapValueClass(className(packageName, simpleName), keyType, valueType, block)
+
+
+  /**
+   * @see [DelegateMapValueClassSpecBuilder]
+   */
+  inline fun buildDelegateMapValueClass(
+    className: ClassName,
+    keyType: TypeName = DEFAULT_KEY_TYPE,
+    valueType: TypeName,
+    block: DelegateMapValueClassSpecBuilderReceiver = {}
+  ) = delegateMapValueClassBuilder(className, keyType, valueType).also(block).build()
 
   /**
    * @see RuntimeExceptionSpecBuilder
@@ -348,7 +370,15 @@ object KotlinCodeGeneration : KLogging() {
     @SuppressWarnings("unused")
     fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName) = dataClassBuilder(className(packageName, simpleName))
 
+    /**
+     * @see DelegateListValueClassSpecBuilder
+     */
     fun delegateListValueClassBuilder(className: ClassName, items: TypeName) = DelegateListValueClassSpecBuilder.builder(className, items)
+
+    /**
+     * @see DelegateMapValueClassSpecBuilder
+     */
+    fun delegateMapValueClassBuilder(className: ClassName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = DelegateMapValueClassSpecBuilder.builder(className, keyType, valueType)
 
     /**
      * @see KotlinEnumClassSpecBuilder

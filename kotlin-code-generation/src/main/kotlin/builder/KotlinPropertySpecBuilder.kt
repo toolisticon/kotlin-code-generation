@@ -51,11 +51,6 @@ class KotlinPropertySpecBuilder internal constructor(
     fun builder(spec: PropertySpec) = KotlinPropertySpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
@@ -72,10 +67,18 @@ class KotlinPropertySpecBuilder internal constructor(
   fun receiver(receiverType: TypeName?) = builder { this.receiver(receiverType) }
   fun receiver(receiverType: KClass<*>) = builder { this.receiver(receiverType) }
 
-  override fun builder(block: PropertySpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinPropertySpec = KotlinPropertySpec(spec = delegate.build())
-  override fun spec(): KotlinPropertySpec = build()
+
+  // <overrides>
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: PropertySpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): PropertySpec = build().get()
+  override fun spec(): KotlinPropertySpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

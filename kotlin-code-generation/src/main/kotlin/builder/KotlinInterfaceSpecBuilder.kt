@@ -37,6 +37,14 @@ class KotlinInterfaceSpecBuilder internal constructor(
     delegate = if (funInterface) TypeSpecBuilder.funInterfaceBuilder(className) else TypeSpecBuilder.interfaceBuilder(className)
   )
 
+  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
+
+  fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
+
+  override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(className = className, spec = delegate.build())
+
+  // <overrides>
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
@@ -44,18 +52,11 @@ class KotlinInterfaceSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
-  fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
-
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = builder { this.addSuperinterface(superinterface, constructorParameter) }
   override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = builder { this.addSuperinterface(superinterface, delegate) }
-
-  fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
-
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
-  override fun build(): KotlinInterfaceSpec = KotlinInterfaceSpec(className = className, spec = delegate.build())
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

@@ -24,6 +24,7 @@ import kotlin.reflect.KClass
 class TypeSpecBuilder(
   override val builder: TypeSpec.Builder
 ) : PoetSpecBuilder<TypeSpecBuilder, TypeSpec.Builder, TypeSpec, TypeSpecSupplier>,
+  TypeSpecSupplier,
   PoetAnnotatableBuilder<TypeSpecBuilder>,
   PoetContextReceivableBuilder<TypeSpecBuilder>,
   PoetDocumentableBuilder<TypeSpecBuilder>,

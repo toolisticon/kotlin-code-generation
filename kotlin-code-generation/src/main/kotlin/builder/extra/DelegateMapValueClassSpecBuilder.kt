@@ -15,31 +15,32 @@ import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import kotlin.reflect.KClass
 
 @ExperimentalKotlinPoetApi
-class DelegateListValueClassSpecBuilder internal constructor(
+class DelegateMapValueClassSpecBuilder internal constructor(
   private val delegate: KotlinValueClassSpecBuilder,
-  private val listType: TypeName,
-) : KotlinGeneratorTypeSpecBuilder<DelegateListValueClassSpecBuilder, KotlinValueClassSpec>,
-  KotlinAnnotatableDocumentableModifiableBuilder<DelegateListValueClassSpecBuilder>,
-  KotlinSuperInterfaceSupport<DelegateListValueClassSpecBuilder> {
+  private val mapType: TypeName,
+) : KotlinGeneratorTypeSpecBuilder<DelegateMapValueClassSpecBuilder, KotlinValueClassSpec>,
+  KotlinAnnotatableDocumentableModifiableBuilder<DelegateMapValueClassSpecBuilder>,
+  KotlinSuperInterfaceSupport<DelegateMapValueClassSpecBuilder> {
 
   companion object {
-    fun builder(name: SimpleName, itemsType: TypeName) =
-      builder(className = simpleClassName(name), itemsType = itemsType)
+    val DEFAULT_KEY_TYPE = String::class.asTypeName()
 
-    fun builder(className: ClassName, itemsType: TypeName) = DelegateListValueClassSpecBuilder(
+    fun builder(name: SimpleName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = builder(className = simpleClassName(name), keyType = keyType, valueType = valueType)
+
+    fun builder(className: ClassName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = DelegateMapValueClassSpecBuilder(
       className = className,
-      itemsType = itemsType
+      keyType = keyType,
+      valueType = valueType
     )
   }
 
   private var propertyName: String = "delegate"
 
-
-  internal constructor(className: ClassName, itemsType: TypeName) : this(
+  internal constructor(className: ClassName, keyType: TypeName, valueType: TypeName) : this(
     delegate = KotlinValueClassSpecBuilder(className),
-    listType = List::class.asClassName().parameterizedBy(itemsType),
+    mapType = Map::class.asTypeName().parameterizedBy(keyType, valueType)
   ) {
-    delegate.addTag(ClassSpecType.LIST)
+    delegate.addTag(ClassSpecType.MAP)
   }
 
   fun propertyName(propertyName: String) = apply {
@@ -48,12 +49,12 @@ class DelegateListValueClassSpecBuilder internal constructor(
   }
 
   override fun build(): KotlinValueClassSpec {
-    delegate.addConstructorProperty(propertyName, listType) {
+    delegate.addConstructorProperty(propertyName, mapType) {
       makePrivate()
     }
     val constructorProperty = delegate.constructorProperty
     return delegate.build {
-      addSuperinterface(listType, constructorProperty.name)
+      addSuperinterface(mapType, constructorProperty.name)
     }
   }
 
@@ -63,10 +64,10 @@ class DelegateListValueClassSpecBuilder internal constructor(
   override fun addModifiers(vararg modifiers: KModifier) = apply { delegate.addModifiers(*modifiers) }
   override fun addSuperinterface(superinterface: TypeName, constructorParameter: String) = apply { delegate.addSuperinterface(superinterface, constructorParameter) }
   override fun addSuperinterface(superinterface: TypeName, delegate: CodeBlock) = apply { this.delegate.addSuperinterface(superinterface, delegate) }
-  override fun addTag(type: KClass<*>, tag: Any?) = apply { delegate.addTag(type, tag) }
   override fun builder(block: TypeSpec.Builder.() -> Unit) = apply { delegate.builder(block) }
+  override fun addTag(type: KClass<*>, tag: Any?) = apply { delegate.addTag(type, tag) }
   // </overrides>
 }
 
 @ExperimentalKotlinPoetApi
-typealias DelegateListValueClassSpecBuilderReceiver = DelegateListValueClassSpecBuilder.() -> Unit
+typealias DelegateMapValueClassSpecBuilderReceiver = DelegateMapValueClassSpecBuilder.() -> Unit

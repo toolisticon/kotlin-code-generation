@@ -9,6 +9,7 @@ import kotlin.reflect.KClass
 class TypeAliasSpecBuilder(
   override val builder: TypeAliasSpec.Builder
 ) : PoetSpecBuilder<TypeAliasSpecBuilder, TypeAliasSpec.Builder, TypeAliasSpec, TypeAliasSpecSupplier>,
+  TypeAliasSpecSupplier,
   PoetAnnotatableBuilder<TypeAliasSpecBuilder>,
   PoetTaggableBuilder<TypeAliasSpecBuilder>,
   PoetDocumentableBuilder<TypeAliasSpecBuilder> {

@@ -27,8 +27,8 @@ internal class DelegateListValueClassSpecTest {
 
       @JvmInline
       public value class MyList(
-        private val items: List<String>,
-      ) : List<String> by items
+        private val `delegate`: List<String>,
+      ) : List<String> by delegate
 
     """.trimIndent())
   }

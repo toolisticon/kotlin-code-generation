@@ -4,8 +4,11 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
-import io.toolisticon.kotlin.generation.poet.*
+import io.toolisticon.kotlin.generation.poet.FileSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilder.Companion.wrap
+import io.toolisticon.kotlin.generation.poet.FileSpecBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.TypeAliasSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
@@ -43,12 +46,6 @@ class KotlinFileSpecBuilder internal constructor(
     fun builder(spec: FileSpec) = KotlinFileSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
-  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
-  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
-  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
-  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
   fun addAliasedImport(kclass: KClass<*>, alias: String) = builder { this.addAliasedImport(kclass, alias) }
   fun addAliasedImport(className: ClassName, alias: String) = builder { this.addAliasedImport(className, alias) }
   fun addAliasedImport(className: ClassName, memberName: String, alias: String) = builder { this.addAliasedImport(className, memberName, alias) }
@@ -74,19 +71,23 @@ class KotlinFileSpecBuilder internal constructor(
   fun nextControlFlow(controlFlow: String, vararg args: Any) = builder { this.nextControlFlow(controlFlow, *args) }
   fun endControlFlow() = builder { this.endControlFlow() }
 
-  override fun builder(block: FileSpecBuilderReceiver) = apply {
-    delegate.builder.block()
-  }
 
   override fun build(): KotlinFileSpec {
     val spec = delegate.build()
     return KotlinFileSpec(spec = spec)
   }
 
-  override fun spec(): KotlinFileSpec = build()
-  override fun get(): FileSpec = build().get()
-
+  // <overrides>
   override val className: ClassName = delegate.className
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
+  override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
+  override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: FileSpecBuilderReceiver) = apply { delegate.builder.block() }
+  override fun get(): FileSpec = build().get()
+  override fun spec(): KotlinFileSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

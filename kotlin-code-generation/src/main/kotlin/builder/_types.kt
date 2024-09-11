@@ -47,7 +47,7 @@ interface KotlinGeneratorTypeSpecBuilder<SELF, SPEC : KotlinGeneratorTypeSpec<SP
  * All typeSpecs that provide support for constructor properties use this shared code.
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinConstructorPropertySupport<SELF> : KotlinTaggableBuilder<SELF> {
+interface KotlinConstructorPropertySupport<SELF> : KotlinTaggableBuilder<SELF> {
 
   /**
    * Implementing builder needs to store the spec provided and apply it to the build.

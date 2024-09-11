@@ -54,12 +54,6 @@ class KotlinFunSpecBuilder internal constructor(
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
   fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
@@ -106,10 +100,18 @@ class KotlinFunSpecBuilder internal constructor(
   fun endControlFlow() = builder { this.endControlFlow() }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
 
-  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())
-  override fun spec(): KotlinFunSpec = build()
+
+  // <overrides>
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun get(): FunSpec = build().get()
+  override fun spec(): KotlinFunSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi
