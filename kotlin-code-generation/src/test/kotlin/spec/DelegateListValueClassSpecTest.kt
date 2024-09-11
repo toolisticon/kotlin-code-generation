@@ -1,7 +1,6 @@
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import com.squareup.kotlinpoet.asTypeName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDelegateListValueClass
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -16,9 +15,12 @@ internal class DelegateListValueClassSpecTest {
       packageName = "xyz",
       simpleName = "MyList",
       items = String::class
-    ).toFileSpec()
+    ) {
+      propertyName("foo")
+    }.toFileSpec()
 
-    assertThat(list.code).isEqualTo("""
+    assertThat(list.code).isEqualTo(
+      """
       package xyz
 
       import kotlin.String
@@ -27,9 +29,10 @@ internal class DelegateListValueClassSpecTest {
 
       @JvmInline
       public value class MyList(
-        private val `delegate`: List<String>,
-      ) : List<String> by delegate
+        private val foo: List<String>,
+      ) : List<String> by foo
 
-    """.trimIndent())
+    """.trimIndent()
+    )
   }
 }

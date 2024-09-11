@@ -14,6 +14,9 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import kotlin.reflect.KClass
 
+/**
+ * Generator that wraps a map holding given key/valueType in a value class and delegates the map.
+ */
 @ExperimentalKotlinPoetApi
 class DelegateMapValueClassSpecBuilder internal constructor(
   private val delegate: KotlinValueClassSpecBuilder,
@@ -25,8 +28,14 @@ class DelegateMapValueClassSpecBuilder internal constructor(
   companion object {
     val DEFAULT_KEY_TYPE = String::class.asTypeName()
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: SimpleName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = builder(className = simpleClassName(name), keyType = keyType, valueType = valueType)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(className: ClassName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = DelegateMapValueClassSpecBuilder(
       className = className,
       keyType = keyType,
@@ -43,6 +52,9 @@ class DelegateMapValueClassSpecBuilder internal constructor(
     delegate.addTag(ClassSpecType.MAP)
   }
 
+  /**
+   * Modify the default property name.
+   */
   fun propertyName(propertyName: String) = apply {
     require(propertyName.isNotBlank()) { "Property name cannot be blank." }
     this.propertyName = propertyName

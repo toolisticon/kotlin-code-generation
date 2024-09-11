@@ -25,7 +25,9 @@ internal class DelegateStringLongMapITest {
       packageName = ROOT_PACKAGE,
       simpleName = "StringLongMap",
       valueType = Long::class.asTypeName()
-    ).toFileSpec()
+    ) {
+      propertyName("map")
+    }.toFileSpec()
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(map))
     compileAssertThat(result).errorMessages().isEmpty()
@@ -37,6 +39,6 @@ internal class DelegateStringLongMapITest {
 
     val instance: Map<String, Long> = klass.primaryConstructor!!.call(values) as Map<String, Long>
 
-    assertThat(instance).hasToString("StringLongMap(delegate={a=1, b=2, c=3})")
+    assertThat(instance).hasToString("StringLongMap(map={a=1, b=2, c=3})")
   }
 }

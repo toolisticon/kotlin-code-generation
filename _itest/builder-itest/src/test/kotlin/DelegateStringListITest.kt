@@ -21,7 +21,7 @@ internal class DelegateStringListITest {
   @Test
   fun `create and use string list`() {
     val list = KotlinCodeGeneration.buildDelegateListValueClass(ROOT_PACKAGE, "StringList", String::class) {
-
+      propertyName("list")
     }.toFileSpec()
 
     val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(list))
@@ -36,6 +36,6 @@ internal class DelegateStringListITest {
 
     val instance: List<String> = klass.primaryConstructor!!.call(values) as List<String>
 
-    assertThat(instance).hasToString("StringList(delegate=[a, b, c])")
+    assertThat(instance).hasToString("StringList(list=[a, b, c])")
   }
 }

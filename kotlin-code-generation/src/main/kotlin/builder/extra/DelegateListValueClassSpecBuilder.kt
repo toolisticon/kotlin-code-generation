@@ -14,46 +14,59 @@ import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinValueClassSpec
 import kotlin.reflect.KClass
 
+/**
+ * Generator that wraps a list holding given elementType in a value class and delegates the list.
+ */
 @ExperimentalKotlinPoetApi
 class DelegateListValueClassSpecBuilder internal constructor(
   private val delegate: KotlinValueClassSpecBuilder,
-  private val listType: TypeName,
+  private val elementType: TypeName,
 ) : KotlinGeneratorTypeSpecBuilder<DelegateListValueClassSpecBuilder, KotlinValueClassSpec>,
   KotlinAnnotatableDocumentableModifiableBuilder<DelegateListValueClassSpecBuilder>,
   KotlinSuperInterfaceSupport<DelegateListValueClassSpecBuilder> {
 
   companion object {
-    fun builder(name: SimpleName, itemsType: TypeName) =
-      builder(className = simpleClassName(name), itemsType = itemsType)
+    /**
+     * Creates new builder.
+     */
+    fun builder(name: SimpleName, elementType: TypeName) = builder(
+      className = simpleClassName(name),
+      elementType = elementType
+    )
 
-    fun builder(className: ClassName, itemsType: TypeName) = DelegateListValueClassSpecBuilder(
+    /**
+     * Creates new builder.
+     */
+    fun builder(className: ClassName, elementType: TypeName) = DelegateListValueClassSpecBuilder(
       className = className,
-      itemsType = itemsType
+      elementType = elementType
     )
   }
 
   private var propertyName: String = "delegate"
 
-
-  internal constructor(className: ClassName, itemsType: TypeName) : this(
+  internal constructor(className: ClassName, elementType: TypeName) : this(
     delegate = KotlinValueClassSpecBuilder(className),
-    listType = List::class.asClassName().parameterizedBy(itemsType),
+    elementType = List::class.asClassName().parameterizedBy(elementType),
   ) {
     delegate.addTag(ClassSpecType.LIST)
   }
 
+  /**
+   * Modify the default property name.
+   */
   fun propertyName(propertyName: String) = apply {
     require(propertyName.isNotBlank()) { "Property name cannot be blank." }
     this.propertyName = propertyName
   }
 
   override fun build(): KotlinValueClassSpec {
-    delegate.addConstructorProperty(propertyName, listType) {
+    delegate.addConstructorProperty(propertyName, elementType) {
       makePrivate()
     }
     val constructorProperty = delegate.constructorProperty
     return delegate.build {
-      addSuperinterface(listType, constructorProperty.name)
+      addSuperinterface(elementType, constructorProperty.name)
     }
   }
 
