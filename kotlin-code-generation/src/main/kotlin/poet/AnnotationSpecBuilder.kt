@@ -13,12 +13,21 @@ class AnnotationSpecBuilder(
   AnnotationSpecSupplier,
   PoetTaggableBuilder<AnnotationSpecBuilder> {
   companion object {
-    fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
+    internal fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ClassName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ParameterizedTypeName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: KClass<out Annotation>): AnnotationSpecBuilder = builder(type.asClassName())
   }
 
