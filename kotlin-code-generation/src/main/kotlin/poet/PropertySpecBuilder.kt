@@ -12,6 +12,7 @@ import kotlin.reflect.KClass
 class PropertySpecBuilder(
   override val builder: PropertySpec.Builder
 ) : PoetSpecBuilder<PropertySpecBuilder, PropertySpec.Builder, PropertySpec, PropertySpecSupplier>,
+  PropertySpecSupplier,
   PoetAnnotatableBuilder<PropertySpecBuilder>,
   PoetContextReceivableBuilder<PropertySpecBuilder>,
   PoetTaggableBuilder<PropertySpecBuilder>,

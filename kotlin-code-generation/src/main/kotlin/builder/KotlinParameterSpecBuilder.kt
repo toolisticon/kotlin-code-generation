@@ -25,45 +25,71 @@ class KotlinParameterSpecBuilder internal constructor(
 
   companion object {
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, *modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: Type, vararg modifiers: KModifier): KotlinParameterSpecBuilder = builder(name, type.asTypeName(), *modifiers)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: KClass<*>, vararg modifiers: KModifier): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), *modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type, modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: Type, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): KotlinParameterSpecBuilder = KotlinParameterSpecBuilder(
       delegate = ParameterSpecBuilder.builder(name, type.asTypeName(), modifiers)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinParameterSpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: ParameterSpec) = KotlinParameterSpecBuilder(delegate = spec.toBuilder().wrap())
   }
-
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
-  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
 
   fun defaultValue(format: String, vararg args: Any?) = builder { this.defaultValue(format, *args) }
   fun defaultValue(codeBlock: CodeBlock?) = builder { this.defaultValue(codeBlock) }
 
-  override fun builder(block: ParameterSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun build(): KotlinParameterSpec = KotlinParameterSpec(spec = delegate.build())
-  override fun spec(): KotlinParameterSpec = build()
+
+  // <overrides>
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: ParameterSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): ParameterSpec = build().get()
+  override fun spec(): KotlinParameterSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

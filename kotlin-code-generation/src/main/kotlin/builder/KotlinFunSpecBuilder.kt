@@ -27,40 +27,55 @@ class KotlinFunSpecBuilder internal constructor(
   KotlinFunSpecSupplier {
 
   companion object {
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(name)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(memberName: MemberName): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.builder(memberName)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.constructorBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.getterBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun setterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder(
       delegate = FunSpecBuilder.setterBuilder()
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: KotlinFunSpec) = builder(spec.get())
 
+    /**
+     * Creates new builder.
+     */
     fun builder(spec: FunSpec) = KotlinFunSpecBuilder(delegate = spec.toBuilder().wrap())
   }
 
   fun addParameter(parameter: KotlinParameterSpecSupplier) = builder { this.addParameter(parameter.get()) }
 
-  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
-  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
-  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
-  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
-  fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
+  internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
   fun jvmModifiers(modifiers: Iterable<Modifier>) = builder { this.jvmModifiers(modifiers) }
   fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
   fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
@@ -106,10 +121,18 @@ class KotlinFunSpecBuilder internal constructor(
   fun endControlFlow() = builder { this.endControlFlow() }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
 
-  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())
-  override fun spec(): KotlinFunSpec = build()
+
+  // <overrides>
+  override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
+  override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
+  override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun get(): FunSpec = build().get()
+  override fun spec(): KotlinFunSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

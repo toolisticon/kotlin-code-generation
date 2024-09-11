@@ -35,16 +35,29 @@ class KotlinAnnotationSpecBuilder internal constructor(
   DelegatingBuilder<KotlinAnnotationSpecBuilder, AnnotationSpecBuilderReceiver> {
 
   companion object {
+
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ClassName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ParameterizedTypeName): KotlinAnnotationSpecBuilder = KotlinAnnotationSpecBuilder(
       delegate = AnnotationSpecBuilder.builder(type)
     )
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: KClass<out Annotation>): KotlinAnnotationSpecBuilder = builder(type.asClassName())
 
+    /**
+     * Creates new builder from spec.
+     */
     fun from(spec: KotlinAnnotationSpecSupplier) = KotlinAnnotationSpecBuilder(
       delegate = spec.get().toBuilder().wrap()
     )
@@ -69,31 +82,71 @@ class KotlinAnnotationSpecBuilder internal constructor(
   private var multiLine = false
   private val members: MutableList<CodeBlock> = mutableListOf()
 
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
+  /**
+   * If marked multiline all members become a new line.
+   */
   fun multiLine() = apply { multiLine = true }
 
+  /**
+   * Add member to annotation.
+   */
   fun addMember(codeBlock: CodeBlock): KotlinAnnotationSpecBuilder = apply { members.add(codeBlock) }
 
+  /**
+   * Add member to annotation.
+   */
   fun addMember(format: String, vararg args: Any): KotlinAnnotationSpecBuilder = addMember(buildCodeBlock(format, *args))
 
+  /**
+   * Add member to annotation.
+   */
   fun addNameMember(memberName: MemberName): KotlinAnnotationSpecBuilder = addMember("%M", memberName)
 
+  /**
+   * Add member to annotation.
+   */
   fun addKClassMember(name: String, value: KClass<*>) = addMember(member.kclass(name, value))
+
+  /**
+   * Add member to annotation.
+   */
   fun addKClassMembers(name: String, vararg values: KClass<*>) = addMember(member.kclasses(name, *values))
 
+  /**
+   * Add member to annotation.
+   */
   fun addStringMember(name: String, value: String) = addMember(member.string(name, value))
+
+  /**
+   * Add member to annotation.
+   */
   fun addStringMembers(name: String, vararg values: String) = addMember(member.strings(name, *values))
 
+  /**
+   * Add member to annotation.
+   */
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember(member.enum(name, value))
+
+  /**
+   * Add member to annotation.
+   */
   fun addEnumMembers(name: String, vararg values: Enum<*>): KotlinAnnotationSpecBuilder = addMember(member.enums(name, *values))
 
+  /**
+   * Add member to annotation.
+   */
   fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember(member.number(name, value))
+
+  /**
+   * Add member to annotation.
+   */
   fun addNumberMembers(name: String, vararg values: Number): KotlinAnnotationSpecBuilder = addMember(member.numbers(name, *values))
 
+  /**
+   * Remove all members.
+   */
   fun clearMembers() = apply { members.clear() }
 
-  override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
 
   override fun build(): KotlinAnnotationSpec {
     if (members.isNotEmpty()) {
@@ -106,8 +159,12 @@ class KotlinAnnotationSpecBuilder internal constructor(
     return KotlinAnnotationSpec(spec = delegate.build())
   }
 
-  override fun spec(): KotlinAnnotationSpec = build()
+  // <overrides>
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
+  override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): AnnotationSpec = build().get()
+  override fun spec(): KotlinAnnotationSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

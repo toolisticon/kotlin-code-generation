@@ -9,14 +9,25 @@ import kotlin.reflect.KClass
  */
 class AnnotationSpecBuilder(
   override val builder: AnnotationSpec.Builder
-) : PoetSpecBuilder<AnnotationSpecBuilder, AnnotationSpec.Builder, AnnotationSpec, AnnotationSpecSupplier>, PoetTaggableBuilder<AnnotationSpecBuilder> {
+) : PoetSpecBuilder<AnnotationSpecBuilder, AnnotationSpec.Builder, AnnotationSpec, AnnotationSpecSupplier>,
+  AnnotationSpecSupplier,
+  PoetTaggableBuilder<AnnotationSpecBuilder> {
   companion object {
-    fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
+    internal fun AnnotationSpec.Builder.wrap() = AnnotationSpecBuilder(this)
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ClassName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: ParameterizedTypeName): AnnotationSpecBuilder = AnnotationSpec.builder(type).wrap()
 
+    /**
+     * Creates new builder.
+     */
     fun builder(type: KClass<out Annotation>): AnnotationSpecBuilder = builder(type.asClassName())
   }
 

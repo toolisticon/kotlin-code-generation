@@ -13,7 +13,9 @@ class KotlinExceptionClassTest {
     val exception = KotlinCodeGeneration.buildRuntimeExceptionClass("foo", "DummyException") {
       addKdoc(" This DummyException indicates something really went wrong. Totally!")
       messageTemplate("Something bad happened, expected=\$foo but got \$bar.")
-      addParameter("foo", Int::class)
+      addConstructorProperty("foo", Int::class) {
+        makePrivate()
+      }
       addParameter("bar", Long::class)
       includeCause("e")
     }.toFileSpec()
@@ -31,7 +33,7 @@ class KotlinExceptionClassTest {
        *  This DummyException indicates something really went wrong. Totally!
        */
       public class DummyException(
-        foo: Int,
+        private val foo: Int,
         bar: Long,
         e: Throwable? = null,
       ) : RuntimeException(""${'"'}Something bad happened, expected=${'$'}foo but got ${'$'}bar.""${'"'}, e)

@@ -34,7 +34,6 @@ internal class HelloWorldExampleITest {
     val file = buildFile(name) {
       addType(type)
     }
-    println(file.code)
 
     assertThat(file.packageName).isEqualTo("foo.bar")
 

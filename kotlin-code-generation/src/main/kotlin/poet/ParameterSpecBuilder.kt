@@ -10,6 +10,7 @@ import kotlin.reflect.KClass
 class ParameterSpecBuilder(
   override val builder: ParameterSpec.Builder
 ) : PoetSpecBuilder<ParameterSpecBuilder, ParameterSpec.Builder, ParameterSpec, ParameterSpecSupplier>,
+  ParameterSpecSupplier,
   PoetAnnotatableBuilder<ParameterSpecBuilder>,
   PoetTaggableBuilder<ParameterSpecBuilder>,
   PoetDocumentableBuilder<ParameterSpecBuilder> {

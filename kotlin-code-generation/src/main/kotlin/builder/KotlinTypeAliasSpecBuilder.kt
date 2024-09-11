@@ -22,24 +22,34 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   KotlinTypeAliasSpecSupplier {
 
   companion object {
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: TypeName): KotlinTypeAliasSpecBuilder = KotlinTypeAliasSpecBuilder(name, type)
+
+    /**
+     * Creates new builder.
+     */
     fun builder(name: String, type: KClass<*>): KotlinTypeAliasSpecBuilder = builder(name, type.asTypeName())
   }
 
   internal constructor(name: String, type: TypeName) : this(delegate = TypeAliasSpecBuilder.builder(name, type))
 
+  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
+  fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
+
+  override fun build() = KotlinTypeAliasSpec(spec = delegate.build())
+
+  // <overrides>
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
-  fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) = builder { this.addTypeVariables(typeVariables) }
-  fun addTypeVariable(typeVariable: TypeVariableName) = builder { this.addTypeVariable(typeVariable) }
-  override fun tag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
-
+  override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   override fun builder(block: TypeAliasSpecBuilderReceiver) = apply { delegate.builder.block() }
-  override fun build() = KotlinTypeAliasSpec(spec = delegate.build())
-  override fun spec(): KotlinTypeAliasSpec = build()
   override fun get(): TypeAliasSpec = build().get()
-
+  override fun spec(): KotlinTypeAliasSpec = build()
+  // </overrides>
 }
 
 @ExperimentalKotlinPoetApi

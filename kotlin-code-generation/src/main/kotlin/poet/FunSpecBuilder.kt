@@ -12,6 +12,7 @@ import kotlin.reflect.KClass
 class FunSpecBuilder(
   override val builder: FunSpec.Builder
 ) : PoetSpecBuilder<FunSpecBuilder, FunSpec.Builder, FunSpec, FunSpecSupplier>,
+  FunSpecSupplier,
   PoetAnnotatableBuilder<FunSpecBuilder>,
   PoetContextReceivableBuilder<FunSpecBuilder>,
   PoetDocumentableBuilder<FunSpecBuilder>,
