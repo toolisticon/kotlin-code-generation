@@ -6,14 +6,13 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeAliasSpecSupplier
 import kotlin.reflect.KClass
 
-
+/**
+ * Represents a typealias.
+ */
 @ExperimentalKotlinPoetApi
-@JvmInline
-value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinGeneratorSpec<KotlinTypeAliasSpec,
-  TypeAliasSpec,
-  TypeAliasSpecSupplier>,
-  KotlinTypeAliasSpecSupplier,
-  KotlinDocumentableSpec {
+data class KotlinTypeAliasSpec(
+  private val spec: TypeAliasSpec
+) : KotlinGeneratorSpec<KotlinTypeAliasSpec, TypeAliasSpec, TypeAliasSpecSupplier>, KotlinTypeAliasSpecSupplier, KotlinDocumentableSpec {
 
   override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
@@ -22,6 +21,9 @@ value class KotlinTypeAliasSpec(private val spec: TypeAliasSpec) : KotlinGenerat
   override fun get(): TypeAliasSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinTypeAliasSpecSupplier : KotlinGeneratorSpecSupplier<KotlinTypeAliasSpec>, TypeAliasSpecSupplier {
   override fun get(): TypeAliasSpec = spec().get()

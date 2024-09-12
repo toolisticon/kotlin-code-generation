@@ -3,17 +3,18 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isDataClass
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents a data class.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinDataClassSpec(
   override val className: ClassName,
   private val spec: TypeSpec
-) : KotlinGeneratorTypeSpec<KotlinDataClassSpec>, KotlinDataClassSpecSupplier,
-  KotlinDocumentableSpec {
+) : KotlinGeneratorTypeSpec<KotlinDataClassSpec>, KotlinDataClassSpecSupplier, KotlinDocumentableSpec {
 
   init {
     require(spec.isDataClass) { "Not a dataClass spec: $spec." }
@@ -26,15 +27,9 @@ data class KotlinDataClassSpec(
   override fun get(): TypeSpec = spec
 }
 
-//fun KotlinDataClassSpec.toBuilder() = KotlinDataClassSpecBuilder.builder(spec = this)
-//fun KotlinDataClassSpec.toFileSpec() = KotlinFileBuilder.builder(this).build()
-// TODO fun KotlinDataClassSpec.toBuilder() = KotlinDataClassBuilder.from(spec = this)
-
-@ExperimentalKotlinPoetApi
-fun KotlinDataClassSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(this.className) {
-  addType(this@toFileSpec)
-}
-
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinDataClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinDataClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()

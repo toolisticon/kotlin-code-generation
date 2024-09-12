@@ -6,11 +6,13 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import kotlin.reflect.KClass
 
-@JvmInline
+/**
+ * Represents an anonymous class.
+ */
 @ExperimentalKotlinPoetApi
-value class KotlinAnonymousClassSpec(private val spec: TypeSpec) : KotlinGeneratorTypeSpec<KotlinAnonymousClassSpec>,
-  KotlinAnonymousClassSpecSupplier,
-  KotlinDocumentableSpec {
+data class KotlinAnonymousClassSpec(
+  private val spec: TypeSpec
+) : KotlinGeneratorTypeSpec<KotlinAnonymousClassSpec>, KotlinAnonymousClassSpecSupplier, KotlinDocumentableSpec {
 
   override fun <T : Any> tag(type: KClass<T>): T? = get().tag(type)
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
@@ -18,6 +20,9 @@ value class KotlinAnonymousClassSpec(private val spec: TypeSpec) : KotlinGenerat
   override fun get(): TypeSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinAnonymousClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnonymousClassSpec>, TypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()

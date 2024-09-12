@@ -5,6 +5,10 @@ import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents a constructor property, wraps parameter and property for easier
+ * creation of constructors with property..
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinConstructorPropertySpec(
   val property: KotlinPropertySpec,
@@ -19,6 +23,9 @@ data class KotlinConstructorPropertySpec(
   override fun spec(): KotlinConstructorPropertySpec = this
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<KotlinConstructorPropertySpec> {
   /**
@@ -27,5 +34,8 @@ interface KotlinConstructorPropertySpecSupplier : KotlinGeneratorSpecSupplier<Ko
   val name: String
 }
 
+/**
+ * Convert collection to list..
+ */
 @ExperimentalKotlinPoetApi
-internal fun toList(constructorProperties: Collection<KotlinConstructorPropertySpecSupplier>) : List<KotlinConstructorPropertySpec> = constructorProperties.map(KotlinConstructorPropertySpecSupplier::spec).toList()
+internal fun toList(constructorProperties: Collection<KotlinConstructorPropertySpecSupplier>): List<KotlinConstructorPropertySpec> = constructorProperties.map(KotlinConstructorPropertySpecSupplier::spec).toList()

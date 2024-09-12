@@ -6,6 +6,9 @@ import io.toolisticon.kotlin.generation.WithClassName
 import io.toolisticon.kotlin.generation.poet.FileSpecSupplier
 import kotlin.reflect.KClass
 
+/**
+ * Represents a file.
+ */
 data class KotlinFileSpec(
   private val spec: FileSpec
 ) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, TaggableSpec {
@@ -21,6 +24,9 @@ data class KotlinFileSpec(
   override fun get(): FileSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, FileSpecSupplier, WithClassName {
   override fun get(): FileSpec = spec().get()
 }
@@ -31,12 +37,28 @@ interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, 
 @JvmInline
 value class KotlinFileSpecs(private val fileSpecs: List<KotlinFileSpec>) : List<KotlinFileSpec> by fileSpecs {
   companion object {
+
+    /**
+     * Empty Specs.
+     */
     val EMPTY = KotlinFileSpecs(emptyList())
 
     fun collect(vararg fns: () -> KotlinFileSpec) = fns.fold(EMPTY) { acc, cur -> acc + cur() }
   }
 
-  constructor(fileSpec : KotlinFileSpec) : this(listOf(fileSpec))
+  /**
+   * Create new instance from single spec.
+   */
+  constructor(fileSpec: KotlinFileSpec) : this(listOf(fileSpec))
 
-  operator fun plus(fileSpec : KotlinFileSpec): KotlinFileSpecs = KotlinFileSpecs(fileSpecs + fileSpec)
+  /**
+   * Create copy of this list and add new spec.
+   */
+  operator fun plus(fileSpec: KotlinFileSpec) = KotlinFileSpecs(fileSpecs + fileSpec)
+
+  /**
+   * Create copy of this list and add all others.
+   */
+  operator fun plus(other: KotlinFileSpecs) = other.fold(this, KotlinFileSpecs::plus)
+
 }

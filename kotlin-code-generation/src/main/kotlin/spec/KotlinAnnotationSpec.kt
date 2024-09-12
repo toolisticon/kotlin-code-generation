@@ -7,6 +7,9 @@ import com.squareup.kotlinpoet.TypeName
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 
+/**
+ * Represents an annotation, added to annotatable specs.
+ */
 data class KotlinAnnotationSpec(
   private val spec: AnnotationSpec
 ) : KotlinGeneratorSpec<KotlinAnnotationSpec, AnnotationSpec, AnnotationSpecSupplier>, KotlinAnnotationSpecSupplier {
@@ -26,9 +29,15 @@ data class KotlinAnnotationSpec(
   }
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 interface KotlinAnnotationSpecSupplier : KotlinGeneratorSpecSupplier<KotlinAnnotationSpec>, AnnotationSpecSupplier {
   override fun get(): AnnotationSpec = spec().get()
 }
 
+/**
+ * Create builder from spec.
+ */
 @ExperimentalKotlinPoetApi
 fun KotlinAnnotationSpec.toBuilder() = KotlinAnnotationSpecBuilder.from(spec = this)
