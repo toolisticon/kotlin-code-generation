@@ -27,6 +27,7 @@ import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecB
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContextFactory
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
@@ -571,10 +572,10 @@ object KotlinCodeGeneration : KLogging() {
    * @return [KotlinFileSpecList] containing the generated files
    * @throws IllegalStateException when no matching strategy is found.
    */
-  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(contextFactory: (INPUT) -> CONTEXT, input: INPUT): KotlinFileSpecList = generateFiles(
-    context = contextFactory.invoke(input),
-    input = input
-  )
+  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(
+    contextFactory: KotlinCodeGenerationContextFactory<CONTEXT,INPUT>,
+    input: INPUT
+  ): KotlinFileSpecList = generateFiles(context = contextFactory.invoke(input), input = input)
 
   /**
    * Generator Function that takes a context and an input, finds matching strategies and generates source file(s).
@@ -586,7 +587,11 @@ object KotlinCodeGeneration : KLogging() {
    * @return [KotlinFileSpecList] containing the generated files
    * @throws IllegalStateException when no matching strategy is found.
    */
-  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(context: CONTEXT, input: INPUT): KotlinFileSpecList {
+  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(
+    context: CONTEXT,
+    input: INPUT
+  ): KotlinFileSpecList {
+
     val strategyCandidates = context.registry.strategies.filter { it.specType.isSubclassOf(KotlinFileSpecIterable::class) }
       .filter { it.contextType.isSubclassOf(CONTEXT::class) }
       .filter { it.inputType.isSubclassOf(INPUT::class) }
@@ -594,6 +599,7 @@ object KotlinCodeGeneration : KLogging() {
         @Suppress("UNCHECKED_CAST")
         it as KotlinCodeGenerationStrategy<CONTEXT, INPUT, KotlinFileSpecIterable>
       }
+
     // find all matching strategies
     val matchingStrategies: List<KotlinCodeGenerationStrategy<CONTEXT, INPUT, KotlinFileSpecIterable>> = strategyCandidates.mapNotNull {
       if (it.test(context, input)) {
