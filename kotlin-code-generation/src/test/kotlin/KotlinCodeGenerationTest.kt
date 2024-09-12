@@ -1,4 +1,3 @@
-
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -7,11 +6,10 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.generateFiles
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName
 import io.toolisticon.kotlin.generation._test.MutableSpiRegistry
-import io.toolisticon.kotlin.generation._test.TestContext
 import io.toolisticon.kotlin.generation._test.TestDeclaration
 import io.toolisticon.kotlin.generation._test.TestDeclarationFileStrategy
 import io.toolisticon.kotlin.generation._test.TestInput
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
+import io.toolisticon.kotlin.generation._test.testContextFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
@@ -40,19 +38,16 @@ internal class KotlinCodeGenerationTest {
     private val testInput = TestInput().put("name", String::class)
     private val testDeclaration = TestDeclaration(className, testInput)
 
+
     @Test
     fun `fail when no strategy registered`() {
       assertThat(registry.strategies).isEmpty()
 
       assertThatThrownBy {
-        generateFiles<TestDeclaration, TestContext, KotlinFileSpecStrategy<TestContext, TestDeclaration>>(
-          input = testDeclaration,
-          contextFactory = { TestContext(it.rootClassName, registry) }
-        )
+        generateFiles(input = testDeclaration, contextFactory = testContextFactory(registry))
       }.isInstanceOf(IllegalStateException::class.java)
         .hasMessage(
-          "No applicable strategy found/filtered for " +
-            "`class io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy`."
+          "No applicable strategy found/filtered for context=`TestContext`, input=`TestDeclaration`."
         )
     }
 
@@ -64,14 +59,10 @@ internal class KotlinCodeGenerationTest {
       assertThat(registry.strategies).isNotEmpty()
 
       assertThatThrownBy {
-        generateFiles<TestDeclaration, TestContext, KotlinFileSpecStrategy<TestContext, TestDeclaration>>(
-          input = testDeclaration,
-          contextFactory = { TestContext(it.rootClassName, registry) }
-        )
+        generateFiles(input = testDeclaration, contextFactory = testContextFactory(registry))
       }.isInstanceOf(IllegalStateException::class.java)
         .hasMessage(
-          "No applicable strategy found/filtered for " +
-            "`class io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy`."
+          "No applicable strategy found/filtered for context=`TestContext`, input=`TestDeclaration`."
         )
     }
 
@@ -83,10 +74,7 @@ internal class KotlinCodeGenerationTest {
 
       assertThat(registry.strategies).isNotEmpty()
 
-      val file = generateFiles<TestDeclaration, TestContext, KotlinFileSpecStrategy<TestContext, TestDeclaration>>(
-        input = testDeclaration,
-        contextFactory = { TestContext(it.rootClassName, registry) }
-      ).single()
+      val file = generateFiles(input = testDeclaration, contextFactory = testContextFactory(registry)).single()
 
       assertThat(file.code).isEqualToIgnoringWhitespace(
         """

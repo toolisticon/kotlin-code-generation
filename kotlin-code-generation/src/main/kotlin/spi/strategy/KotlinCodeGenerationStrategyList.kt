@@ -11,13 +11,16 @@ import kotlin.reflect.KClass
  */
 @ExperimentalKotlinPoetApi
 @JvmInline
-value class KotlinCodeGenerationStrategyList(private val list: List<UnboundKotlinCodeGenerationStrategy>) :
-  List<UnboundKotlinCodeGenerationStrategy> by list {
+value class KotlinCodeGenerationStrategyList(
+  @PublishedApi
+  internal val list: List<UnboundKotlinCodeGenerationStrategy>
+) : List<UnboundKotlinCodeGenerationStrategy> by list {
 
   constructor(vararg strategy: UnboundKotlinCodeGenerationStrategy) : this(strategy.toList())
 
   /**
    * Filter the current list and return instances of given type.
+   *
    * @param strategyType defining which concrete implementations to use
    * @return list containing only instances of given [strategyType]
    */
@@ -26,6 +29,12 @@ value class KotlinCodeGenerationStrategyList(private val list: List<UnboundKotli
   ): List<STRATEGY> {
     return list.filterIsInstance(strategyType.java)
   }
+
+  /**
+   * Filter the current list and return instances of given type.
+   * @return list containing only instances of reified type.
+   */
+  inline fun <reified STRATEGY : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> filter() = filter(STRATEGY::class)
 
   override fun toString(): String = "KotlinCodeGenerationStrategyList(strategies=${list.map { it.name }})"
 }
@@ -40,6 +49,4 @@ fun <STRATEGY : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>, CONTEXT : Ko
 fun <STRATEGY : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> List<STRATEGY>.executeAll(
   context: CONTEXT,
   input: INPUT
-): List<SPEC> = map {
-  it.execute(context, input)
-}.filterNotNull()
+): List<SPEC> = mapNotNull { it.execute(context, input) }

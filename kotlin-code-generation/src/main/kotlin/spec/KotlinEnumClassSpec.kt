@@ -6,6 +6,9 @@ import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents an enum class.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinEnumClassSpec(
   override val className: ClassName,
@@ -22,6 +25,9 @@ data class KotlinEnumClassSpec(
   override fun get(): TypeSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinEnumClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinEnumClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()

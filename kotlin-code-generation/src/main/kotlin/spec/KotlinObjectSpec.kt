@@ -6,6 +6,9 @@ import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents an object.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinObjectSpec(
   override val className: ClassName,
@@ -18,6 +21,9 @@ data class KotlinObjectSpec(
   override fun get(): TypeSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinObjectSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()

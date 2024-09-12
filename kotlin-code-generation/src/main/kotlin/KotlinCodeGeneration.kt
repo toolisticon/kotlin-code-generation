@@ -21,20 +21,21 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBui
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.runtimeExceptionClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.builder.extra.*
 import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContextFactory
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
-import io.toolisticon.kotlin.generation.spi.strategy.KotlinFileSpecStrategy
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import mu.KLogging
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 /**
  * Kotlin Code Generation is a wrapper lib for kotlin poet. This is the central class that allows access to builders and tools via simple static helpers.
@@ -559,34 +560,65 @@ object KotlinCodeGeneration : KLogging() {
     const val NBSP = "·"
   }
 
-
   /**
-   * Generator Function that takes an input and generates source file(s).
+   * Generator Function that takes a context and an input, finds matching strategies and generates source file(s).
+   *
+   * Invokes the contextFactory and calls `generateFiles(context, input)`.
    *
    * @param INPUT the type of the input (base source of generation)
    * @param CONTEXT the context (containing registry, ...) used for generation.
-   * @param STRATEGY the [KotlinFileSpecStrategy] to apply (using `executeAll()`
    * @param input the instance of the input
-   * @param contextFactory fn that creates the context based on input.
-   * @return list of [KotlinFileSpec]
-   * @throws IllegalStateException when no strategy is found.
+   * @param contextFactory factory fn to create the context (containing the spi registry) used for generation from input
+   * @return [KotlinFileSpecList] containing the generated files
+   * @throws IllegalStateException when no matching strategy is found.
    */
-  inline fun <INPUT : Any,
-    CONTEXT : KotlinCodeGenerationContext<CONTEXT>,
-    reified STRATEGY : KotlinFileSpecStrategy<CONTEXT, INPUT>> generateFiles(
-    input: INPUT,
-    contextFactory: (INPUT) -> CONTEXT,
-  ): List<KotlinFileSpec> {
-    val context = contextFactory.invoke(input)
-    val strategies: List<STRATEGY> = context.registry.strategies.filter(STRATEGY::class).mapNotNull {
+  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(
+    contextFactory: KotlinCodeGenerationContextFactory<CONTEXT,INPUT>,
+    input: INPUT
+  ): KotlinFileSpecList = generateFiles(context = contextFactory.invoke(input), input = input)
+
+  /**
+   * Generator Function that takes a context and an input, finds matching strategies and generates source file(s).
+   *
+   * @param INPUT the type of the input (base source of generation)
+   * @param CONTEXT the context (containing registry, ...) used for generation.
+   * @param input the instance of the input
+   * @param context the context (containing the spi registry) used for generation
+   * @return [KotlinFileSpecList] containing the generated files
+   * @throws IllegalStateException when no matching strategy is found.
+   */
+  inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(
+    context: CONTEXT,
+    input: INPUT
+  ): KotlinFileSpecList {
+
+    val strategyCandidates = context.registry.strategies.filter { it.specType.isSubclassOf(KotlinFileSpecIterable::class) }
+      .filter { it.contextType.isSubclassOf(CONTEXT::class) }
+      .filter { it.inputType.isSubclassOf(INPUT::class) }
+      .map {
+        @Suppress("UNCHECKED_CAST")
+        it as KotlinCodeGenerationStrategy<CONTEXT, INPUT, KotlinFileSpecIterable>
+      }
+
+    // find all matching strategies
+    val matchingStrategies: List<KotlinCodeGenerationStrategy<CONTEXT, INPUT, KotlinFileSpecIterable>> = strategyCandidates.mapNotNull {
       if (it.test(context, input)) {
         it
       } else {
         logger.info { "strategy-filter: removing ${it.name}" }
         null
       }
+    }.also {
+      check(it.isNotEmpty()) { "No applicable strategy found/filtered for context=`${CONTEXT::class.simpleName}`, input=`${input::class.simpleName}`." }
     }
-    check(strategies.isNotEmpty()) { "No applicable strategy found/filtered for `${STRATEGY::class}`." }
-    return context.registry.strategies.filter(STRATEGY::class).executeAll(context, input)
+
+    // generate files
+    val sourceFiles = matchingStrategies.executeAll(context, input).flatten().also {
+      check(it.isNotEmpty()) { "No files where generated for context=`${CONTEXT::class.simpleName}`, input=`${input::class.simpleName}`." }
+    }
+
+    // wrap to spec list
+    return KotlinFileSpecList(sourceFiles)
   }
+
 }

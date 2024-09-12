@@ -6,12 +6,13 @@ import io.toolisticon.kotlin.generation.poet.FunSpecSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents a function.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinFunSpec(
   private val spec: FunSpec
-) : KotlinGeneratorSpec<KotlinFunSpec, FunSpec, FunSpecSupplier>,
-  KotlinFunSpecSupplier,
-  KotlinDocumentableSpec {
+) : KotlinGeneratorSpec<KotlinFunSpec, FunSpec, FunSpecSupplier>, KotlinFunSpecSupplier, KotlinDocumentableSpec {
 
   override val kdoc: KDoc get() = KDoc(spec.kdoc)
 
@@ -20,6 +21,9 @@ data class KotlinFunSpec(
   override fun get(): FunSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinFunSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFunSpec>, FunSpecSupplier {
   override fun get(): FunSpec = spec().get()

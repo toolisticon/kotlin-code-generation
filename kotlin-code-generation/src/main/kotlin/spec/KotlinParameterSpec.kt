@@ -7,15 +7,13 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.ParameterSpecSupplier
 import kotlin.reflect.KClass
 
-@JvmInline
+/**
+ * Represents a parameter.
+ */
 @ExperimentalKotlinPoetApi
-value class KotlinParameterSpec(
+data class KotlinParameterSpec(
   private val spec: ParameterSpec
-) : KotlinGeneratorSpec<KotlinParameterSpec,
-  ParameterSpec,
-  ParameterSpecSupplier>,
-  KotlinParameterSpecSupplier,
-  KotlinDocumentableSpec {
+) : KotlinGeneratorSpec<KotlinParameterSpec, ParameterSpec, ParameterSpecSupplier>, KotlinParameterSpecSupplier, KotlinDocumentableSpec {
 
   val name: String get() = spec.name
   val type: TypeName get() = spec.type
@@ -27,6 +25,9 @@ value class KotlinParameterSpec(
   override fun get(): ParameterSpec = this.spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinParameterSpecSupplier : KotlinGeneratorSpecSupplier<KotlinParameterSpec>, ParameterSpecSupplier {
   override fun get(): ParameterSpec = spec().get()

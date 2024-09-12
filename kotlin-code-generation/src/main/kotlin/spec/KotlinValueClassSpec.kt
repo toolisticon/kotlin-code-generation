@@ -7,6 +7,9 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.typeSpec.isValueCla
 import io.toolisticon.kotlin.generation.poet.KDoc
 import kotlin.reflect.KClass
 
+/**
+ * Represents a value class.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinValueClassSpec(
   override val className: ClassName,
@@ -23,7 +26,9 @@ data class KotlinValueClassSpec(
   override fun get(): TypeSpec = spec
 }
 
-// fun KotlinValueClassSpec.toBuilder() = KotlinValueClassBuilder.builder(spec = this)
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinValueClassSpecSupplier : KotlinGeneratorSpecSupplier<KotlinValueClassSpec>, ToFileTypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()

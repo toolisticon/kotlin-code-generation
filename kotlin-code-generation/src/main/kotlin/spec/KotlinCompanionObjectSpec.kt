@@ -6,6 +6,9 @@ import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import kotlin.reflect.KClass
 
+/**
+ * Represents a companion object.
+ */
 @ExperimentalKotlinPoetApi
 data class KotlinCompanionObjectSpec(
   private val spec: TypeSpec
@@ -17,6 +20,9 @@ data class KotlinCompanionObjectSpec(
   override fun get(): TypeSpec = spec
 }
 
+/**
+ * Marks the builder and the spec so they are interchangeable.
+ */
 @ExperimentalKotlinPoetApi
 interface KotlinCompanionObjectSpecSupplier : KotlinGeneratorSpecSupplier<KotlinCompanionObjectSpec>, TypeSpecSupplier {
   override fun get(): TypeSpec = spec().get()
