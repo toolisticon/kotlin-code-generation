@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
  */
 data class KotlinFileSpec(
   private val spec: FileSpec
-) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, TaggableSpec {
+) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, TaggableSpec, KotlinFileSpecIterable {
 
   val packageName: String = spec.packageName
   val rootName: String = spec.name
@@ -19,6 +19,8 @@ data class KotlinFileSpec(
   override val className: ClassName = ClassName(packageName, rootName)
   val fqn: String = "$packageName.$rootName"
   val fileName: String = "$fqn.kt"
+
+  override fun iterator(): Iterator<KotlinFileSpec> = listOf(this).listIterator()
 
   override fun spec(): KotlinFileSpec = this
   override fun get(): FileSpec = spec
@@ -35,15 +37,17 @@ interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, 
  * List that contains multiple [KotlinFileSpec]s.
  */
 @JvmInline
-value class KotlinFileSpecs(private val fileSpecs: List<KotlinFileSpec>) : List<KotlinFileSpec> by fileSpecs {
+value class KotlinFileSpecList(private val fileSpecs: List<KotlinFileSpec>) : List<KotlinFileSpec> by fileSpecs, KotlinFileSpecIterable {
   companion object {
 
     /**
      * Empty Specs.
      */
-    val EMPTY = KotlinFileSpecs(emptyList())
+    val EMPTY = KotlinFileSpecList(emptyList())
 
-    fun collect(vararg fns: () -> KotlinFileSpec) = fns.fold(EMPTY) { acc, cur -> acc + cur() }
+    fun collect(vararg fns: () -> KotlinFileSpec) = collect(fns.toList())
+
+    fun collect(specs: List<() -> KotlinFileSpec>) = specs.fold(EMPTY) { acc, cur -> acc + cur() }
   }
 
   /**
@@ -52,13 +56,12 @@ value class KotlinFileSpecs(private val fileSpecs: List<KotlinFileSpec>) : List<
   constructor(fileSpec: KotlinFileSpec) : this(listOf(fileSpec))
 
   /**
-   * Create copy of this list and add new spec.
+   * Create copy of this list and add new spec(s).
    */
-  operator fun plus(fileSpec: KotlinFileSpec) = KotlinFileSpecs(fileSpecs + fileSpec)
-
-  /**
-   * Create copy of this list and add all others.
-   */
-  operator fun plus(other: KotlinFileSpecs) = other.fold(this, KotlinFileSpecs::plus)
-
+  operator fun plus(fileSpec: KotlinFileSpecIterable) = KotlinFileSpecList(fileSpecs + fileSpec)
 }
+
+/**
+ * Iterable that provides instances of [KotlinFileSpec].
+ */
+sealed interface KotlinFileSpecIterable : Iterable<KotlinFileSpec>
