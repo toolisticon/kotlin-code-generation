@@ -45,8 +45,25 @@ value class KotlinFileSpecList(private val fileSpecs: List<KotlinFileSpec>) : Li
      */
     val EMPTY = KotlinFileSpecList(emptyList())
 
+    /**
+     * Create [KotlinFileSpecList] from given vararg iterables.
+     */
+    fun of(vararg iterables: KotlinFileSpecIterable) = of(iterables.toList())
+
+
+    /**
+     * Create [KotlinFileSpecList] from given iterables.
+     */
+    fun of(iterables: List<KotlinFileSpecIterable>) = KotlinFileSpecList(iterables.flatten())
+
+    /**
+     * Collect file spec suppliers
+     */
     fun collect(vararg fns: () -> KotlinFileSpec) = collect(fns.toList())
 
+    /**
+     * Collect file spec suppliers.
+     */
     fun collect(specs: List<() -> KotlinFileSpec>) = specs.fold(EMPTY) { acc, cur -> acc + cur() }
   }
 

@@ -40,5 +40,8 @@ interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> 
   ): List<PROCESSOR> = registry.processors.filterIsInstance(processorType.java)
 }
 
+/**
+ * Factory to create generation context.
+ */
 @OptIn(ExperimentalKotlinPoetApi::class)
 fun interface KotlinCodeGenerationContextFactory<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : (INPUT) -> CONTEXT
