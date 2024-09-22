@@ -6,7 +6,6 @@ import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.KDoc
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilder
-import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
 import kotlin.reflect.KClass
 
@@ -57,13 +56,13 @@ class KotlinConstructorPropertySpecBuilder internal constructor(
     return KotlinConstructorPropertySpec(parameter = parameter, property = property)
   }
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { parameterBuilder.addAnnotation(spec) }
   override fun addKdoc(kdoc: KDoc) = apply { parameterBuilder.addKdoc(kdoc) }
   override fun addModifiers(vararg modifiers: KModifier) = apply { propertyBuilder.addModifiers(*modifiers) }
   override fun addTag(type: KClass<*>, tag: Any?) = apply { propertyBuilder.addTag(type, tag) }
   override fun spec(): KotlinConstructorPropertySpec = build()
-  // </overrides>
+  // endregion [overrides]
 
 }
 

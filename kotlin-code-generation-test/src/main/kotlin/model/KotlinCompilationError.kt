@@ -6,6 +6,4 @@ package io.toolisticon.kotlin.generation.test.model
 data class KotlinCompilationError(
   val message: String,
   val file: String
-) {
-  override fun toString()= "KotlinCompilationError(message='$message', file='$file')"
-}
+)

@@ -159,12 +159,12 @@ class KotlinAnnotationSpecBuilder internal constructor(
     return KotlinAnnotationSpec(spec = delegate.build())
   }
 
-  // <overrides>
+  // region [overrides]
   override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   override fun builder(block: AnnotationSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): AnnotationSpec = build().get()
   override fun spec(): KotlinAnnotationSpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

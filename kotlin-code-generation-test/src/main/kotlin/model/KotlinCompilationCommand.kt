@@ -14,11 +14,13 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 @ExperimentalCompilerApi
 data class KotlinCompilationCommand(
   val fileSpecs: KotlinFileSpecList
-) {
+) : Iterable<SourceFile> {
 
-  constructor(fileSpec: KotlinFileSpec) : this(KotlinFileSpecList(fileSpec))
+  constructor(vararg fileSpecs: KotlinFileSpec) : this(KotlinFileSpecList(*fileSpecs))
 
   operator fun plus(fileSpec: KotlinFileSpec) = copy(fileSpecs = fileSpecs + fileSpec)
 
-  val sourceFiles: List<SourceFile> by lazy { fileSpecs.map { it.sourceFile() } }
+  private val sourceFiles: List<SourceFile> by lazy { fileSpecs.map { it.sourceFile() } }
+
+  override fun iterator(): Iterator<SourceFile> = sourceFiles.iterator()
 }
