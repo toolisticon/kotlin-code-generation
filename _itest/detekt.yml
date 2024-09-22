@@ -2,7 +2,7 @@
 # see https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml
 #
 comments:
-  active: false
+  active: true
   excludes: "_itest/**,**/test/**,**/_itest/**,**/*Test.kt,*/src/test/kotlin/**/*.kt,**/*Stages.kt,**/*ITest.kt"
   CommentOverPrivateFunction:
     active: false
@@ -12,15 +12,15 @@ comments:
     active: false
     endOfSentenceFormat: ([.?!][ \t\n\r\f<])|([.?!:]$)
   UndocumentedPublicClass:
-    active: false
+    active: true
     searchInNestedClass: true
     searchInInnerClass: true
-    searchInInnerObject: true
+    searchInInnerObject: false
     searchInInnerInterface: true
   UndocumentedPublicFunction:
-    active: false
+    active: true
 
 performance:
-  active: false
+  active: true
   SpreadOperator:
     active: false
