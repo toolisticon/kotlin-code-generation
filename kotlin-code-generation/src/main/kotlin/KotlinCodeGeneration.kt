@@ -43,6 +43,8 @@ import kotlin.reflect.full.isSubclassOf
 @ExperimentalKotlinPoetApi
 object KotlinCodeGeneration : KLogging() {
 
+  // region [Category: build* functions]
+
   /**
    * Build a [KotlinAnnotationSpec] using given type and receiver fn.
    * @see [KotlinAnnotationSpecBuilder.builder]
@@ -296,10 +298,11 @@ object KotlinCodeGeneration : KLogging() {
   inline fun buildValueClass(packageName: PackageName, simpleName: SimpleName, block: KotlinValueClassSpecBuilderReceiver = {}): KotlinValueClassSpec =
     buildValueClass(className(packageName, simpleName), block)
 
+  // endregion [Category: build* functions]
+
   /**
    * Static access for all builders.
    */
-  @ExperimentalKotlinPoetApi
   @Suppress("ClassName", SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     /**
@@ -573,7 +576,7 @@ object KotlinCodeGeneration : KLogging() {
    * @throws IllegalStateException when no matching strategy is found.
    */
   inline fun <reified CONTEXT : KotlinCodeGenerationContext<CONTEXT>, reified INPUT : Any> generateFiles(
-    contextFactory: KotlinCodeGenerationContextFactory<CONTEXT,INPUT>,
+    contextFactory: KotlinCodeGenerationContextFactory<CONTEXT, INPUT>,
     input: INPUT
   ): KotlinFileSpecList = generateFiles(context = contextFactory.invoke(input), input = input)
 

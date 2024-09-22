@@ -90,7 +90,7 @@ class KotlinPropertySpecBuilder internal constructor(
 
   override fun build(): KotlinPropertySpec = KotlinPropertySpec(spec = delegate.build())
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addKdoc(kdoc: KDoc): KotlinPropertySpecBuilder = apply { delegate.addKdoc(kdoc.get()) }
@@ -99,7 +99,7 @@ class KotlinPropertySpecBuilder internal constructor(
   override fun builder(block: PropertySpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): PropertySpec = build().get()
   override fun spec(): KotlinPropertySpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

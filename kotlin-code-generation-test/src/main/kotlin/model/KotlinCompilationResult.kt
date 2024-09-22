@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
-import org.assertj.core.api.Assertions.assertThat
+import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.assertThat
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import kotlin.reflect.KClass
 
@@ -18,8 +18,14 @@ data class KotlinCompilationResult(
   val result: JvmCompilationResult
 ) {
 
+  /**
+   * OK or ERROR.
+   */
   val exitCode = result.exitCode
 
+  /**
+   * List of errors, one per parsed error line.
+   */
   val errors: List<KotlinCompilationError> by lazy {
     result.messages.lines()
       .filter { it.startsWith("e:") }
@@ -43,12 +49,6 @@ data class KotlinCompilationResult(
 
   fun loadClass(className: ClassName): KClass<out Any> = result.classLoader.loadClass(className.canonicalName).kotlin
 
-  fun shouldBeOk() {
-    assertThat(exitCode)
-      .`as` { "compilation failed with errors: $errors" }
-      .isEqualTo(KotlinCompilation.ExitCode.OK)
-  }
-
   override fun toString() = toString(false)
   fun toString(includeCommand: Boolean) = "${this::class.simpleName}(" +
     if (includeCommand) {
@@ -58,3 +58,15 @@ data class KotlinCompilationResult(
     } +
     "exitCode=$exitCode, errors=$errors, generatedSources=$generatedSources)"
 }
+
+/**
+ * Convenience for `assertThat(result).hasExitCode().
+ */
+@ExperimentalCompilerApi
+@ExperimentalKotlinPoetApi
+fun KotlinCompilationResult.requireOk() = apply {
+  assertThat(this)
+    .`as` { "compilation failed with errors: ${errors}." }
+    .hasExitCode(KotlinCompilation.ExitCode.OK)
+}
+

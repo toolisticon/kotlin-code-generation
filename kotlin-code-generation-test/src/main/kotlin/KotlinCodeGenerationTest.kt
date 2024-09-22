@@ -5,6 +5,7 @@ import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import io.toolisticon.kotlin.generation.spec.KotlinFileSpec
+import io.toolisticon.kotlin.generation.spec.KotlinFileSpecList
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationResult
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
@@ -35,12 +36,18 @@ import java.io.ByteArrayOutputStream
 @ExperimentalKotlinPoetApi
 object KotlinCodeGenerationTest {
 
+  /**
+   * @see KotlinCompilationAssert
+   */
   fun assertThat(actual: KotlinCompilationResult): KotlinCompilationAssert = KotlinCompilationAssert(actual)
 
+  /**
+   * Compiles files contained in command.
+   */
   fun compile(cmd: KotlinCompilationCommand): KotlinCompilationResult {
 
     val result: JvmCompilationResult = KotlinCompilation().apply {
-      sources = cmd.sourceFiles
+      sources = cmd.toList()
       inheritClassPath = true
 
 
@@ -52,5 +59,19 @@ object KotlinCodeGenerationTest {
     return KotlinCompilationResult(cmd = cmd, result = result)
   }
 
+
+  /**
+   * Convenience to compile files directly.
+   * @see [KotlinCodeGenerationTest.compile]
+   */
+  fun compile(vararg fileSpec: KotlinFileSpec) = this.compile(
+    KotlinCompilationCommand(
+      KotlinFileSpecList.of(fileSpec.toList())
+    )
+  )
+
+  /**
+   * Extract sourceFile from spec.
+   */
   fun KotlinFileSpec.sourceFile() = SourceFile.kotlin(name = this.fileName, contents = this.code)
 }

@@ -10,13 +10,26 @@ fun interface Builder<PRODUCT : Any> {
   fun build(): PRODUCT
 }
 
+/**
+ * Builder for PRODUCT that is also a supplier for SPEC, used to combine poetSpec and kcg specs.
+ */
 interface BuilderSupplier<PRODUCT : Any, SPEC : Any> : Builder<PRODUCT>, Supplier<SPEC>
 
+/**
+ * Marks type as className holder.
+ */
 interface WithClassName {
   val className: ClassName
 }
 
+/**
+ * ClassName when used as a file name for fileSpec.
+ */
 typealias FileName = ClassName
+
+/**
+ * The poet string used for formatting.
+ */
 typealias CodeBlockFormat = String
 
 /**

@@ -7,6 +7,9 @@ import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpec
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 
+/**
+ * Builder to create a `@Suppress` annotation.
+ */
 @ExperimentalKotlinPoetApi
 data class SuppressAnnotation(val names: List<String> = emptyList()) : KotlinAnnotationSpecSupplier {
   constructor(name: String) : this(listOf(name))

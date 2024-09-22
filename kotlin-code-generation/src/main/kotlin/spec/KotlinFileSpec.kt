@@ -70,7 +70,7 @@ value class KotlinFileSpecList(private val fileSpecs: List<KotlinFileSpec>) : Li
   /**
    * Create new instance from single spec.
    */
-  constructor(fileSpec: KotlinFileSpec) : this(listOf(fileSpec))
+  constructor(vararg fileSpec: KotlinFileSpec) : this(fileSpec.toList())
 
   /**
    * Create copy of this list and add new spec(s).

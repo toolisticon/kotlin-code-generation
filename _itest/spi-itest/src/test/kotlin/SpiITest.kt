@@ -1,13 +1,14 @@
 package io.toolisticon.kotlin.generation.itest.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import com.tschuchort.compiletesting.KotlinCompilation
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
-import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest
+import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.compile
+import io.toolisticon.kotlin.generation.test.callPrimaryConstructor
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
+import io.toolisticon.kotlin.generation.test.model.requireOk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
@@ -44,10 +45,9 @@ internal class SpiITest {
     val spec = requireNotNull(context.registry.strategies.filter(TestDataClassStrategy::class).executeSingle(context, input))
     val file = KotlinCodeGeneration.builder.fileBuilder(input.className).addType(spec).build()
 
-    val result = KotlinCodeGenerationTest.compile(KotlinCompilationCommand(file))
-    KotlinCodeGenerationTest.assertThat(result).hasExitCode(KotlinCompilation.ExitCode.OK)
+    val result = compile(KotlinCompilationCommand(file)).requireOk()
 
-    val foo = result.loadClass(input.className).java.getDeclaredConstructor(String::class.java, Long::class.java).newInstance("Foo", 5L)
+    val foo: Any = result.loadClass(input.className).callPrimaryConstructor("Foo", 5L)
 
     assertThat(foo).hasToString("ExampleDataClass(name=Foo, foo=5)")
   }

@@ -41,7 +41,7 @@ class KotlinTypeAliasSpecBuilder internal constructor(
 
   override fun build() = KotlinTypeAliasSpec(spec = delegate.build())
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
@@ -49,7 +49,7 @@ class KotlinTypeAliasSpecBuilder internal constructor(
   override fun builder(block: TypeAliasSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): TypeAliasSpec = build().get()
   override fun spec(): KotlinTypeAliasSpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

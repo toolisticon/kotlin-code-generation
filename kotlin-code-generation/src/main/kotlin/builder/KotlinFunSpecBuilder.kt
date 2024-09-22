@@ -123,7 +123,7 @@ class KotlinFunSpecBuilder internal constructor(
 
   override fun build(): KotlinFunSpec = KotlinFunSpec(spec = delegate.build())
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
@@ -132,7 +132,7 @@ class KotlinFunSpecBuilder internal constructor(
   override fun builder(block: FunSpecBuilderReceiver): KotlinFunSpecBuilder = apply { delegate.builder.block() }
   override fun get(): FunSpec = build().get()
   override fun spec(): KotlinFunSpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

@@ -65,7 +65,7 @@ class KotlinClassSpecBuilder internal constructor(
 
   override fun build(): KotlinClassSpec {
     val hasConstructorProperties = constructorProperties.isNotEmpty()
-    check( !(hasConstructorProperties && isSetPrimaryConstructor)) { "Decide if you want to use the constructorProperty support OR define a custom primary constructor, not both." }
+    check(!(hasConstructorProperties && isSetPrimaryConstructor)) { "Decide if you want to use the constructorProperty support OR define a custom primary constructor, not both." }
 
     if (hasConstructorProperties) {
       val constructor = delegate.primaryConstructorWithProperties(toList(constructorProperties.values))
@@ -75,7 +75,7 @@ class KotlinClassSpecBuilder internal constructor(
     return KotlinClassSpec(className = className, spec = delegate.build())
   }
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addConstructorProperty(spec: KotlinConstructorPropertySpecSupplier) = apply { constructorProperties[spec.name] = spec }
   override fun contextReceivers(vararg receiverTypes: TypeName) = builder { this.contextReceivers(*receiverTypes) }
@@ -88,7 +88,7 @@ class KotlinClassSpecBuilder internal constructor(
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }
   override fun addTag(type: KClass<*>, tag: Any?) = builder { this.tag(type, tag) }
   override fun builder(block: TypeSpecBuilderReceiver) = apply { delegate.builder.block() }
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

@@ -81,7 +81,7 @@ class KotlinParameterSpecBuilder internal constructor(
 
   override fun build(): KotlinParameterSpec = KotlinParameterSpec(spec = delegate.build())
 
-  // <overrides>
+  // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addKdoc(kdoc: KDoc) = apply { delegate.addKdoc(kdoc.get()) }
   override fun addModifiers(vararg modifiers: KModifier) = builder { this.addModifiers(*modifiers) }
@@ -89,7 +89,7 @@ class KotlinParameterSpecBuilder internal constructor(
   override fun builder(block: ParameterSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): ParameterSpec = build().get()
   override fun spec(): KotlinParameterSpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

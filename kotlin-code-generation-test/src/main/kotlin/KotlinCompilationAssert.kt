@@ -17,8 +17,14 @@ class KotlinCompilationAssert(
   actual: KotlinCompilationResult,
 ) : AbstractAssert<KotlinCompilationAssert, KotlinCompilationResult>(actual, KotlinCompilationAssert::class.java) {
 
+  /**
+   * Assertions on error messages.
+   */
   fun errorMessages() = Assertions.assertThat(actual.errors)
 
+  /**
+   * Assertion on exitCode.
+   */
   fun hasExitCode(exitCode: KotlinCompilation.ExitCode): KotlinCompilationAssert = apply {
     Assertions.assertThat(actual.exitCode).isEqualTo(exitCode)
   }

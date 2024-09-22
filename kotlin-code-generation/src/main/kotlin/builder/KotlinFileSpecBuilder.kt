@@ -94,7 +94,7 @@ class KotlinFileSpecBuilder internal constructor(
     return KotlinFileSpec(spec = spec)
   }
 
-  // <overrides>
+  // region [overrides]
   override val className: ClassName = delegate.className
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
@@ -104,7 +104,7 @@ class KotlinFileSpecBuilder internal constructor(
   override fun builder(block: FileSpecBuilderReceiver) = apply { delegate.builder.block() }
   override fun get(): FileSpec = build().get()
   override fun spec(): KotlinFileSpec = build()
-  // </overrides>
+  // endregion [overrides]
 }
 
 @ExperimentalKotlinPoetApi

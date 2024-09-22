@@ -1,4 +1,3 @@
-
 package io.toolisticon.kotlin.generation.itest
 
 import com.squareup.kotlinpoet.ClassName
@@ -42,8 +41,8 @@ internal class MyCustomAnnotationSpecITest {
 
     val klass: KClass<out Any> = result.loadClass(name)
     assertThat(klass.asClassName()).isEqualTo(name)
-    assertThat(klass.annotations).hasSize(1)
-    val annotation: Annotation = klass.annotations[0]
+    assertThat(klass.java.annotations).hasSize(2) // 2 because Meta is included
+    val annotation: Annotation = klass.java.annotations[0]
     assertThat(annotation).hasToString("@io.toolisticon.kotlin.generation.itest.created.MyCustomAnnotation(\"hello\")")
   }
 }
