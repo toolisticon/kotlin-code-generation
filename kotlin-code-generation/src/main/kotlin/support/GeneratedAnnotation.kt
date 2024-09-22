@@ -10,6 +10,9 @@ import jakarta.annotation.Generated
 import java.time.Instant
 import kotlin.reflect.KClass
 
+/**
+ * Builder to create a `@Generated` annotation.
+ */
 @ExperimentalKotlinPoetApi
 @Suppress(SUPPRESS_UNUSED)
 data class GeneratedAnnotation(

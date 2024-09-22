@@ -303,7 +303,6 @@ object KotlinCodeGeneration : KLogging() {
   /**
    * Static access for all builders.
    */
-  @ExperimentalKotlinPoetApi
   @Suppress("ClassName", SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     /**
