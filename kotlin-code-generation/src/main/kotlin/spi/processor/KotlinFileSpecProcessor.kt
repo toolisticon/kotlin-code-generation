@@ -29,16 +29,15 @@ abstract class KotlinFileSpecProcessor<CONTEXT : KotlinCodeGenerationContext<CON
 
 /**
  * Used to implement a [io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor]
- * that will visit/modify a [KotlinFileSpecBuilder] but do not work on a loop variable.
+ * that will visit/modify a [KotlinFileSpecBuilder] but do not work on a loop variable/input type.
  */
 @ExperimentalKotlinPoetApi
 abstract class KotlinFileSpecEmptyInputProcessor<CONTEXT : KotlinCodeGenerationContext<CONTEXT>>(
   contextType: KClass<CONTEXT>,
   order: Int = KotlinCodeGenerationSpi.DEFAULT_ORDER
-) : KotlinCodeGenerationProcessorBase<CONTEXT, EmptyInput, KotlinFileSpecBuilder>(
+) : KotlinFileSpecProcessor<CONTEXT, EmptyInput>(
   contextType = contextType,
   inputType = EmptyInput::class,
-  builderType = KotlinFileSpecBuilder::class,
   order = order
 ) {
   /**
@@ -54,4 +53,10 @@ abstract class KotlinFileSpecEmptyInputProcessor<CONTEXT : KotlinCodeGenerationC
   fun test(context: CONTEXT): Boolean = context::class.isSubclassOf(contextType)
 
   override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input) && test(context)
+
+  /**
+   * Execute only based on context.
+   */
+  fun execute(context: CONTEXT, builder: KotlinFileSpecBuilder): KotlinFileSpecBuilder = super.execute(context, EmptyInput, builder)
+
 }
