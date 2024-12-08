@@ -33,8 +33,7 @@ internal class GeneratedAnnotationTest {
       import jakarta.`annotation`.Generated
       import kotlin.String
 
-      @Generated(value = ["io.toolisticon.kotlin.generation.KotlinCodeGeneration"], date =
-          "2024-07-02T10:01:33.205357100Z")
+      @Generated(value = ["io.toolisticon.kotlin.generation.KotlinCodeGeneration"], date = "2024-07-02T10:01:33.205357100Z")
       public data class Bar(
         public val x: String,
       )
