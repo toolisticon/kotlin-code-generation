@@ -3,12 +3,12 @@
 package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
-import mu.KLogging
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
 
@@ -26,7 +26,7 @@ class KotlinDataClassSpecBuilder internal constructor(
   KotlinMemberSpecHolderBuilder<KotlinDataClassSpecBuilder>,
   KotlinSuperInterfaceSupport<KotlinDataClassSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinDataClassSpecBuilder> {
-  companion object : KLogging() {
+  companion object {
     /**
      * Creates new builder.
      */
@@ -37,6 +37,8 @@ class KotlinDataClassSpecBuilder internal constructor(
      */
     fun builder(className: ClassName): KotlinDataClassSpecBuilder = KotlinDataClassSpecBuilder(className)
   }
+
+  private val logger = KotlinLogging.logger {}
 
   internal constructor (className: ClassName) : this(
     className = className,
