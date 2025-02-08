@@ -1,11 +1,13 @@
 package io.toolisticon.kotlin.generation.spi.registry
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
-import io.toolisticon.kotlin.generation.spi.*
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
-import mu.KLogging
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -21,15 +23,18 @@ class KotlinCodeGenerationServiceRepository(
   override val processors: KotlinCodeGenerationProcessorList = KotlinCodeGenerationProcessorList(),
   override val strategies: KotlinCodeGenerationStrategyList = KotlinCodeGenerationStrategyList(),
 ) : KotlinCodeGenerationSpiRegistry {
-  companion object : KLogging() {
+  companion object {
 
-    fun load(contextTypeUpperBound: KClass<*>,
-             classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
-             exclusions: Set<String> = emptySet()
+    fun load(
+      contextTypeUpperBound: KClass<*>,
+      classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
+      exclusions: Set<String> = emptySet()
     ): KotlinCodeGenerationSpiRegistry {
       return KotlinCodeGenerationServiceLoader(contextTypeUpperBound, classLoader, exclusions)()
     }
   }
+
+  private val logger = KotlinLogging.logger {}
 
   init {
     require(strategies.isNotEmpty()) { "At least one strategy is required." }

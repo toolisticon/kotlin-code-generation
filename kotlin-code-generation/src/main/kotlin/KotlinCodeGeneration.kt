@@ -4,6 +4,7 @@ package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.MemberName.Companion.member
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.annotationClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.anonymousClassBuilder
@@ -33,7 +34,6 @@ import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
-import mu.KLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -41,7 +41,9 @@ import kotlin.reflect.full.isSubclassOf
  * Kotlin Code Generation is a wrapper lib for kotlin poet. This is the central class that allows access to builders and tools via simple static helpers.
  */
 @ExperimentalKotlinPoetApi
-object KotlinCodeGeneration : KLogging() {
+object KotlinCodeGeneration {
+  @PublishedApi
+  internal val logger = KotlinLogging.logger {}
 
   // region [Category: build* functions]
 
