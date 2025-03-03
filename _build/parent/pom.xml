@@ -22,7 +22,7 @@
 
     <!-- TEST -->
     <assertj.version>3.27.3</assertj.version>
-    <logback.version>1.5.16</logback.version>
+    <logback.version>1.5.17</logback.version>
   </properties>
 
   <dependencyManagement>
