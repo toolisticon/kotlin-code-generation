@@ -8,7 +8,7 @@ import io.toolisticon.kotlin.generation.spi.UnboundKotlinCodeGenerationProcessor
 import io.toolisticon.kotlin.generation.spi.UnboundKotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
-import java.util.ServiceLoader
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -22,20 +22,25 @@ import kotlin.reflect.full.isSubclassOf
 class KotlinCodeGenerationServiceLoader(
   val contextTypeUpperBound: KClass<*> = Any::class,
   val classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
-  val exclusions: Set<String> = emptySet()
+  val exclusions: Set<String> = emptySet(),
+  // If true, the contextTypeUpperBound is ignored, and all services are accepted regardless of their context type.
+  val ignoreContext: Boolean = false
 ) : () -> KotlinCodeGenerationSpiRegistry {
 
   override fun invoke(): KotlinCodeGenerationSpiRegistry {
     val serviceInstances: List<KotlinCodeGenerationSpi<*, *>> = ServiceLoader.load(KotlinCodeGenerationSpi::class.java, classLoader).toList()
+      .filter { it.contextType.isSubclassOf(contextTypeUpperBound) }
       .filterNot { exclusions.contains(it::class.java.name) }
     check(serviceInstances.isNotEmpty()) { "No serviceInstances found, configure `${KotlinCodeGenerationSpi.metaInfServices}`, and/or check your exclusions filter." }
 
-    val withIllegalContextType = serviceInstances.filterNot { it.contextType.isSubclassOf(contextTypeUpperBound) }
+    if (!ignoreContext) {
+      val withIllegalContextType = serviceInstances.filterNot { it.contextType.isSubclassOf(contextTypeUpperBound) }
 
-    require(withIllegalContextType.isEmpty()) {
-      "All declarations of type `${KotlinCodeGenerationSpi.metaInfServices}` " +
-        "must be a subclass of contextType=$contextTypeUpperBound, but " +
-        "found ${withIllegalContextType.joinToString(", ")}."
+      require(withIllegalContextType.isEmpty()) {
+        "All declarations of type `${KotlinCodeGenerationSpi.metaInfServices}` " +
+          "must be a subclass of contextType=$contextTypeUpperBound, but " +
+          "found ${withIllegalContextType.joinToString(", ")}."
+      }
     }
 
     return KotlinCodeGenerationServiceRepository(
