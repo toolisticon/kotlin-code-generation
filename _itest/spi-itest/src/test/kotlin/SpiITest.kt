@@ -3,14 +3,15 @@ package io.toolisticon.kotlin.generation.itest.spi
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasContextType
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasNameIn
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationSpiList
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.compile
 import io.toolisticon.kotlin.generation.test.callPrimaryConstructor
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import io.toolisticon.kotlin.generation.test.model.requireOk
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
@@ -18,19 +19,20 @@ import org.junit.jupiter.api.Test
 internal class SpiITest {
 
   @Test
-  fun `init fails when only strategy is excluded`() {
-    assertThatThrownBy {
-      registry(
-        contextTypeUpperBound = TestContext::class,
-        exclusions = setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")
-      )
-    }.isInstanceOf(IllegalStateException::class.java)
-      .hasMessage("No serviceInstances found, configure `META-INF/services/io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi`, and/or check your exclusions filter.")
+  fun `init is empty`() {
+    val list = KotlinCodeGenerationSpiList()
+      .filter(hasContextType(TestContext::class))
+      .filterNot(hasNameIn(setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")))
+
+    assertThat(list.strategies).isEmpty()
+    assertThat(list.processors).isEmpty()
   }
 
   @Test
   fun `use spi defined strategies and processors to generate code`() {
-    val registry = registry(contextTypeUpperBound = TestContext::class)
+    val registry = KotlinCodeGenerationSpiList(
+      TestDataClassStrategy()
+    ).registry()
     val context = TestContext(registry)
 
 

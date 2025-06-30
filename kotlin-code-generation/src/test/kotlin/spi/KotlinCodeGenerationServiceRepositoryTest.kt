@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
-import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
+import io.toolisticon.kotlin.generation.spi.registry.DefaultKotlinCodeGenerationServiceRegistry
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinDataClassSpecStrategy
 import org.assertj.core.api.Assertions.assertThat
@@ -30,14 +30,6 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
     override val specType: KClass<KotlinDataClassSpec> = KotlinDataClassSpec::class
 
-  }
-
-
-  @Test
-  fun `create registry from spi instances`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = TestContext::class, strategies = KotlinCodeGenerationStrategyList(FooDataClassStrategy()))
-
-    println(registry)
   }
 
   object SealedSuperContext {
@@ -73,8 +65,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   @Test
   fun `initialize with sealed super context`() {
-    val registry = KotlinCodeGenerationServiceRepository(
-      contextTypeUpperBound = SealedSuperContext.SuperContext::class,
+    val registry = DefaultKotlinCodeGenerationServiceRegistry(
       strategies = KotlinCodeGenerationStrategyList(SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
     )
 
