@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
  * Wraps list of [KotlinCodeGenerationStrategy] instances. Used to provide additional functionalities.
  */
 @ExperimentalKotlinPoetApi
-@JvmInline
-value class KotlinCodeGenerationStrategyList(
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
+data class KotlinCodeGenerationStrategyList(
   @PublishedApi
   internal val list: List<UnboundKotlinCodeGenerationStrategy>
 ) : List<UnboundKotlinCodeGenerationStrategy> by list {
@@ -37,6 +37,7 @@ value class KotlinCodeGenerationStrategyList(
   inline fun <reified STRATEGY : KotlinCodeGenerationStrategy<CONTEXT, INPUT, SPEC>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> filter() = filter(STRATEGY::class)
 
   override fun toString(): String = "KotlinCodeGenerationStrategyList(strategies=${list.map { it.name }})"
+
 }
 
 @ExperimentalKotlinPoetApi

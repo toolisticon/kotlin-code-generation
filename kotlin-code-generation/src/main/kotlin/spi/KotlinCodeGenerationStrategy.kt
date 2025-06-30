@@ -32,6 +32,14 @@ interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CON
    * @return the generated spec
    */
   operator fun invoke(context: CONTEXT, input: INPUT): SPEC
+
+  /**
+   * Checks if this strategy should be applied.
+   *
+   * @param context the context we are operating in
+   * @param input the concrete work item
+   * @return `true` if this strategy should be applied, `false` otherwise.
+   */
   override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   /**
@@ -49,9 +57,3 @@ interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CON
     null
   }
 }
-
-/**
- * Convenience alias to reference unbound strategies without repeating the `<*,*,*>`.
- */
-@ExperimentalKotlinPoetApi
-typealias UnboundKotlinCodeGenerationStrategy = KotlinCodeGenerationStrategy<*, *, *>

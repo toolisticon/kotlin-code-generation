@@ -1,4 +1,3 @@
-
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ClassName
@@ -101,7 +100,6 @@ object TestFixtures {
     }
   }
 
-
   object SpiFixtures {
 
     data class InputA(
@@ -129,17 +127,14 @@ object TestFixtures {
       contextType = EmptyContext::class, inputType = InputB::class
     )
 
-
     object EmptyContext : KotlinCodeGenerationContext<EmptyContext> {
       override val contextType = EmptyContext::class
       override val registry = EmptyRegistry
     }
 
     object EmptyRegistry : KotlinCodeGenerationSpiRegistry {
-      override val contextTypeUpperBound = Any::class
       override val strategies: KotlinCodeGenerationStrategyList = KotlinCodeGenerationStrategyList()
       override val processors: KotlinCodeGenerationProcessorList = KotlinCodeGenerationProcessorList()
     }
   }
-
 }

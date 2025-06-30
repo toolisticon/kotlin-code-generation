@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
  * Wraps list of [KotlinCodeGenerationProcessor] instances. Used to provide additional functionalities.
  */
 @ExperimentalKotlinPoetApi
-@JvmInline
-value class KotlinCodeGenerationProcessorList(
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
+data class KotlinCodeGenerationProcessorList(
   @PublishedApi
   internal val list: List<UnboundKotlinCodeGenerationProcessor>
 ) : List<UnboundKotlinCodeGenerationProcessor> by list {
@@ -36,10 +36,8 @@ value class KotlinCodeGenerationProcessorList(
    */
   inline fun <reified PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, SPEC>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, SPEC : Any> filter() = filter(PROCESSOR::class)
 
-
   override fun toString(): String = "KotlinCodeGenerationProcessorList(processors=${list.map { it.name }})"
 }
-
 
 @ExperimentalKotlinPoetApi
 fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> List<PROCESSOR>.executeSingle(
