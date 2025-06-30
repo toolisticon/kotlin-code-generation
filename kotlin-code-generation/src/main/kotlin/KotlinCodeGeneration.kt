@@ -29,7 +29,6 @@ import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.*
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
-import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationSpiList
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import java.util.function.Predicate
@@ -555,22 +554,6 @@ object KotlinCodeGeneration {
       classLoader: ClassLoader = defaultClassLoader(),
       filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
     ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
-
-    fun registry(
-      classLoader: ClassLoader = defaultClassLoader(),
-      filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
-    ): KotlinCodeGenerationSpiList = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
-
-    /**
-     * Initializes registry using spi.
-     */
-    fun registry(
-      contextTypeUpperBound: KClass<*> = Any::class,
-      classLoader: ClassLoader = defaultClassLoader(),
-      exclusions: Set<String> = emptySet()
-    ): KotlinCodeGenerationSpiList = KotlinCodeGenerationServiceLoader(classLoader = classLoader)()
-      .filter(filter.hasContextType(contextTypeUpperBound))
-      .filterNot(filter.hasNameIn(exclusions))
   }
 
   /**

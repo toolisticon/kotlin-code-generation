@@ -3,8 +3,9 @@ package io.toolisticon.kotlin.generation.itest.spi
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry
-import io.toolisticon.kotlin.generation.spi.registry.DefaultKotlinCodeGenerationServiceRegistry
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasContextType
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasNameIn
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationSpiList
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.compile
 import io.toolisticon.kotlin.generation.test.callPrimaryConstructor
@@ -19,19 +20,20 @@ internal class SpiITest {
 
   @Test
   fun `init is empty`() {
-    val registry = registry(
-      contextTypeUpperBound = TestContext::class,
-      exclusions = setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")
-    )
+    val list = KotlinCodeGenerationSpiList()
+      .filter(hasContextType(TestContext::class))
+      .filterNot(hasNameIn(setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")))
 
-    assertThat(registry.strategies).isEmpty()
-    assertThat(registry.processors).isEmpty()
+    assertThat(list.strategies).isEmpty()
+    assertThat(list.processors).isEmpty()
   }
 
   @Test
   fun `use spi defined strategies and processors to generate code`() {
-    val list = registry()
-    val context = TestContext(DefaultKotlinCodeGenerationServiceRegistry(list))
+    val registry = KotlinCodeGenerationSpiList(
+      TestDataClassStrategy()
+    ).registry()
+    val context = TestContext(registry)
 
 
     val input = MapInput(
