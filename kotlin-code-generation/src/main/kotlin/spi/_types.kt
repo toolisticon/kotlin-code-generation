@@ -34,7 +34,9 @@ typealias UnboundKotlinCodeGenerationStrategy = KotlinCodeGenerationStrategy<*, 
 @ExperimentalKotlinPoetApi
 typealias UnboundKotlinCodeGenerationProcessor = KotlinCodeGenerationProcessor<*, *, *>
 
-
+/**
+ * Convenience alias for a [Predicate] without repeating the `<*,*,*>`.
+ */
 @ExperimentalKotlinPoetApi
 typealias KotlinCodeGenerationSpiPredicate = Predicate<UnboundKotlinCodeGenerationSpi>
 
