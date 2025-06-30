@@ -519,40 +519,67 @@ object KotlinCodeGeneration {
     @Suppress("ClassName")
     object filter {
 
+      /**
+       * Does not filter anything, matches all.
+       */
       val all: KotlinCodeGenerationSpiPredicate = Predicate { true }
 
+      /**
+       * Matches by name, using the simpleName of the class.
+       */
       fun hasName(name: String): KotlinCodeGenerationSpiPredicate = Predicate {
         name == it::class.simpleName
       }
 
+      /**
+       * Matches if instance is of type [UnboundKotlinCodeGenerationStrategy].
+       */
       val isStrategy: KotlinCodeGenerationSpiPredicate = Predicate {
         it is UnboundKotlinCodeGenerationStrategy
       }
 
+      /**
+       * Matches if instance is of type [UnboundKotlinCodeGenerationProcessor].
+       */
       val isProcessor: KotlinCodeGenerationSpiPredicate = Predicate {
         it is UnboundKotlinCodeGenerationProcessor
       }
 
+      /**
+       * Matches if instances has a name contained in the given set.
+       */
       fun hasNameIn(names: Set<String>): KotlinCodeGenerationSpiPredicate = Predicate {
         names.contains(it::class.java.name)
       }
 
+      /**
+       * Matches if the contextType of the instance is a subclass of the given contextType.
+       */
       fun hasContextType(contextType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
         it.contextType.isSubclassOf(contextType)
       }
 
+      /**
+       * Matches if the inputType of the instance is a subclass of the given inputType.
+       */
       fun hasInputType(inputType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
         it.inputType.isSubclassOf(inputType)
       }
 
+      /**
+       * Matches if the specType of the instance is a subclass of the given specType.
+       */
       fun hasSpecType(specType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
         it.inputType.isSubclassOf(specType)
       }
     }
 
+    /**
+     * Load all [KotlinCodeGenerationSpi] instances from the classpath resource using the default classLoader.
+     */
     fun load(
       classLoader: ClassLoader = defaultClassLoader(),
-      filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
+      filter: KotlinCodeGenerationSpiPredicate = spi.filter.all
     ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
   }
 
