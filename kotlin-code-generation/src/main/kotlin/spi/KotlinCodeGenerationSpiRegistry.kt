@@ -28,4 +28,3 @@ interface KotlinCodeGenerationSpiRegistry {
    */
   val processors: KotlinCodeGenerationProcessorList
 }
-

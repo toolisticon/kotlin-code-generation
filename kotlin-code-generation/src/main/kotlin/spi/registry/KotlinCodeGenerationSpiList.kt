@@ -7,11 +7,18 @@ import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrateg
 
 /**
  * A list of [UnboundKotlinCodeGenerationSpi] that implements the [KotlinCodeGenerationSpiRegistry] interface.
+ *
+ * These are loaded via SPI using [java.util.ServiceLoader], implemented via [KotlinCodeGenerationSpiListSupplier].
  */
 @ExperimentalKotlinPoetApi
 @Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 data class KotlinCodeGenerationSpiList(private val list: List<UnboundKotlinCodeGenerationSpi>) : List<UnboundKotlinCodeGenerationSpi> by list {
 
+  /**
+   * Creates a [KotlinCodeGenerationSpiList] from the given strategies and processors.
+   *
+   * @param strategy the strategies to include in the list.
+   */
   constructor(vararg strategy: UnboundKotlinCodeGenerationSpi) : this(strategy.toList())
 
   val strategies: KotlinCodeGenerationStrategyList by lazy {
@@ -31,4 +38,9 @@ data class KotlinCodeGenerationSpiList(private val list: List<UnboundKotlinCodeG
   )
 
   override fun toString(): String = "KotlinCodeGenerationSpiList(list=${list.map { it.name }})"
+
+  fun registry() : KotlinCodeGenerationSpiRegistry = DefaultKotlinCodeGenerationServiceRegistry(
+    strategies = strategies,
+    processors = processors
+  )
 }

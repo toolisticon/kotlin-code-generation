@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry
-import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
+import io.toolisticon.kotlin.generation.spi.registry.DefaultKotlinCodeGenerationServiceRegistry
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.compile
 import io.toolisticon.kotlin.generation.test.callPrimaryConstructor
@@ -31,7 +31,7 @@ internal class SpiITest {
   @Test
   fun `use spi defined strategies and processors to generate code`() {
     val list = registry()
-    val context = TestContext(KotlinCodeGenerationServiceRepository(list))
+    val context = TestContext(DefaultKotlinCodeGenerationServiceRegistry(list))
 
 
     val input = MapInput(

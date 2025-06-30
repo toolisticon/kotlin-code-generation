@@ -26,6 +26,14 @@ interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CO
    * Input is nullable because we could use processors solely based on context.
    */
   operator fun invoke(context: CONTEXT, input: INPUT, builder: BUILDER): BUILDER
+
+  /**
+   * Checks if this processor should be applied.
+   *
+   * @param context the context we are operating in
+   * @param input the concrete work item
+   * @return `true` if this processor should be applied, `false` otherwise.
+   */
   override fun test(context: CONTEXT, input: Any): Boolean = super.test(context, input)
 
   /**

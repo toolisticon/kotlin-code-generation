@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spi.registry
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
+import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiPredicate
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
@@ -16,7 +17,7 @@ import java.util.*
  * or short by [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry].
  */
 @ExperimentalKotlinPoetApi
-data class KotlinCodeGenerationServiceRepository(
+data class DefaultKotlinCodeGenerationServiceRegistry(
   override val processors: KotlinCodeGenerationProcessorList = KotlinCodeGenerationProcessorList(),
   override val strategies: KotlinCodeGenerationStrategyList = KotlinCodeGenerationStrategyList(),
 ) : KotlinCodeGenerationSpiRegistry {
@@ -25,6 +26,8 @@ data class KotlinCodeGenerationServiceRepository(
     processors = spi.processors,
     strategies = spi.strategies,
   )
+
+  constructor(spi: KotlinCodeGenerationSpiList, filter: KotlinCodeGenerationSpiPredicate) : this(spi.filter(filter))
 
   private val logger = KotlinLogging.logger {}
 

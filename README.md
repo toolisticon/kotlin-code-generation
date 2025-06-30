@@ -2,7 +2,6 @@
 
 The one-stop lib for code generation for kotlin (jvm) and code generation testing. Based on [kotlin-poet](https://square.github.io/kotlinpoet/).
 
-
 [![incubating](https://img.shields.io/badge/lifecycle-INCUBATING-orange.svg)](https://github.com/holisticon#open-source-lifecycle)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.toolisticon.kotlin.generation/kotlin-code-generation)
 [![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
@@ -30,7 +29,22 @@ The one-stop lib for code generation for kotlin (jvm) and code generation testin
 
 ## Documentation
 
-* see [kotlin-poet](https://square.github.io/kotlinpoet/) 
+This code generation lib wraps the fantastic [kotlin-poet](https://square.github.io/kotlinpoet/) framework. The documentation is based on the [kotlin-poet documentation](https://square.github.io/kotlinpoet/).
+
+## Getting started
+
+Core concept are [Strategies](./kotlin-code-generation/src/main/kotlin/spi/KotlinCodeGenerationStrategy.kt) and [Processors](./kotlin-code-generation/src/main/kotlin/spi/KotlinCodeGenerationProcessor.kt).
+
+### Load SPI
+
+* Implement and list your strategies and processors in the `META-INF/services/io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi`. Both interfaces are loaded via the same ServiceLoader mechanism,
+and later filtered for the specific type of strategy or processor.
+* Load the services via `val spi = KotlinCodeGeneration.spi.load()`
+* Define your context by extending the `KotlinCodeGenerationContext` class. This context is passed to the strategies and processors, so they can use more data than just the input item in the loop.
+  * You probably want to filter the loaded list you provide to your specific context.
+  * 
+
+
 
 ## Features
 

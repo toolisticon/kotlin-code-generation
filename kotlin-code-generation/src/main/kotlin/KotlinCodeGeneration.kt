@@ -551,6 +551,11 @@ object KotlinCodeGeneration {
       }
     }
 
+    fun load(
+      classLoader: ClassLoader = defaultClassLoader(),
+      filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
+    ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
+
     fun registry(
       classLoader: ClassLoader = defaultClassLoader(),
       filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
