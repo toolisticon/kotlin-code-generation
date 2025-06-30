@@ -2,14 +2,12 @@ package io.toolisticon.kotlin.generation.spi.registry
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationProcessor
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
 import java.util.*
-import kotlin.reflect.KClass
 
 /**
  * Holds all implementation instances of [KotlinCodeGenerationStrategy] and [KotlinCodeGenerationProcessor].
@@ -18,21 +16,15 @@ import kotlin.reflect.KClass
  * or short by [io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry].
  */
 @ExperimentalKotlinPoetApi
-class KotlinCodeGenerationServiceRepository(
-  override val contextTypeUpperBound: KClass<*>,
+data class KotlinCodeGenerationServiceRepository(
   override val processors: KotlinCodeGenerationProcessorList = KotlinCodeGenerationProcessorList(),
   override val strategies: KotlinCodeGenerationStrategyList = KotlinCodeGenerationStrategyList(),
 ) : KotlinCodeGenerationSpiRegistry {
-  companion object {
 
-    fun load(
-      contextTypeUpperBound: KClass<*>,
-      classLoader: ClassLoader = KotlinCodeGeneration.spi.defaultClassLoader(),
-      exclusions: Set<String> = emptySet()
-    ): KotlinCodeGenerationSpiRegistry {
-      return KotlinCodeGenerationServiceLoader(contextTypeUpperBound, classLoader, exclusions)()
-    }
-  }
+  constructor(spi: KotlinCodeGenerationSpiList) : this(
+    processors = spi.processors,
+    strategies = spi.strategies,
+  )
 
   private val logger = KotlinLogging.logger {}
 
@@ -44,7 +36,6 @@ class KotlinCodeGenerationServiceRepository(
   }
 
   override fun toString(): String = "${this::class.simpleName}(" +
-    "contextType=$contextTypeUpperBound, " +
     "strategies=${strategies}, " +
     "processors=${processors})"
 }

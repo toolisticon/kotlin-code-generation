@@ -32,14 +32,6 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
 
   }
 
-
-  @Test
-  fun `create registry from spi instances`() {
-    val registry = KotlinCodeGenerationServiceRepository(contextTypeUpperBound = TestContext::class, strategies = KotlinCodeGenerationStrategyList(FooDataClassStrategy()))
-
-    println(registry)
-  }
-
   object SealedSuperContext {
 
     sealed interface TestType {
@@ -74,7 +66,6 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
   @Test
   fun `initialize with sealed super context`() {
     val registry = KotlinCodeGenerationServiceRepository(
-      contextTypeUpperBound = SealedSuperContext.SuperContext::class,
       strategies = KotlinCodeGenerationStrategyList(SealedSuperContext.LongDataClassStrategy(), SealedSuperContext.StringDataClassStrategy())
     )
 

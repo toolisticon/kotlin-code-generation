@@ -27,13 +27,12 @@ import io.toolisticon.kotlin.generation.builder.extra.*
 import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContextFactory
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
-import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationStrategy
+import io.toolisticon.kotlin.generation.spi.*
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationSpiList
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
+import java.util.function.Predicate
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -512,10 +511,50 @@ object KotlinCodeGeneration {
    */
   @Suppress("ClassName")
   object spi {
+
     /**
      * The default classLoader supplier fn.
      */
     val defaultClassLoader: () -> ClassLoader = { Thread.currentThread().contextClassLoader }
+
+    @Suppress("ClassName")
+    object filter {
+
+      val all: KotlinCodeGenerationSpiPredicate = Predicate { true }
+
+      fun hasName(name: String): KotlinCodeGenerationSpiPredicate = Predicate {
+        name == it::class.simpleName
+      }
+
+      val isStrategy: KotlinCodeGenerationSpiPredicate = Predicate {
+        it is UnboundKotlinCodeGenerationStrategy
+      }
+
+      val isProcessor: KotlinCodeGenerationSpiPredicate = Predicate {
+        it is UnboundKotlinCodeGenerationProcessor
+      }
+
+      fun hasNameIn(names: Set<String>): KotlinCodeGenerationSpiPredicate = Predicate {
+        names.contains(it::class.java.name)
+      }
+
+      fun hasContextType(contextType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
+        it.contextType.isSubclassOf(contextType)
+      }
+
+      fun hasInputType(inputType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
+        it.inputType.isSubclassOf(inputType)
+      }
+
+      fun hasSpecType(specType: KClass<*>): KotlinCodeGenerationSpiPredicate = Predicate {
+        it.inputType.isSubclassOf(specType)
+      }
+    }
+
+    fun registry(
+      classLoader: ClassLoader = defaultClassLoader(),
+      filter: KotlinCodeGenerationSpiPredicate = Predicate { true }
+    ): KotlinCodeGenerationSpiList = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
 
     /**
      * Initializes registry using spi.
@@ -524,7 +563,9 @@ object KotlinCodeGeneration {
       contextTypeUpperBound: KClass<*> = Any::class,
       classLoader: ClassLoader = defaultClassLoader(),
       exclusions: Set<String> = emptySet()
-    ): KotlinCodeGenerationSpiRegistry = KotlinCodeGenerationServiceLoader(contextTypeUpperBound = contextTypeUpperBound, classLoader = classLoader, exclusions = exclusions).invoke()
+    ): KotlinCodeGenerationSpiList = KotlinCodeGenerationServiceLoader(classLoader = classLoader)()
+      .filter(filter.hasContextType(contextTypeUpperBound))
+      .filterNot(filter.hasNameIn(exclusions))
   }
 
   /**

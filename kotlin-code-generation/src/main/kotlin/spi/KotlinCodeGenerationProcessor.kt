@@ -45,9 +45,3 @@ interface KotlinCodeGenerationProcessor<CONTEXT : KotlinCodeGenerationContext<CO
     builder
   }
 }
-
-/**
- * Convenience alias to reference unbound processors without repeating the `<*,*,*>`.
- */
-@ExperimentalKotlinPoetApi
-typealias UnboundKotlinCodeGenerationProcessor = KotlinCodeGenerationProcessor<*, *, *>

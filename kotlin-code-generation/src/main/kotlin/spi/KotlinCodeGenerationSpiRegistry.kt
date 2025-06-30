@@ -3,7 +3,6 @@ package io.toolisticon.kotlin.generation.spi
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.spi.processor.KotlinCodeGenerationProcessorList
 import io.toolisticon.kotlin.generation.spi.strategy.KotlinCodeGenerationStrategyList
-import kotlin.reflect.KClass
 
 /**
  * The registry provides access to all registered [KotlinCodeGenerationSpi] instances.
@@ -18,13 +17,6 @@ import kotlin.reflect.KClass
 @ExperimentalKotlinPoetApi
 interface KotlinCodeGenerationSpiRegistry {
   /**
-   * All spi instances define a [KotlinCodeGenerationSpi.contextType] to indicate the context
-   * they are operating on. The registries upper bound defines what contextTypes are allowed in this
-   * registry. Especially useful when dealing with context hierarchies.
-   */
-  val contextTypeUpperBound: KClass<*>
-
-  /**
    * All registered [KotlinCodeGenerationStrategy] instances, wrapped in a [KotlinCodeGenerationStrategyList].
    * Must not be empty.
    */
@@ -35,5 +27,5 @@ interface KotlinCodeGenerationSpiRegistry {
    * Might be empty.
    */
   val processors: KotlinCodeGenerationProcessorList
-
 }
+

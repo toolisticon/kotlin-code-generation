@@ -4,13 +4,13 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.registry
+import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceRepository
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import io.toolisticon.kotlin.generation.test.KotlinCodeGenerationTest.compile
 import io.toolisticon.kotlin.generation.test.callPrimaryConstructor
 import io.toolisticon.kotlin.generation.test.model.KotlinCompilationCommand
 import io.toolisticon.kotlin.generation.test.model.requireOk
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.Test
 
@@ -18,20 +18,20 @@ import org.junit.jupiter.api.Test
 internal class SpiITest {
 
   @Test
-  fun `init fails when only strategy is excluded`() {
-    assertThatThrownBy {
-      registry(
-        contextTypeUpperBound = TestContext::class,
-        exclusions = setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")
-      )
-    }.isInstanceOf(IllegalStateException::class.java)
-      .hasMessage("No serviceInstances found, configure `META-INF/services/io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi`, and/or check your exclusions filter.")
+  fun `init is empty`() {
+    val registry = registry(
+      contextTypeUpperBound = TestContext::class,
+      exclusions = setOf("io.toolisticon.kotlin.generation.itest.spi.TestDataClassStrategy")
+    )
+
+    assertThat(registry.strategies).isEmpty()
+    assertThat(registry.processors).isEmpty()
   }
 
   @Test
   fun `use spi defined strategies and processors to generate code`() {
-    val registry = registry(contextTypeUpperBound = TestContext::class)
-    val context = TestContext(registry)
+    val list = registry()
+    val context = TestContext(KotlinCodeGenerationServiceRepository(list))
 
 
     val input = MapInput(

@@ -49,9 +49,3 @@ interface KotlinCodeGenerationStrategy<CONTEXT : KotlinCodeGenerationContext<CON
     null
   }
 }
-
-/**
- * Convenience alias to reference unbound strategies without repeating the `<*,*,*>`.
- */
-@ExperimentalKotlinPoetApi
-typealias UnboundKotlinCodeGenerationStrategy = KotlinCodeGenerationStrategy<*, *, *>
