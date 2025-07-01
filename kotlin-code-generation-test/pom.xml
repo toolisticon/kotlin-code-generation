@@ -11,6 +11,7 @@
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
   <artifactId>kotlin-code-generation-test</artifactId>
+  <name>kotlin-code-generation-test</name>
   <description>Tools for testing generated classes. This lib exposes testing libraries and is supposed to be included
     with `scope=test`
   </description>

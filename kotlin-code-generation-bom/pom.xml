@@ -10,6 +10,7 @@
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
   <artifactId>kotlin-code-generation-bom</artifactId>
+  <name>kotlin-code-generation-bom</name>
   <description>Bill of material for kotlin-code-generation.</description>
   <packaging>pom</packaging>
 
