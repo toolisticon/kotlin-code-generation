@@ -30,6 +30,7 @@ jobs:
           java-version: 17
           distribution: zulu
           cache: maven
+          server-id: central
 
       # Prepare
       - name: Prepare Maven Wrapper
