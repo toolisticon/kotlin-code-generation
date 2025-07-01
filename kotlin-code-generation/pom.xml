@@ -5,12 +5,13 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <relativePath>../_build/parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation</groupId>
   <artifactId>kotlin-code-generation</artifactId>
+  <name>kotlin-code-generation</name>
   <description>Wrapping core components for kotlin code generation with kotlin-poet.</description>
 
   <dependencies>

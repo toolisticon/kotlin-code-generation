@@ -5,12 +5,12 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
   <artifactId>report-generator</artifactId>
-  <name>report: ${project.artifactId}</name>
+  <name>report: report-generator</name>
   <description>Generates aggregate reports.</description>
   <packaging>pom</packaging>
 

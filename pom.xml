@@ -5,15 +5,15 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2025.6.1</version>
+    <version>2025.7.1</version>
     <relativePath/>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation._</groupId>
   <artifactId>kotlin-code-generation-root</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
 
-  <name>pom: ${project.artifactId}</name>
+  <name>pom: kotlin-code-generation-root</name>
   <description>Root of kotlin-code-generation</description>
   <url>https://github.com/toolisticon/kotlin-code-generation/</url>
   <packaging>pom</packaging>
@@ -72,17 +72,6 @@
     <developerConnection>scm:git:git@github.com:toolisticon/kotlin-code-generation.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
   <developers>
     <developer>

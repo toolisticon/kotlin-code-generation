@@ -5,12 +5,12 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-root</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>kotlin-code-generation-parent</artifactId>
-  <name>pom: ${project.artifactId}</name>
+  <name>pom: kotlin-code-generation-parent</name>
   <description>Common parent pom for all modules.</description>
   <packaging>pom</packaging>
 
