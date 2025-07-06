@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ClassName
 import java.util.function.Supplier
+import kotlin.reflect.KClass
 
 /**
  * Marks a type as capable of building a new product.
@@ -21,6 +22,22 @@ interface BuilderSupplier<PRODUCT : Any, SPEC : Any> : Builder<PRODUCT>, Supplie
 interface WithClassName {
   val className: ClassName
 }
+
+/**
+ * An implementing type can provide a generic value for a tag key.
+ * Behaves as [com.squareup.kotlinpoet.Taggable] but hides the implementation of the tg provider.
+ */
+interface WithTags {
+  /**
+   * @see [com.squareup.kotlinpoet.Taggable.tag]
+   */
+  fun <T : Any> tag(type: KClass<T>): T?
+}
+
+/**
+ * Reified access to [WithTags.tag].
+ */
+inline fun <reified T : Any> WithTags.tag(): T? = tag(T::class)
 
 /**
  * ClassName when used as a file name for fileSpec.
