@@ -24,9 +24,7 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
     contextType = TestContext::class,
     inputType = TestInput::class,
   ) {
-    override fun invoke(context: TestContext, input: TestInput): KotlinDataClassSpec {
-      TODO("Not yet implemented")
-    }
+    override fun invoke(context: TestContext, input: TestInput): KotlinDataClassSpec = TODO("Not yet implemented")
 
     override val specType: KClass<KotlinDataClassSpec> = KotlinDataClassSpec::class
 

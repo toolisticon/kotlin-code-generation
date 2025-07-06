@@ -1,4 +1,3 @@
-
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
@@ -16,6 +15,7 @@ import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.spi.strategy.executeSingle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.reflect.KClass
 
 @OptIn(ExperimentalKotlinPoetApi::class)
 class KotlinCodeGenerationStrategyListTest {
@@ -24,6 +24,8 @@ class KotlinCodeGenerationStrategyListTest {
     override fun invoke(context: EmptyContext, input: InputA): KotlinDataClassSpec = buildDataClass(input.className) {
       input.fields.map { (k, v) -> buildConstructorProperty(k, v) }.forEach(this::addConstructorProperty)
     }
+
+    override fun <T : Any> tag(type: KClass<T>): T? = TODO("Not yet implemented")
   }
 
   class BStrategy : DataClassBStrategy() {
