@@ -6,25 +6,49 @@ import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.TypeSpec
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.WithClassName
-import io.toolisticon.kotlin.generation.poet.*
+import io.toolisticon.kotlin.generation.WithTags
+import io.toolisticon.kotlin.generation.poet.KDoc
+import io.toolisticon.kotlin.generation.poet.PoetSpec
+import io.toolisticon.kotlin.generation.poet.PoetSpecSupplier
+import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
-import kotlin.reflect.KClass
 
+/**
+ * A supplier for Kotlin generator specs, which can be used to provide a spec for code generation.
+ * This is typically used in conjunction with Kotlin generator specifications.
+ */
 interface KotlinGeneratorSpecSupplier<GENERATOR_SPEC> {
   fun spec(): GENERATOR_SPEC
 }
 
+/**
+ * A Kotlin generator specification that provides a code generation spec.
+ * It extends the [PoetSpecSupplier] interface to provide the underlying spec.
+ *
+ * @param SELF The type of the generator spec itself, used for fluent API.
+ * @param SPEC The type of the spec being generated.
+ * @param SUPPLIER The type of the supplier for the spec.
+ */
 sealed interface KotlinGeneratorSpec<SELF : KotlinGeneratorSpec<SELF, SPEC, SUPPLIER>, SPEC : PoetSpec, SUPPLIER : PoetSpecSupplier<SPEC>> : PoetSpecSupplier<SPEC>, KotlinGeneratorSpecSupplier<SELF> {
   override fun spec(): SELF
   val code: String get() = get().toString()
 }
 
+/**
+ * A Kotlin generator type specification that provides a type spec.
+ * It extends the [KotlinGeneratorSpec] interface to provide the underlying type spec.
+ *
+ * @param SELF The type of the generator spec itself, used for fluent API.
+ */
 sealed interface KotlinGeneratorTypeSpec<SELF : KotlinGeneratorTypeSpec<SELF>> : KotlinGeneratorSpec<SELF, TypeSpec, TypeSpecSupplier>, TypeSpecSupplier {
   override fun spec(): SELF
 }
 
+/**
+ * Marks a spec as documentable, meaning it can be documented with KDoc.
+ */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinDocumentableSpec : TaggableSpec {
+sealed interface KotlinDocumentableSpec : WithTags {
   val kdoc: KDoc
 }
 
@@ -40,21 +64,6 @@ sealed interface ToFileTypeSpecSupplier : TypeSpecSupplier, WithClassName
 fun ToFileTypeSpecSupplier.toFileSpec() = KotlinCodeGeneration.buildFile(className) {
   addType(this@toFileSpec)
 }
-
-/**
- * Marks Spec as [com.squareup.kotlinpoet.Taggable].
- */
-sealed interface TaggableSpec {
-  /**
-   * @see [com.squareup.kotlinpoet.Taggable.tag]
-   */
-  fun <T : Any> tag(type: KClass<T>): T?
-}
-
-/**
- * Reified access to [TaggableSpec.tag].
- */
-inline fun <reified T : Any> TaggableSpec.tag(): T? = tag(T::class)
 
 /**
  * Tags a spec with extra type.

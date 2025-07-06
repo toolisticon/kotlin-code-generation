@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import io.toolisticon.kotlin.generation.WithTags
 import kotlin.reflect.KClass
 
 /**
@@ -13,7 +14,7 @@ import kotlin.reflect.KClass
  * Hint: for implementing a concrete context, use the [io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase].
  */
 @ExperimentalKotlinPoetApi
-interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> {
+interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> : WithTags {
 
   /**
    * SELF type of the context implementation, used to verify against [io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpi.contextType].
@@ -38,6 +39,8 @@ interface KotlinCodeGenerationContext<SELF : KotlinCodeGenerationContext<SELF>> 
   fun <PROCESSOR : KotlinCodeGenerationProcessor<CONTEXT, INPUT, BUILDER>, CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any, BUILDER : Any> processors(
     processorType: KClass<PROCESSOR>
   ): List<PROCESSOR> = registry.processors.filterIsInstance(processorType.java)
+
+  override fun <T : Any> tag(type: KClass<T>): T? = null
 }
 
 /**

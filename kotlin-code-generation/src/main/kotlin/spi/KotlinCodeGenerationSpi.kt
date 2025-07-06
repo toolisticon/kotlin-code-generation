@@ -1,6 +1,7 @@
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
+import io.toolisticon.kotlin.generation.WithTags
 import java.util.function.BiPredicate
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
@@ -14,7 +15,7 @@ import kotlin.reflect.full.isSubclassOf
  * * [KotlinCodeGenerationProcessor] - visitor pattern to modify spec builders before the spec is build.
  */
 @ExperimentalKotlinPoetApi
-sealed interface KotlinCodeGenerationSpi<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any> {
+sealed interface KotlinCodeGenerationSpi<CONTEXT : KotlinCodeGenerationContext<CONTEXT>, INPUT : Any> : Comparable<KotlinCodeGenerationSpi<*, *>>, BiPredicate<CONTEXT, Any>, WithTags {
   companion object {
     val metaInfServices = "META-INF/services/${KotlinCodeGenerationSpi::class.qualifiedName}"
     const val DEFAULT_ORDER = 0
@@ -57,4 +58,6 @@ sealed interface KotlinCodeGenerationSpi<CONTEXT : KotlinCodeGenerationContext<C
    * @return `true` when the spi shoud be applied.
    */
   override fun test(context: CONTEXT, input: Any): Boolean = context::class.isSubclassOf(contextType) && input::class.isSubclassOf(inputType)
+
+  override fun <T : Any> tag(type: KClass<T>): T? = null
 }

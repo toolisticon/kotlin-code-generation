@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import io.toolisticon.kotlin.generation.WithClassName
+import io.toolisticon.kotlin.generation.WithTags
 import io.toolisticon.kotlin.generation.poet.FileSpecSupplier
 import kotlin.reflect.KClass
 
@@ -11,7 +12,7 @@ import kotlin.reflect.KClass
  */
 data class KotlinFileSpec(
   private val spec: FileSpec
-) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, TaggableSpec, KotlinFileSpecIterable {
+) : KotlinGeneratorSpec<KotlinFileSpec, FileSpec, FileSpecSupplier>, KotlinFileSpecSupplier, WithTags, KotlinFileSpecIterable {
 
   val packageName: String = spec.packageName
   val rootName: String = spec.name
@@ -37,6 +38,7 @@ interface KotlinFileSpecSupplier : KotlinGeneratorSpecSupplier<KotlinFileSpec>, 
  * List that contains multiple [KotlinFileSpec]s.
  */
 @JvmInline
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 value class KotlinFileSpecList(private val fileSpecs: List<KotlinFileSpec>) : List<KotlinFileSpec> by fileSpecs, KotlinFileSpecIterable {
   companion object {
 
