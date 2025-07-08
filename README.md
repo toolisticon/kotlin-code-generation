@@ -3,7 +3,7 @@
 The one-stop lib for code generation for kotlin (jvm) and code generation testing. Based on [kotlin-poet](https://square.github.io/kotlinpoet/).
 
 [![stable](https://img.shields.io/badge/lifecycle-STABLE-green.svg)](https://github.com/holisticon#open-source-lifecycle) 
-[![Maven Central Version](https://img.shields.io/maven-central/v/io.toolisticon.kotlin.generation/kotlin-code-generation-bpm)](https://central.sonatype.com/namespace/io.toolisticon.kotlin.generation)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.toolisticon.kotlin.generation/kotlin-code-generation-bom)](https://central.sonatype.com/namespace/io.toolisticon.kotlin.generation)
 [![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e493c246c3684b95a2ef097ae912d45a)](https://app.codacy.com/gh/toolisticon/kotlin-code-generation/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![codecov](https://codecov.io/gh/toolisticon/kotlin-code-generation/graph/badge.svg?token=kyJ82m5DAT)](https://codecov.io/gh/toolisticon/kotlin-code-generation)
