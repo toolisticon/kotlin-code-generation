@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-root</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -17,7 +17,7 @@
   <properties>
     <classgraph.version>4.8.180</classgraph.version>
     <kotlin-poet.version>2.2.0</kotlin-poet.version>
-    <kotlin-compile-testing.version>0.7.1</kotlin-compile-testing.version>
+    <kotlin-compile-testing.version>0.8.0</kotlin-compile-testing.version>
     <slf4j.version>2.0.17</slf4j.version>
 
     <!-- TEST -->
@@ -58,6 +58,7 @@
         <version>${assertj.version}</version>
         <scope>test</scope>
       </dependency>
+
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
