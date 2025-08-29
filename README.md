@@ -7,7 +7,7 @@ The one-stop lib for code generation for kotlin (jvm) and code generation testin
 [![Build Status](https://github.com/toolisticon/kotlin-code-generation/workflows/Development%20branches/badge.svg)](https://github.com/toolisticon/kotlin-code-generation/actions)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e493c246c3684b95a2ef097ae912d45a)](https://app.codacy.com/gh/toolisticon/kotlin-code-generation/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![codecov](https://codecov.io/gh/toolisticon/kotlin-code-generation/graph/badge.svg?token=kyJ82m5DAT)](https://codecov.io/gh/toolisticon/kotlin-code-generation)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![sponsored](https://img.shields.io/badge/sponsoredBy-Holisticon-RED.svg)](https://holisticon.de/)
 [![javadoc](https://javadoc.io/badge2/io.toolisticon.kotlin.generation/kotlin-code-generation/javadoc.svg)](https://javadoc.io/doc/io.toolisticon.kotlin.generation/kotlin-code-generation)
 
