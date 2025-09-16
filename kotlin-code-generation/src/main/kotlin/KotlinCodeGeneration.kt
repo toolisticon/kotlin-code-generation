@@ -602,6 +602,14 @@ object KotlinCodeGeneration {
     fun Enum<*>.asMemberName(): MemberName = this::class.asClassName().member(this.name)
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
+
+    fun TypeName.className(): ClassName = if (this is ClassName) {
+      this
+    } else {
+      throw IllegalStateException("Cannot extract ClassName from TypeName of type `${this::class.simpleName}`")
+    }
+
+    val TypeName.simpleName: String get() = className().simpleName
   }
 
   /**
