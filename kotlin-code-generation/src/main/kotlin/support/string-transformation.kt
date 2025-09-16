@@ -1,9 +1,14 @@
-// copied from kotlin-gists
 package io.toolisticon.kotlin.generation.support
+
+import org.apiguardian.api.API
+import org.apiguardian.api.API.Status.EXPERIMENTAL
+import kotlin.text.replace
+import kotlin.text.split
 
 /**
  * A transformation function for strings, which can be used to apply various transformations to a string.
  */
+@API(status = EXPERIMENTAL, since = "2025.7.0")
 fun interface StringTransformation : (String) -> String
 
 @Suppress("ClassName", "FunctionName")
@@ -40,17 +45,49 @@ data object StringTransformations {
    * Example: `fooBarHelloWorld` becomes `FOO_BAR_HELLO_WORLD`.
    */
   data object TO_UPPER_SNAKE_CASE : StringTransformation {
-    override fun invoke(input: String): String = input
-      .trim()
-      // Replace any sequence of non-alphanumeric characters (including whitespace) with underscore
-      .replace(Regex("[^A-Za-z0-9]+"), "_")
-      // Insert underscores between lower->upper camelCase boundaries
-      .replace(Regex("([a-z])([A-Z])"), "$1_$2")
-      // Collapse multiple underscores
-      .replace(Regex("_+"), "_")
-      // Remove leading/trailing underscores
-      .trim('_')
-      .uppercase()
+    override fun invoke(input: String): String {
+      val normalized = input
+        .trim()
+        // Replace any sequence of non-alphanumeric characters (including whitespace) with underscore
+        .replace(Regex("[^A-Za-z0-9]+"), "_")
+        // Collapse multiple underscores
+        .replace(Regex("_+"), "_")
+        // Remove leading/trailing underscores
+        .trim('_')
+
+      if (normalized.isEmpty()) return ""
+
+      fun Char.isLowerOrDigit() = this.isLowerCase() || this.isDigit()
+
+      val words = mutableListOf<String>()
+      normalized.split("_").forEach { token ->
+        if (token.isEmpty()) return@forEach
+        val sb = StringBuilder()
+        var lowerCountSinceBoundary = 0
+        for (i in token.indices) {
+          val c = token[i]
+          val prev = if (i > 0) token[i - 1] else null
+          val next = if (i + 1 < token.length) token[i + 1] else null
+
+          val shouldSplitHere = prev != null &&
+            prev.isLowerOrDigit() && c.isUpperCase() &&
+            (next != null && next.isLowerCase()) &&
+            lowerCountSinceBoundary >= 2
+
+          if (shouldSplitHere) {
+            words += sb.toString()
+            sb.setLength(0)
+            lowerCountSinceBoundary = 0
+          }
+
+          sb.append(c)
+          if (c.isLowerOrDigit()) lowerCountSinceBoundary++
+        }
+        if (sb.isNotEmpty()) words += sb.toString()
+      }
+
+      return words.joinToString("_") { it.uppercase() }
+    }
   }
 
   /**

@@ -87,6 +87,13 @@
     <!-- /KOTLIN -->
 
     <dependency>
+      <!-- FIXME: remove with 2025.9.2 -->
+      <groupId>org.apiguardian</groupId>
+      <artifactId>apiguardian-api</artifactId>
+      <version>1.1.2</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>

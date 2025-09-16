@@ -70,6 +70,11 @@ typealias SimpleName = String
 typealias PropertyName = String
 
 /**
+ * A constant name like 'FOO_BAR'.
+ */
+typealias ConstantName  = String
+
+/**
  * A parameter name, the  name of fun parameter.
  */
 typealias ParameterName = String

@@ -31,6 +31,8 @@ import io.toolisticon.kotlin.generation.spi.*
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
 import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
+import io.toolisticon.kotlin.generation.support.StringTransformations
+import io.toolisticon.kotlin.generation.support.StringTransformations.transform
 import java.util.function.Predicate
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
@@ -603,13 +605,30 @@ object KotlinCodeGeneration {
 
     fun TypeName.nullable(nullable: Boolean = true): TypeName = this.copy(nullable = nullable)
 
-    fun TypeName.className(): ClassName = if (this is ClassName) {
-      this
-    } else {
-      throw IllegalStateException("Cannot extract ClassName from TypeName of type `${this::class.simpleName}`")
-    }
+    /**
+     * Get [TypeName] as [ClassName].
+     */
+    fun TypeName.className(): ClassName = this as? ClassName ?: throw IllegalArgumentException("Cannot extract ClassName from TypeName of type `${this::class.simpleName}`")
 
-    val TypeName.simpleName: String get() = className().simpleName
+    /**
+     * Get simpleName of [ClassName].
+     */
+    val TypeName.simpleName: SimpleName get() = className().simpleName
+
+    /**
+     * Transform given name to a valid kotlin property name using [StringTransformations.TO_LOWER_CAMEL_CASE].
+     */
+    fun propertyName(name: String): PropertyName = name.transform(StringTransformations.TO_LOWER_CAMEL_CASE)
+
+    /**
+     * Transform given name to a valid kotlin constant name using [StringTransformations.TO_UPPER_SNAKE_CASE].
+     */
+    fun constantName(name: String): ConstantName = name.transform(StringTransformations.TO_UPPER_SNAKE_CASE)
+
+    /**
+     * Transform given name to a valid kotlin class name using [StringTransformations.TO_UPPER_CAMEL_CASE].
+     */
+    fun simpleName(name: String): SimpleName = name.transform(StringTransformations.TO_UPPER_CAMEL_CASE)
   }
 
   /**
