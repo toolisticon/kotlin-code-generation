@@ -11,7 +11,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildParameter
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_NAME
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING_TEMPLATE
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.nullable
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.simpleClassName
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder

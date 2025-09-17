@@ -1,7 +1,7 @@
 package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.WithClassName
 import kotlin.reflect.KClass
 

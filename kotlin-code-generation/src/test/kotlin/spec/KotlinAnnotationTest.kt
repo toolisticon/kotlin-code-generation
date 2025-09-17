@@ -2,13 +2,13 @@ package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotationSpecBuilder
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
-
 
 @OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinAnnotationTest {
@@ -25,9 +25,10 @@ internal class KotlinAnnotationTest {
     val annotation = buildAnnotation(MyAnnotation::class) {
       addStringMember("name", "foo")
       addKClassMember("type", String::class)
+      addKClassMembers("classes", className("com.acme", "ClassA"), className("com.acme", "ClassB"))
     }
 
-    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class)""")
+    assertThat(annotation.code).isEqualTo("""@io.toolisticon.kotlin.generation.TestFixtures.MyAnnotation(name = "foo", type = kotlin.String::class, classes = [com.acme.ClassA::class, com.acme.ClassB::class])""")
   }
 
   @Test

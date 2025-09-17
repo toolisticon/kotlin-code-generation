@@ -37,6 +37,7 @@ data class CodeBlockArray<T>(
     fun enumArray(vararg items: Enum<*>): CodeBlockArray<MemberName> = CodeBlockArray(FORMAT_MEMBER, items.map { it.asMemberName() }.toList())
 
     fun kclassArray(vararg items: KClass<*>): CodeBlockArray<KClass<*>> = CodeBlockArray(FORMAT_KCLASS, items.toList())
+    fun kclassArray(vararg items: ClassName): CodeBlockArray<ClassName> = CodeBlockArray(FORMAT_KCLASS, items.toList())
 
     fun typeNameArray(vararg items: TypeName): CodeBlockArray<TypeName> = CodeBlockArray(FORMAT_KCLASS, items.toList())
 

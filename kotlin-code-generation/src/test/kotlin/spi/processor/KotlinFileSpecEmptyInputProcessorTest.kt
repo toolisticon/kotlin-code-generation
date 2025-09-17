@@ -3,7 +3,7 @@ package io.toolisticon.kotlin.generation.spi.processor
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.fileBuilder
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation._test.MutableSpiRegistry
 import io.toolisticon.kotlin.generation._test.TestContext
 import io.toolisticon.kotlin.generation.builder.KotlinFileSpecBuilder

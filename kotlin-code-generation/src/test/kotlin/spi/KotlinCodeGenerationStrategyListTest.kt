@@ -3,7 +3,7 @@ package io.toolisticon.kotlin.generation.spi
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildConstructorProperty
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.TestFixtures.SpiFixtures.DataClassAStrategy
 import io.toolisticon.kotlin.generation.TestFixtures.SpiFixtures.DataClassBStrategy
 import io.toolisticon.kotlin.generation.TestFixtures.SpiFixtures.EmptyContext

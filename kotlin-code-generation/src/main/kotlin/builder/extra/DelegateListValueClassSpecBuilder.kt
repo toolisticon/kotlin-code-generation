@@ -2,7 +2,7 @@ package io.toolisticon.kotlin.generation.builder.extra
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.simpleClassName
 import io.toolisticon.kotlin.generation.SimpleName
 import io.toolisticon.kotlin.generation.builder.KotlinAnnotatableDocumentableModifiableBuilder
 import io.toolisticon.kotlin.generation.builder.KotlinGeneratorTypeSpecBuilder

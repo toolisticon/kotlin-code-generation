@@ -1,14 +1,14 @@
-
 package io.toolisticon.kotlin.generation.spec
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.functionName
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.propertyName
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-
 
 @OptIn(ExperimentalKotlinPoetApi::class)
 internal class KotlinClassTest {
@@ -17,7 +17,7 @@ internal class KotlinClassTest {
   fun `create class with default constructor and single hello world function`() {
     val builder = classBuilder("foo", "Bar")
 
-    builder.addFunction("helloWorld") {
+    builder.addFunction(functionName("Hello World")) {
       returns(String::class)
       addCode("return $FORMAT_STRING", "Hello World!")
     }
@@ -34,7 +34,7 @@ internal class KotlinClassTest {
   @Test
   fun `fail with constructorProperty AND primaryConstructor`() {
     val builder = classBuilder("foo", "Bar").apply {
-      addConstructorProperty("foo", String::class)
+      addConstructorProperty(propertyName("Foo"), String::class)
       primaryConstructor(KotlinCodeGeneration.builder.constructorBuilder())
     }
 
@@ -42,7 +42,6 @@ internal class KotlinClassTest {
       .isInstanceOf(IllegalStateException::class.java)
       .hasMessage("Decide if you want to use the constructorProperty support OR define a custom primary constructor, not both.")
   }
-
 
   @Test
   fun `provide primaryConstructor`() {
