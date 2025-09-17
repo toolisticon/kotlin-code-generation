@@ -4,7 +4,7 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.simpleClassName
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.simpleClassName
 import io.toolisticon.kotlin.generation.builder.KotlinConstructorPropertySpecBuilder.Companion.primaryConstructorWithProperties
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.*

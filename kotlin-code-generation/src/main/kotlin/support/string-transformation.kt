@@ -1,14 +1,11 @@
 package io.toolisticon.kotlin.generation.support
 
-import org.apiguardian.api.API
-import org.apiguardian.api.API.Status.EXPERIMENTAL
 import kotlin.text.replace
 import kotlin.text.split
 
 /**
  * A transformation function for strings, which can be used to apply various transformations to a string.
  */
-@API(status = EXPERIMENTAL, since = "2025.7.0")
 fun interface StringTransformation : (String) -> String
 
 @Suppress("ClassName", "FunctionName")
@@ -33,7 +30,7 @@ data object StringTransformations {
 
   fun SHORTEN(maxLength: Int?, append: String = "...") =
     if (maxLength == null || maxLength == Int.MAX_VALUE) NOOP else stringTransformation("shorten=$maxLength") {
-      if (maxLength != null && it.length > maxLength)
+      if (it.length > maxLength)
         it.take(maxLength) + append
       else it
     }

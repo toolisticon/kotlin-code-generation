@@ -1,7 +1,7 @@
 package io.toolisticon.kotlin.generation
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.generateFiles
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asCodeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.asMemberName

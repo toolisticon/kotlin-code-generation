@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildAnnotation
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationContext
 import io.toolisticon.kotlin.generation.spi.KotlinCodeGenerationSpiRegistry
 import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
@@ -71,7 +72,7 @@ object TestFixtures {
           return Collections.emptyEnumeration()
         }
 
-        val url: URL = URL("foo", "bar", 99, "/foobar", object : URLStreamHandler() {
+        val url = URL("foo", "bar", 99, "/foobar", object : URLStreamHandler() {
           override fun openConnection(u: URL?): URLConnection {
             return object : URLConnection(u) {
               override fun connect() {
@@ -107,7 +108,7 @@ object TestFixtures {
       val simpleName: SimpleName,
       val fields: Map<String, KClass<*>>
     ) {
-      val className = KotlinCodeGeneration.className(packageName, simpleName)
+      val className = className(packageName, simpleName)
     }
 
     data class InputB(

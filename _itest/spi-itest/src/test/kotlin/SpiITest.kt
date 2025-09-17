@@ -2,7 +2,7 @@ package io.toolisticon.kotlin.generation.itest.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration.className
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasContextType
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.spi.filter.hasNameIn
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationSpiList

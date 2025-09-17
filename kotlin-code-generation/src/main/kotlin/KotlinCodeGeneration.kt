@@ -22,6 +22,7 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.propertyBui
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.runtimeExceptionClassBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.typeAliasBuilder
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.valueClassBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.builder.extra.*
 import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
@@ -30,7 +31,6 @@ import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.*
 import io.toolisticon.kotlin.generation.spi.registry.KotlinCodeGenerationServiceLoader
 import io.toolisticon.kotlin.generation.spi.strategy.executeAll
-import io.toolisticon.kotlin.generation.support.SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE
 import io.toolisticon.kotlin.generation.support.StringTransformations
 import io.toolisticon.kotlin.generation.support.StringTransformations.transform
 import java.util.function.Predicate
@@ -41,6 +41,7 @@ import kotlin.reflect.full.isSubclassOf
  * Kotlin Code Generation is a wrapper lib for kotlin poet. This is the central class that allows access to builders and tools via simple static helpers.
  */
 @ExperimentalKotlinPoetApi
+@Suppress("ClassName", "unused")
 object KotlinCodeGeneration {
   @PublishedApi
   internal val logger = KotlinLogging.logger {}
@@ -69,7 +70,6 @@ object KotlinCodeGeneration {
    * Build a [KotlinAnnotationClassSpec] using given package- and simpleName and receiver fn.
    * @see [KotlinAnnotationClassSpecBuilder.builder]
    */
-  @SuppressWarnings("unused")
   inline fun buildAnnotationClass(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}) = buildAnnotationClass(className(packageName, simpleName), block)
 
   /**
@@ -165,7 +165,6 @@ object KotlinCodeGeneration {
    * Build codeBlock using receiver-fn.
    * @see [CodeBlock.of]
    */
-  @SuppressWarnings("unused")
   inline fun buildCodeBlock(block: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().also(block).build()
 
   /**
@@ -208,7 +207,6 @@ object KotlinCodeGeneration {
    * Build [KotlinEnumClassSpec].
    * @see [KotlinEnumClassSpecBuilder.builder]
    */
-  @SuppressWarnings("unused")
   inline fun buildEnumClass(packageName: PackageName, simpleName: SimpleName, block: KotlinEnumClassSpecBuilderReceiver = {}) = buildEnumClass(className(packageName, simpleName), block)
 
   /**
@@ -221,7 +219,6 @@ object KotlinCodeGeneration {
    * Build [KotlinFileSpec].
    * @see [KotlinFileSpecBuilder.builder]
    */
-  @SuppressWarnings("unused")
   inline fun buildFile(packageName: PackageName, simpleName: SimpleName, block: KotlinFileSpecBuilderReceiver = {}): KotlinFileSpec = buildFile(className(packageName, simpleName), block)
 
   /**
@@ -240,7 +237,7 @@ object KotlinCodeGeneration {
    * Build [KotlinInterfaceSpec].
    * @see [KotlinInterfaceSpecBuilder.builder]
    */
-  @SuppressWarnings("unused")
+
   inline fun buildInterface(packageName: PackageName, simpleName: SimpleName, block: KotlinInterfaceSpecBuilderReceiver = {}): KotlinInterfaceSpec =
     buildInterface(className(packageName, simpleName), block)
 
@@ -266,7 +263,6 @@ object KotlinCodeGeneration {
    * Build [KotlinParameterSpec].
    * @see [KotlinParameterSpecBuilder.builder]
    */
-  @SuppressWarnings("unused")
   inline fun buildParameter(name: ParameterName, type: KClass<*>, block: KotlinParameterSpecBuilderReceiver = {}): KotlinParameterSpec = buildParameter(name, type.asTypeName(), block)
 
   /**
@@ -305,7 +301,6 @@ object KotlinCodeGeneration {
   /**
    * Static access for all builders.
    */
-  @Suppress("ClassName", SUPPRESS_MEMBER_VISIBILITY_CAN_BE_PRIVATE)
   object builder {
     /**
      * @see KotlinAnnotationClassSpecBuilder
@@ -315,7 +310,6 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinAnnotationClassSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName) = annotationClassBuilder(className(packageName, simpleName))
 
     /**
@@ -326,13 +320,11 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinAnnotationSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun annotationBuilder(type: KClass<out Annotation>) = annotationBuilder(type.asClassName())
 
     /**
      * @see KotlinAnnotationSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
 
     /**
@@ -373,7 +365,6 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinDataClassSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName) = dataClassBuilder(className(packageName, simpleName))
 
     /**
@@ -389,13 +380,11 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinEnumClassSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun enumClassBuilder(name: SimpleName) = KotlinEnumClassSpecBuilder.builder(name)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun enumClassBuilder(packageName: PackageName, name: SimpleName) = enumClassBuilder(className(packageName, name))
 
     /**
@@ -461,13 +450,11 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinPropertySpecBuilder
      */
-    @SuppressWarnings("unused")
     fun propertyBuilder(name: PropertyName, type: TypeName) = KotlinPropertySpecBuilder.builder(name, type)
 
     /**
      * @see KotlinPropertySpecBuilder
      */
-    @SuppressWarnings("unused")
     fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
 
     /**
@@ -493,24 +480,12 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinValueClassSpecBuilder
      */
-    @SuppressWarnings("unused")
     fun valueClassBuilder(packageName: PackageName, simpleName: SimpleName) = valueClassBuilder(className(packageName, simpleName))
   }
 
   /**
-   * Create [ClassName] for given package and simpleName.
-   */
-  fun className(packageName: PackageName, simpleName: SimpleName) = ClassName(packageName, simpleName)
-
-  /**
-   * Create [ClassName] with default packageName.
-   */
-  fun simpleClassName(simpleName: SimpleName) = className("", simpleName)
-
-  /**
    * Static to spi.
    */
-  @Suppress("ClassName")
   object spi {
 
     /**
@@ -518,7 +493,6 @@ object KotlinCodeGeneration {
      */
     val defaultClassLoader: () -> ClassLoader = { Thread.currentThread().contextClassLoader }
 
-    @Suppress("ClassName")
     object filter {
 
       /**
@@ -588,7 +562,6 @@ object KotlinCodeGeneration {
   /**
    * TypeSpec helpers.
    */
-  @Suppress("ClassName")
   object typeSpec {
 
     fun TypeSpec.hasModifier(modifier: KModifier) = this.modifiers.contains(modifier)
@@ -597,7 +570,7 @@ object KotlinCodeGeneration {
     val TypeSpec.isValueClass: Boolean get() = hasModifier(KModifier.VALUE)
   }
 
-  @Suppress("ClassName")
+
   object name {
     fun Collection<MemberName>.asCodeBlock(): CodeBlock = this.map { it.asCodeBlock() }.joinToCode(prefix = "[", suffix = "]")
 
@@ -616,9 +589,24 @@ object KotlinCodeGeneration {
     val TypeName.simpleName: SimpleName get() = className().simpleName
 
     /**
+     * Create [ClassName] for given package and simpleName.
+     */
+    fun className(packageName: PackageName, simpleName: SimpleName) = ClassName(packageName, simpleName)
+
+    /**
+     * Create [ClassName] with default packageName.
+     */
+    fun simpleClassName(simpleName: SimpleName) = className("", simpleName)
+
+    /**
      * Transform given name to a valid kotlin property name using [StringTransformations.TO_LOWER_CAMEL_CASE].
      */
     fun propertyName(name: String): PropertyName = name.transform(StringTransformations.TO_LOWER_CAMEL_CASE)
+
+    /**
+     * Transform given name to a valid kotlin function name using [StringTransformations.TO_LOWER_CAMEL_CASE].
+     */
+    fun functionName(name: String): FunctionName = name.transform(StringTransformations.TO_LOWER_CAMEL_CASE)
 
     /**
      * Transform given name to a valid kotlin constant name using [StringTransformations.TO_UPPER_SNAKE_CASE].
@@ -634,17 +622,29 @@ object KotlinCodeGeneration {
   /**
    * Constants for kotlin-poet formats.
    */
-  @Suppress("ClassName")
   object format {
+    /** %S — emits a quoted string literal with necessary escaping. */
     const val FORMAT_STRING = "%S"
+
+    /** %P — emits a string for use inside a string template (no quotes, $ escaped). */
     const val FORMAT_STRING_TEMPLATE = "%P"
+
+    /** %T — emits a type and adds an import if needed. */
     const val FORMAT_TYPE = "%T"
+
+    /** %M — emits a member reference (function or property) and adds its import. */
     const val FORMAT_MEMBER = "%M"
+
+    /** %N — emits a name (e.g., of a parameter, property, or type). */
     const val FORMAT_NAME = "%N"
+
+    /** %L — emits a literal value or raw CodeBlock without additional quoting. */
     const val FORMAT_LITERAL = "%L"
 
+    /** Convenience for emitting a KClass literal: `%T::class`. */
     const val FORMAT_KCLASS = "$FORMAT_TYPE::class"
 
+    /** Non‑breaking space used by KotlinPoet for pretty printing (\u00B7). */
     const val NBSP = "·"
   }
 

@@ -1,7 +1,8 @@
 package io.toolisticon.kotlin.generation.spi
 
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
-import io.toolisticon.kotlin.generation.KotlinCodeGeneration
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildDataClass
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.spec.KotlinDataClassSpec
 import io.toolisticon.kotlin.generation.spi.context.KotlinCodeGenerationContextBase
 import io.toolisticon.kotlin.generation.spi.registry.DefaultKotlinCodeGenerationServiceRegistry
@@ -48,13 +49,13 @@ internal class KotlinCodeGenerationServiceRepositoryTest {
     }
 
     class LongDataClassStrategy : KotlinDataClassSpecStrategy<SuperContext.SubContextLong, String>(SuperContext.SubContextLong::class, String::class) {
-      override fun invoke(context: SuperContext.SubContextLong, input: String): KotlinDataClassSpec = KotlinCodeGeneration.buildDataClass(KotlinCodeGeneration.className("foo.bar", "LongClass")) {
+      override fun invoke(context: SuperContext.SubContextLong, input: String): KotlinDataClassSpec = buildDataClass(className("foo.bar", "LongClass")) {
         addConstructorProperty(input, Long::class)
       }
     }
 
     class StringDataClassStrategy : KotlinDataClassSpecStrategy<SuperContext.SubContextString, String>(SuperContext.SubContextString::class, String::class) {
-      override fun invoke(context: SuperContext.SubContextString, input: String): KotlinDataClassSpec = KotlinCodeGeneration.buildDataClass(KotlinCodeGeneration.className("foo.bar", "StringClass")) {
+      override fun invoke(context: SuperContext.SubContextString, input: String): KotlinDataClassSpec = buildDataClass(className("foo.bar", "StringClass")) {
         addConstructorProperty(input, Long::class)
       }
     }
