@@ -19,14 +19,14 @@ import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.enumArr
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.kclassArray
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.numberArray
 import io.toolisticon.kotlin.generation.support.CodeBlockArray.Companion.stringArray
-import io.toolisticon.kotlin.generation.support.SUPPRESS_CLASS_NAME
+import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
 import kotlin.reflect.KClass
 
 /**
  * Builder for [KotlinAnnotationSpec].
  */
 @ExperimentalKotlinPoetApi
-//@Suppress(SUPPRESS_UNUSED)
+@Suppress(SUPPRESS_UNUSED)
 class KotlinAnnotationSpecBuilder internal constructor(
   private val delegate: AnnotationSpecBuilder
 ) : BuilderSupplier<KotlinAnnotationSpec, AnnotationSpec>,
@@ -62,7 +62,7 @@ class KotlinAnnotationSpecBuilder internal constructor(
       delegate = spec.get().toBuilder().wrap()
     )
 
-    @Suppress(SUPPRESS_CLASS_NAME)
+    @Suppress("ClassName")
     object member {
       fun string(name: String, value: String) = codeBlock("$name = $FORMAT_STRING", value)
       fun strings(name: String, vararg values: String) = codeBlock("$name = $FORMAT_LITERAL", stringArray(*values).build())
@@ -71,7 +71,9 @@ class KotlinAnnotationSpecBuilder internal constructor(
       fun numbers(name: String, vararg values: Number) = codeBlock("$name = $FORMAT_LITERAL", numberArray(*values).build())
 
       fun kclass(name: String, value: KClass<*>) = codeBlock("$name = $FORMAT_KCLASS", value)
+      fun kclass(name: String, value: ClassName) = codeBlock("$name = $FORMAT_KCLASS", value)
       fun kclasses(name: String, vararg values: KClass<*>) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
+      fun kclasses(name: String, vararg values: ClassName) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
 
       fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value.asMemberName())
       fun enums(name: String, vararg values: Enum<*>) = codeBlock("$name = $FORMAT_LITERAL", enumArray(*values).build())
@@ -111,6 +113,11 @@ class KotlinAnnotationSpecBuilder internal constructor(
    * Add member to annotation.
    */
   fun addKClassMembers(name: String, vararg values: KClass<*>) = addMember(member.kclasses(name, *values))
+
+  /**
+   * Add member to annotation.
+   */
+  fun addKClassMembers(name: String, vararg values: ClassName) = addMember(member.kclasses(name, *values))
 
   /**
    * Add member to annotation.
