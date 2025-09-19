@@ -121,7 +121,7 @@ interface KotlinDocumentableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
    * Wraps a codeBlock into a KDoc and adds it.
    * @see KotlinDocumentableBuilder.addKdoc
    */
-  fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
+  fun addKdoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
 
   /**
    * Wraps a single string and adds it.
