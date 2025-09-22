@@ -22,6 +22,7 @@ class KotlinFunSpecBuilder internal constructor(
   private val delegate: FunSpecBuilder
 ) : BuilderSupplier<KotlinFunSpec, FunSpec>,
   DelegatingBuilder<KotlinFunSpecBuilder, FunSpecBuilderReceiver>,
+  KotlinAddCodeBlockBuilder<KotlinFunSpecBuilder>,
   KotlinAnnotatableDocumentableModifiableBuilder<KotlinFunSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinFunSpecBuilder>,
   KotlinFunSpecSupplier {
@@ -111,9 +112,9 @@ class KotlinFunSpecBuilder internal constructor(
   fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier) = builder { this.addParameter(name, type, *modifiers) }
   fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
   fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
-  fun addCode(format: String, vararg args: Any?) = builder { this.addCode(format, *args) }
+
   fun addNamedCode(format: String, args: Map<String, *>) = builder { this.addNamedCode(format, args) }
-  fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }
+  override fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }
   fun addComment(format: String, vararg args: Any) = builder { this.addComment(format, *args) }
 
   fun beginControlFlow(controlFlow: String, vararg args: Any) = builder { this.beginControlFlow(controlFlow, *args) }

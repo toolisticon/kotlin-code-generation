@@ -14,6 +14,7 @@ class FunSpecBuilder(
 ) : PoetSpecBuilder<FunSpecBuilder, FunSpec.Builder, FunSpec, FunSpecSupplier>,
   FunSpecSupplier,
   PoetAnnotatableBuilder<FunSpecBuilder>,
+  PoetAddCodeBlockBuilder<FunSpecBuilder>,
   PoetContextReceivableBuilder<FunSpecBuilder>,
   PoetDocumentableBuilder<FunSpecBuilder>,
   PoetTaggableBuilder<FunSpecBuilder>,
@@ -90,9 +91,10 @@ class FunSpecBuilder(
   fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier): FunSpecBuilder = apply { builder.addParameter(name, type, *modifiers) }
   fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>): FunSpecBuilder = apply { builder.addParameter(name, type, modifiers) }
   fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>): FunSpecBuilder = apply { builder.addParameter(name, type, modifiers) }
-  fun addCode(format: String, vararg args: Any?): FunSpecBuilder = apply { builder.addCode(format, *args) }
+
+  override fun addCode(codeBlock: CodeBlock): FunSpecBuilder = apply { builder.addCode(codeBlock) }
+
   fun addNamedCode(format: String, args: Map<String, *>): FunSpecBuilder = apply { builder.addNamedCode(format, args) }
-  fun addCode(codeBlock: CodeBlock): FunSpecBuilder = apply { builder.addCode(codeBlock) }
   fun addComment(format: String, vararg args: Any): FunSpecBuilder = apply { builder.addComment(format, *args) }
 
   fun beginControlFlow(controlFlow: String, vararg args: Any): FunSpecBuilder = apply { builder.beginControlFlow(controlFlow, *args) }

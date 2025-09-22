@@ -2,6 +2,7 @@ package io.toolisticon.kotlin.generation.poet
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.Builder
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
 import java.util.function.Supplier
 import javax.lang.model.element.Element
 import kotlin.reflect.KClass
@@ -42,6 +43,33 @@ sealed interface PoetAnnotatableBuilder<SELF> {
   fun addAnnotation(annotationSupplier: AnnotationSpecSupplier): SELF = addAnnotation(annotationSupplier.get())
 }
 
+/**
+ * Everything related to code blocks.
+ */
+@OptIn(ExperimentalKotlinPoetApi::class)
+sealed interface PoetAddCodeBlockBuilder<SELF> {
+  /**
+   * Adds a [CodeBlock]. Must be implemented by the concrete builder.
+   */
+  fun addCode(codeBlock: CodeBlock): SELF
+
+  /**
+   * Formats the given [String] and arguments as [CodeBlock] and adds it.
+   */
+  fun addCode(format: String, vararg args: Any?): SELF = addCode(codeBlock(format, *args))
+
+  /**
+   * Add a [CodeBlock] by providing a supplier.
+   */
+  fun addCode(supplier: CodeBlockSupplier): SELF = addCode(supplier.get())
+
+  /**
+   * Receiver function for codeblock, use `builder.addCode { ... }` to add code.
+   */
+  fun addCode(block: CodeBlockBuilderReceiver): SELF = addCode(
+    CodeBlockBuilder.builder().also(block).build()
+  )
+}
 
 /**
  * Typesafe wrapper for [TypeSpecHolder.Builder].
