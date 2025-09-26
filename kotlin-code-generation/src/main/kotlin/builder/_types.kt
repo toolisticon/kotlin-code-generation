@@ -1,6 +1,5 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.Annotatable.Builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -108,6 +107,9 @@ interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier): SELF = addAnnotation(annotationSpec.get())
 }
 
+/**
+ * Everything related to code blocks.
+ */
 interface KotlinAddCodeBlockBuilder<SELF> {
 
   /**

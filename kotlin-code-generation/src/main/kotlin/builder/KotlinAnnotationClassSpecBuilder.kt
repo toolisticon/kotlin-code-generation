@@ -67,7 +67,6 @@ class KotlinAnnotationClassSpecBuilder internal constructor(
    */
   fun target(vararg targets: AnnotationTarget) = apply { this.targets.addAll(targets) }
 
-
   internal fun addOriginatingElement(originatingElement: Element) = builder { this.addOriginatingElement(originatingElement) }
 
   override fun build(): KotlinAnnotationClassSpec {

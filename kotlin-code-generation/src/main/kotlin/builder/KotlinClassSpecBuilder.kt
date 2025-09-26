@@ -60,7 +60,6 @@ class KotlinClassSpecBuilder internal constructor(
   fun addSuperclassConstructorParameter(format: String, vararg args: Any) = builder { this.addSuperclassConstructorParameter(format, *args) }
   fun addSuperclassConstructorParameter(codeBlock: CodeBlock) = builder { this.addSuperclassConstructorParameter(codeBlock) }
 
-
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
   override fun build(): KotlinClassSpec {

@@ -565,6 +565,11 @@ object KotlinCodeGeneration {
     ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
   }
 
+  object codeBlock {
+    val CSV = codeBlock(", ")
+    val SPACE = codeBlock(" ")
+  }
+
   /**
    * TypeSpec helpers.
    */
