@@ -1,6 +1,5 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.Annotatable.Builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -19,7 +18,10 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.CodeBlockSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
+import io.toolisticon.kotlin.generation.poet.PoetAddCodeBlockBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
@@ -105,6 +107,33 @@ interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   fun addAnnotation(annotationSpec: AnnotationSpecSupplier): SELF = addAnnotation(annotationSpec.get())
 }
 
+/**
+ * Everything related to code blocks.
+ */
+interface KotlinAddCodeBlockBuilder<SELF> {
+
+  /**
+   * Adds a [CodeBlock]. Must be implemented by the concrete builder.
+   */
+  fun addCode(codeBlock: CodeBlock): SELF
+
+  /**
+   * Formats the given [String] and arguments as [CodeBlock] and adds it.
+   */
+  fun addCode(format: String, vararg args: Any?): SELF = addCode(CodeBlockBuilder.builder().add(format, *args).build())
+
+  /**
+   * Add a [CodeBlock] by providing a supplier.
+   */
+  fun addCode(supplier: CodeBlockSupplier): SELF = addCode(supplier.get())
+
+  /**
+   * Receiver function for codeblock, use `builder.addCode { ... }` to add code.
+   */
+  fun addCode(block: CodeBlockBuilderReceiver): SELF = addCode(
+    CodeBlockBuilder.builder().also(block).build()
+  )
+}
 /**
  * Typesafe wrapper for [com.squareup.kotlinpoet.Documentable.Builder]. Marks anything that can have `kdoc` documentation.
  *

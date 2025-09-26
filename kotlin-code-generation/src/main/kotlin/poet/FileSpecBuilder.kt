@@ -14,6 +14,7 @@ class FileSpecBuilder(
 ) : PoetSpecBuilder<FileSpecBuilder, FileSpec.Builder, FileSpec, FileSpecSupplier>,
   FileSpecSupplier,
   PoetAnnotatableBuilder<FileSpecBuilder>,
+  PoetAddCodeBlockBuilder<FileSpecBuilder>,
   PoetMemberSpecHolderBuilder<FileSpecBuilder>,
   PoetTypeSpecHolderBuilder<FileSpecBuilder>,
   PoetTaggableBuilder<FileSpecBuilder>,
@@ -61,9 +62,7 @@ class FileSpecBuilder(
   fun addDefaultPackageImport(packageName: String): FileSpecBuilder = apply { builder.addDefaultPackageImport(packageName) }
   fun addKotlinDefaultImports(includeJvm: Boolean = true, includeJs: Boolean = true): FileSpecBuilder = apply { builder.addKotlinDefaultImports(includeJvm, includeJs) }
   fun indent(indent: String): FileSpecBuilder = apply { builder.indent(indent) }
-  fun addCode(format: String, vararg args: Any?): FileSpecBuilder = apply { builder.addCode(format, *args) }
   fun addNamedCode(format: String, args: Map<String, *>): FileSpecBuilder = apply { builder.addNamedCode(format, args) }
-  fun addCode(codeBlock: CodeBlock): FileSpecBuilder = apply { builder.addCode(codeBlock) }
   fun addBodyComment(format: String, vararg args: Any): FileSpecBuilder = apply { builder.addBodyComment(format, *args) }
   fun beginControlFlow(controlFlow: String, vararg args: Any): FileSpecBuilder = apply { builder.beginControlFlow(controlFlow, *args) }
   fun nextControlFlow(controlFlow: String, vararg args: Any): FileSpecBuilder = apply { builder.nextControlFlow(controlFlow, *args) }
@@ -71,6 +70,7 @@ class FileSpecBuilder(
   fun addStatement(format: String, vararg args: Any): FileSpecBuilder = apply { builder.addStatement(format, *args) }
   fun clearBody(): FileSpecBuilder = apply { builder.clearBody() }
 
+  override fun addCode(codeBlock: CodeBlock): FileSpecBuilder = apply { builder.addCode(codeBlock) }
   override fun tag(type: KClass<*>, tag: Any?): FileSpecBuilder = apply { builder.tag(type, tag) }
 
   override fun build(): FileSpec = builder.build()

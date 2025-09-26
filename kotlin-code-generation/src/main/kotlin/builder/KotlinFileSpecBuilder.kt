@@ -20,6 +20,7 @@ import kotlin.reflect.KClass
 class KotlinFileSpecBuilder internal constructor(
   private val delegate: FileSpecBuilder
 ) : BuilderSupplier<KotlinFileSpec, FileSpec>, KotlinFileSpecSupplier, DelegatingBuilder<KotlinFileSpecBuilder, FileSpecBuilderReceiver>,
+  KotlinAddCodeBlockBuilder<KotlinFileSpecBuilder>,
   KotlinAnnotatableBuilder<KotlinFileSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinFileSpecBuilder>,
   KotlinTypeSpecHolderBuilder<KotlinFileSpecBuilder> {
@@ -69,8 +70,6 @@ class KotlinFileSpecBuilder internal constructor(
   fun addAliasedImport(className: ClassName, memberName: String, alias: String) = builder { this.addAliasedImport(className, memberName, alias) }
   fun addAliasedImport(memberName: MemberName, alias: String) = builder { this.addAliasedImport(memberName, alias) }
   fun addBodyComment(format: String, vararg args: Any) = builder { this.addBodyComment(format, *args) }
-  fun addCode(format: String, vararg args: Any?) = builder { this.addCode(format, *args) }
-  fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }
   fun addDefaultPackageImport(packageName: String) = builder { this.addDefaultPackageImport(packageName) }
   fun addFileComment(format: String, vararg args: Any) = builder { this.addFileComment(format, *args) }
   fun addImport(constant: Enum<*>) = builder { this.addImport(constant) }
@@ -97,6 +96,7 @@ class KotlinFileSpecBuilder internal constructor(
   // region [overrides]
   override val className: ClassName = delegate.className
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
+  override fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }
   override fun addFunction(funSpec: KotlinFunSpecSupplier) = apply { delegate.addFunction(funSpec.get()) }
   override fun addProperty(propertySpec: KotlinPropertySpecSupplier) = apply { delegate.addProperty(propertySpec.get()) }
   override fun addType(typeSpec: TypeSpecSupplier) = builder { this.addType(typeSpec.get()) }

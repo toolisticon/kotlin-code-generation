@@ -26,6 +26,9 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.builder.extra.*
 import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.*
@@ -91,6 +94,16 @@ object KotlinCodeGeneration {
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
 
   /**
+   * Build a [CodeBlock] using given receiver fn.
+   */
+  inline fun buildCodeBlock(block: CodeBlockBuilderReceiver = {}) = builder.codeBlockBuilder().also(block).build()
+
+  /**
+   * @see [CodeBlock.of]
+   */
+  fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = codeBlock(format, *args)
+
+  /**
    * @see [DelegateListValueClassSpecBuilder]
    */
   inline fun buildDelegateListValueClass(
@@ -112,7 +125,6 @@ object KotlinCodeGeneration {
     className = className(packageName, simpleName),
     items = items
   ).also(block).build()
-
 
   /**
    * @see [DelegateListValueClassSpecBuilder]
@@ -155,17 +167,6 @@ object KotlinCodeGeneration {
    * @see RuntimeExceptionSpecBuilder
    */
   inline fun buildRuntimeExceptionClass(className: ClassName, block: RuntimeExceptionSpecBuilderReceiver = {}) = runtimeExceptionClassBuilder(className).also(block).build()
-
-  /**
-   * @see [CodeBlock.of]
-   */
-  fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = CodeBlock.of(format, *args)
-
-  /**
-   * Build codeBlock using receiver-fn.
-   * @see [CodeBlock.of]
-   */
-  inline fun buildCodeBlock(block: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().also(block).build()
 
   /**
    * Build [KotlinCompanionObjectSpec] using optional name and receiver fn.
@@ -341,6 +342,11 @@ object KotlinCodeGeneration {
      * @see KotlinClassSpecBuilder
      */
     fun classBuilder(packageName: PackageName, simpleName: SimpleName) = classBuilder(className(packageName, simpleName))
+
+    /**
+     * See Also: [io.toolisticon.kotlin.generation.poet.CodeBlockBuilder]
+     */
+    fun codeBlockBuilder() = CodeBlockBuilder.builder()
 
     /**
      * @see KotlinCompanionObjectSpecBuilder
@@ -557,6 +563,11 @@ object KotlinCodeGeneration {
       classLoader: ClassLoader = defaultClassLoader(),
       filter: KotlinCodeGenerationSpiPredicate = spi.filter.all
     ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
+  }
+
+  object codeBlock {
+    val CSV = codeBlock(", ")
+    val SPACE = codeBlock(" ")
   }
 
   /**
