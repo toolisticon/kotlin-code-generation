@@ -61,24 +61,99 @@ class KotlinAnnotationSpecBuilder internal constructor(
     fun from(spec: KotlinAnnotationSpecSupplier) = KotlinAnnotationSpecBuilder(
       delegate = spec.get().toBuilder().wrap()
     )
+  }
 
-    @Suppress("ClassName")
-    object member {
-      fun string(name: String, value: String) = codeBlock("$name = $FORMAT_STRING", value)
-      fun strings(name: String, vararg values: String) = codeBlock("$name = $FORMAT_LITERAL", stringArray(*values).build())
+  @Suppress("ClassName")
+  data object member {
+    /**
+     * Build a CodeBlock assigning a String value to an annotation member.
+     * Example: name = "value"
+     * @param name the annotation member name
+     * @param value the String value
+     * @return the CodeBlock representing the annotation member assignment
+     */
+    fun string(name: String, value: String) = codeBlock("$name = $FORMAT_STRING", value)
 
-      fun number(name: String, value: Number) = codeBlock("$name = $FORMAT_LITERAL", value)
-      fun numbers(name: String, vararg values: Number) = codeBlock("$name = $FORMAT_LITERAL", numberArray(*values).build())
+    /**
+     * Build a CodeBlock assigning multiple String values to an annotation member array.
+     * Example: names = ["a", "b"]
+     * @param name the annotation member name
+     * @param values the String values
+     * @return the CodeBlock representing the annotation member array assignment
+     */
+    fun strings(name: String, vararg values: String) = codeBlock("$name = $FORMAT_LITERAL", stringArray(*values).build())
 
-      fun kclass(name: String, value: KClass<*>) = codeBlock("$name = $FORMAT_KCLASS", value)
-      fun kclass(name: String, value: ClassName) = codeBlock("$name = $FORMAT_KCLASS", value)
-      fun kclasses(name: String, vararg values: KClass<*>) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
-      fun kclasses(name: String, vararg values: ClassName) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
+    /**
+     * Build a CodeBlock assigning a numeric value to an annotation member.
+     * Example: priority = 5
+     * @param name the annotation member name
+     * @param value the Number value
+     * @return the CodeBlock representing the annotation member assignment
+     */
+    fun number(name: String, value: Number) = codeBlock("$name = $FORMAT_LITERAL", value)
 
-      fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value.asMemberName())
-      fun enums(name: String, vararg values: Enum<*>) = codeBlock("$name = $FORMAT_LITERAL", enumArray(*values).build())
-    }
+    /**
+     * Build a CodeBlock assigning multiple numeric values to an annotation member array.
+     * Example: codes = [1, 2, 3]
+     * @param name the annotation member name
+     * @param values the Number values
+     * @return the CodeBlock representing the annotation member array assignment
+     */
+    fun numbers(name: String, vararg values: Number) = codeBlock("$name = $FORMAT_LITERAL", numberArray(*values).build())
 
+    /**
+     * Build a CodeBlock assigning a KClass value to an annotation member.
+     * Example: type = MyType::class
+     * @param name the annotation member name
+     * @param value the KClass value
+     * @return the CodeBlock representing the annotation member assignment
+     */
+    fun kclass(name: String, value: KClass<*>) = codeBlock("$name = $FORMAT_KCLASS", value)
+
+    /**
+     * Build a CodeBlock assigning a ClassName value to an annotation member.
+     * Example: type = MyType::class
+     * @param name the annotation member name
+     * @param value the ClassName value
+     * @return the CodeBlock representing the annotation member assignment
+     */
+    fun kclass(name: String, value: ClassName) = codeBlock("$name = $FORMAT_KCLASS", value)
+
+    /**
+     * Build a CodeBlock assigning multiple KClass values to an annotation member array.
+     * Example: types = [A::class, B::class]
+     * @param name the annotation member name
+     * @param values the KClass values
+     * @return the CodeBlock representing the annotation member array assignment
+     */
+    fun kclasses(name: String, vararg values: KClass<*>) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
+
+    /**
+     * Build a CodeBlock assigning multiple ClassName values to an annotation member array.
+     * Example: types = [A::class, B::class]
+     * @param name the annotation member name
+     * @param values the ClassName values
+     * @return the CodeBlock representing the annotation member array assignment
+     */
+    fun kclasses(name: String, vararg values: ClassName) = codeBlock("$name = $FORMAT_LITERAL", kclassArray(*values).build())
+
+    /**
+     * Build a CodeBlock assigning an Enum entry to an annotation member.
+     * Example: mode = Mode.FAST
+     * @param name the annotation member name
+     * @param value the Enum constant
+     * @return the CodeBlock representing the annotation member assignment
+     */
+    fun enum(name: String, value: Enum<*>) = codeBlock("$name = $FORMAT_MEMBER", value.asMemberName())
+
+    /**
+     * Build a CodeBlock assigning multiple Enum entries to an annotation member array.
+     * Example: modes = [Mode.FAST, Mode.SAFE]
+     * @param name the annotation member name
+     * @param values the Enum constants
+     * @return the CodeBlock representing the annotation member array assignment
+     */
+    fun enums(name: String, vararg values: Enum<*>) = codeBlock("$name = $FORMAT_LITERAL", enumArray(*values).build())
   }
 
   private var multiLine = false
@@ -90,62 +165,67 @@ class KotlinAnnotationSpecBuilder internal constructor(
   fun multiLine() = apply { multiLine = true }
 
   /**
-   * Add member to annotation.
+   * Add CodeBlock member to annotation.
    */
   fun addMember(codeBlock: CodeBlock): KotlinAnnotationSpecBuilder = apply { members.add(codeBlock) }
 
   /**
-   * Add member to annotation.
+   * Add formatted member to annotation.
    */
   fun addMember(format: String, vararg args: Any): KotlinAnnotationSpecBuilder = addMember(buildCodeBlock(format, *args))
 
   /**
-   * Add member to annotation.
+   * Add MemberName member to annotation.
    */
   fun addNameMember(memberName: MemberName): KotlinAnnotationSpecBuilder = addMember("%M", memberName)
 
   /**
-   * Add member to annotation.
+   * Add KClass member to annotation.
    */
   fun addKClassMember(name: String, value: KClass<*>) = addMember(member.kclass(name, value))
 
   /**
-   * Add member to annotation.
+   * Add ClassName member to annotation.
+   */
+  fun addKClassMember(name: String, value: ClassName) = addMember(member.kclass(name, value))
+
+  /**
+   * Add KClass members to annotation.
    */
   fun addKClassMembers(name: String, vararg values: KClass<*>) = addMember(member.kclasses(name, *values))
 
   /**
-   * Add member to annotation.
+   * Add ClassName members to annotation.
    */
   fun addKClassMembers(name: String, vararg values: ClassName) = addMember(member.kclasses(name, *values))
 
   /**
-   * Add member to annotation.
+   * Add String member to annotation.
    */
   fun addStringMember(name: String, value: String) = addMember(member.string(name, value))
 
   /**
-   * Add member to annotation.
+   * Add String members to annotation.
    */
   fun addStringMembers(name: String, vararg values: String) = addMember(member.strings(name, *values))
 
   /**
-   * Add member to annotation.
+   * Add Enum member to annotation.
    */
   fun addEnumMember(name: String, value: Enum<*>): KotlinAnnotationSpecBuilder = addMember(member.enum(name, value))
 
   /**
-   * Add member to annotation.
+   * Add Enum members to annotation.
    */
   fun addEnumMembers(name: String, vararg values: Enum<*>): KotlinAnnotationSpecBuilder = addMember(member.enums(name, *values))
 
   /**
-   * Add member to annotation.
+   * Add Number member to annotation.
    */
   fun addNumberMember(name: String, value: Number): KotlinAnnotationSpecBuilder = addMember(member.number(name, value))
 
   /**
-   * Add member to annotation.
+   * Add Number members to annotation.
    */
   fun addNumberMembers(name: String, vararg values: Number): KotlinAnnotationSpecBuilder = addMember(member.numbers(name, *values))
 
@@ -153,7 +233,6 @@ class KotlinAnnotationSpecBuilder internal constructor(
    * Remove all members.
    */
   fun clearMembers() = apply { members.clear() }
-
 
   override fun build(): KotlinAnnotationSpec {
     if (members.isNotEmpty()) {
