@@ -204,9 +204,139 @@ interface KotlinModifiableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   fun makeAbstract(): SELF = addModifiers(KModifier.ABSTRACT)
 
   /**
+   * Adds [KModifier#ACTUAL].
+   */
+  fun makeActual(): SELF = addModifiers(KModifier.ACTUAL)
+
+  /**
+   * Adds [KModifier#ANNOTATION].
+   */
+  fun makeAnnotation(): SELF = addModifiers(KModifier.ANNOTATION)
+
+  /**
+   * Adds [KModifier#COMPANION].
+   */
+  fun makeCompanion(): SELF = addModifiers(KModifier.COMPANION)
+
+  /**
+   * Adds [KModifier#CONST].
+   */
+  fun makeConst(): SELF = addModifiers(KModifier.CONST)
+
+  /**
+   * Adds [KModifier#CROSSINLINE].
+   */
+  fun makeCrossinline(): SELF = addModifiers(KModifier.CROSSINLINE)
+
+  /**
+   * Adds [KModifier#ENUM].
+   */
+  fun makeEnum(): SELF = addModifiers(KModifier.ENUM)
+
+  /**
+   * Adds [KModifier#EXPECT].
+   */
+  fun makeExpect(): SELF = addModifiers(KModifier.EXPECT)
+
+  /**
+   * Adds [KModifier#EXTERNAL].
+   */
+  fun makeExternal(): SELF = addModifiers(KModifier.EXTERNAL)
+
+  /**
+   * Adds [KModifier#FINAL].
+   */
+  fun makeFinal(): SELF = addModifiers(KModifier.FINAL)
+
+  /**
+   * Adds [KModifier#INFIX].
+   */
+  fun makeInfix(): SELF = addModifiers(KModifier.INFIX)
+
+  /**
+   * Adds [KModifier#INLINE].
+   */
+  fun makeInline(): SELF = addModifiers(KModifier.INLINE)
+
+  /**
+   * Adds [KModifier#INNER].
+   */
+  fun makeInner(): SELF = addModifiers(KModifier.INNER)
+
+  /**
+   * Adds [KModifier#INTERNAL].
+   */
+  fun makeInternal(): SELF = addModifiers(KModifier.INTERNAL)
+
+  /**
+   * Adds [KModifier#LATEINIT].
+   */
+  fun makeLateinit(): SELF = addModifiers(KModifier.LATEINIT)
+
+  /**
+   * Adds [KModifier#NOINLINE].
+   */
+  fun makeNoinline(): SELF = addModifiers(KModifier.NOINLINE)
+
+  /**
+   * Adds [KModifier#OPEN].
+   */
+  fun makeOpen(): SELF = addModifiers(KModifier.OPEN)
+
+  /**
+   * Adds [KModifier#OPERATOR].
+   */
+  fun makeOperator(): SELF = addModifiers(KModifier.OPERATOR)
+
+  /**
+   * Adds [KModifier#OUT].
+   */
+  fun makeOut(): SELF = addModifiers(KModifier.OUT)
+
+  /**
+   * Adds [KModifier#OVERRIDE].
+   */
+  fun makeOverride(): SELF = addModifiers(KModifier.OVERRIDE)
+
+  /**
    * Adds [KModifier#PRIVATE].
    */
   fun makePrivate(): SELF = addModifiers(KModifier.PRIVATE)
+
+  /**
+   * Adds [KModifier#PROTECTED].
+   */
+  fun makeProtected(): SELF = addModifiers(KModifier.PROTECTED)
+
+  /**
+   * Adds [KModifier#PUBLIC].
+   */
+  fun makePublic(): SELF = addModifiers(KModifier.PUBLIC)
+
+  /**
+   * Adds [KModifier#SEALED].
+   */
+  fun makeSealed(): SELF = addModifiers(KModifier.SEALED)
+
+  /**
+   * Adds [KModifier#SUSPEND].
+   */
+  fun makeSuspend(): SELF = addModifiers(KModifier.SUSPEND)
+
+  /**
+   * Adds [KModifier#TAILREC].
+   */
+  fun makeTailrec(): SELF = addModifiers(KModifier.TAILREC)
+
+  /**
+   * Adds [KModifier#VARARG].
+   */
+  fun makeVararg(): SELF = addModifiers(KModifier.VARARG)
+
+  /**
+   * Adds [KModifier#REIFIED].
+   */
+  fun makeReified(): SELF = addModifiers(KModifier.REIFIED)
 }
 
 /**
