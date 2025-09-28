@@ -26,6 +26,9 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.className
 import io.toolisticon.kotlin.generation.builder.*
 import io.toolisticon.kotlin.generation.builder.extra.*
 import io.toolisticon.kotlin.generation.builder.extra.DelegateMapValueClassSpecBuilder.Companion.DEFAULT_KEY_TYPE
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder.Companion.codeBlock
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.FormatSpecifier.asCodeBlock
 import io.toolisticon.kotlin.generation.spec.*
 import io.toolisticon.kotlin.generation.spi.*
@@ -91,6 +94,16 @@ object KotlinCodeGeneration {
   inline fun buildClass(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = buildClass(className(packageName, simpleName), block)
 
   /**
+   * Build a [CodeBlock] using given receiver fn.
+   */
+  inline fun buildCodeBlock(block: CodeBlockBuilderReceiver = {}) = builder.codeBlockBuilder().also(block).build()
+
+  /**
+   * @see [CodeBlock.of]
+   */
+  fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = codeBlock(format, *args)
+
+  /**
    * @see [DelegateListValueClassSpecBuilder]
    */
   inline fun buildDelegateListValueClass(
@@ -112,7 +125,6 @@ object KotlinCodeGeneration {
     className = className(packageName, simpleName),
     items = items
   ).also(block).build()
-
 
   /**
    * @see [DelegateListValueClassSpecBuilder]
@@ -155,17 +167,6 @@ object KotlinCodeGeneration {
    * @see RuntimeExceptionSpecBuilder
    */
   inline fun buildRuntimeExceptionClass(className: ClassName, block: RuntimeExceptionSpecBuilderReceiver = {}) = runtimeExceptionClassBuilder(className).also(block).build()
-
-  /**
-   * @see [CodeBlock.of]
-   */
-  fun buildCodeBlock(format: CodeBlockFormat, vararg args: Any?) = CodeBlock.of(format, *args)
-
-  /**
-   * Build codeBlock using receiver-fn.
-   * @see [CodeBlock.of]
-   */
-  inline fun buildCodeBlock(block: CodeBlock.Builder.() -> Unit): CodeBlock = CodeBlock.builder().also(block).build()
 
   /**
    * Build [KotlinCompanionObjectSpec] using optional name and receiver fn.
@@ -305,162 +306,167 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinAnnotationClassSpecBuilder
      */
-    fun annotationClassBuilder(className: ClassName) = KotlinAnnotationClassSpecBuilder.builder(className)
+    fun annotationClassBuilder(className: ClassName, block: KotlinAnnotationClassSpecBuilderReceiver = {}) = KotlinAnnotationClassSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinAnnotationClassSpecBuilder
      */
-    fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName) = annotationClassBuilder(className(packageName, simpleName))
+    fun annotationClassBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationClassSpecBuilderReceiver = {}) = annotationClassBuilder(className(packageName, simpleName), block)
 
     /**
      * @see KotlinAnnotationSpecBuilder
      */
-    fun annotationBuilder(type: ClassName) = KotlinAnnotationSpecBuilder.builder(type)
+    fun annotationBuilder(type: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}) = KotlinAnnotationSpecBuilder.builder(type).also(block)
 
     /**
      * @see KotlinAnnotationSpecBuilder
      */
-    fun annotationBuilder(type: KClass<out Annotation>) = annotationBuilder(type.asClassName())
+    fun annotationBuilder(type: KClass<out Annotation>, block: KotlinAnnotationSpecBuilderReceiver = {}) = annotationBuilder(type.asClassName(), block)
 
     /**
      * @see KotlinAnnotationSpecBuilder
      */
-    fun annotationBuilder(packageName: PackageName, simpleName: SimpleName) = annotationBuilder(className(packageName, simpleName))
+    fun annotationBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinAnnotationSpecBuilderReceiver = {}) = annotationBuilder(className(packageName, simpleName), block)
 
     /**
      * @see KotlinAnonymousClassSpecBuilder
      */
-    fun anonymousClassBuilder() = KotlinAnonymousClassSpecBuilder.builder()
+    fun anonymousClassBuilder(block: KotlinAnonymousClassSpecBuilderReceiver = {}) = KotlinAnonymousClassSpecBuilder.builder().also(block)
 
     /**
      * @see KotlinClassSpecBuilder
      */
-    fun classBuilder(className: ClassName) = KotlinClassSpecBuilder.builder(className)
+    fun classBuilder(className: ClassName, block: KotlinClassSpecBuilderReceiver = {}) = KotlinClassSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinClassSpecBuilder
      */
-    fun classBuilder(packageName: PackageName, simpleName: SimpleName) = classBuilder(className(packageName, simpleName))
+    fun classBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinClassSpecBuilderReceiver = {}) = classBuilder(className(packageName, simpleName), block)
+
+    /**
+     * See Also: [io.toolisticon.kotlin.generation.poet.CodeBlockBuilder]
+     */
+    fun codeBlockBuilder(block: CodeBlockBuilderReceiver = {}) = CodeBlockBuilder.builder().also(block)
 
     /**
      * @see KotlinCompanionObjectSpecBuilder
      */
-    fun companionObjectBuilder(name: String? = null) = KotlinCompanionObjectSpecBuilder.builder(name)
+    fun companionObjectBuilder(name: String? = null, block: KotlinCompanionObjectSpecBuilderReceiver = {}) = KotlinCompanionObjectSpecBuilder.builder(name).also(block)
 
     /**
      * @see KotlinConstructorPropertySpecBuilder
      */
-    fun constructorPropertyBuilder(name: PropertyName, type: TypeName) = KotlinConstructorPropertySpecBuilder.builder(name, type)
+    fun constructorPropertyBuilder(name: PropertyName, type: TypeName, block: KotlinConstructorPropertySpecBuilderReceiver = {}) = KotlinConstructorPropertySpecBuilder.builder(name, type).also(block)
 
     /**
      * @see KotlinFunSpecBuilder
      */
-    fun constructorBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.constructorBuilder()
+    fun constructorBuilder(block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpecBuilder = KotlinFunSpecBuilder.constructorBuilder().also(block)
 
     /**
      * @see KotlinDataClassSpecBuilder
      */
-    fun dataClassBuilder(className: ClassName) = KotlinDataClassSpecBuilder.builder(className)
+    fun dataClassBuilder(className: ClassName, block: KotlinDataClassSpecBuilderReceiver = {}) = KotlinDataClassSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinDataClassSpecBuilder
      */
-    fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName) = dataClassBuilder(className(packageName, simpleName))
+    fun dataClassBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinDataClassSpecBuilderReceiver = {}) = dataClassBuilder(className(packageName, simpleName), block)
 
     /**
      * @see DelegateListValueClassSpecBuilder
      */
-    fun delegateListValueClassBuilder(className: ClassName, items: TypeName) = DelegateListValueClassSpecBuilder.builder(className, items)
+    fun delegateListValueClassBuilder(className: ClassName, items: TypeName, block: DelegateListValueClassSpecBuilderReceiver = {}) = DelegateListValueClassSpecBuilder.builder(className, items).also(block)
 
     /**
      * @see DelegateMapValueClassSpecBuilder
      */
-    fun delegateMapValueClassBuilder(className: ClassName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName) = DelegateMapValueClassSpecBuilder.builder(className, keyType, valueType)
+    fun delegateMapValueClassBuilder(className: ClassName, keyType: TypeName = DEFAULT_KEY_TYPE, valueType: TypeName, block: DelegateMapValueClassSpecBuilderReceiver = {}) = DelegateMapValueClassSpecBuilder.builder(className, keyType, valueType).also(block)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
-    fun enumClassBuilder(name: SimpleName) = KotlinEnumClassSpecBuilder.builder(name)
+    fun enumClassBuilder(name: SimpleName, block: KotlinEnumClassSpecBuilderReceiver = {}) = KotlinEnumClassSpecBuilder.builder(name).also(block)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
-    fun enumClassBuilder(packageName: PackageName, name: SimpleName) = enumClassBuilder(className(packageName, name))
+    fun enumClassBuilder(packageName: PackageName, name: SimpleName, block: KotlinEnumClassSpecBuilderReceiver = {}) = enumClassBuilder(className(packageName, name), block)
 
     /**
      * @see KotlinEnumClassSpecBuilder
      */
-    fun enumClassBuilder(className: ClassName) = KotlinEnumClassSpecBuilder.builder(className)
+    fun enumClassBuilder(className: ClassName, block: KotlinEnumClassSpecBuilderReceiver = {}) = KotlinEnumClassSpecBuilder.builder(className).also(block)
 
     /**
      * @see RuntimeExceptionSpecBuilder
      */
-    fun runtimeExceptionClassBuilder(className: ClassName) = RuntimeExceptionSpecBuilder.builder(className)
+    fun runtimeExceptionClassBuilder(className: ClassName, block: RuntimeExceptionSpecBuilderReceiver = {}) = RuntimeExceptionSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinFileSpecBuilder
      */
-    fun fileBuilder(className: ClassName) = KotlinFileSpecBuilder.builder(className)
+    fun fileBuilder(className: ClassName, block: KotlinFileSpecBuilderReceiver = {}) = KotlinFileSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinFileSpecBuilder
      */
-    fun fileBuilder(packageName: PackageName, simpleName: SimpleName) = fileBuilder(className(packageName, simpleName))
+    fun fileBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinFileSpecBuilderReceiver = {}) = fileBuilder(className(packageName, simpleName), block)
 
     /**
      * @see KotlinFunSpecBuilder
      */
-    fun funBuilder(name: FunctionName) = KotlinFunSpecBuilder.builder(name)
+    fun funBuilder(name: FunctionName, block: KotlinFunSpecBuilderReceiver = {}) = KotlinFunSpecBuilder.builder(name).also(block)
 
     /**
      * @see KotlinFunSpecBuilder
      */
-    fun getterBuilder(): KotlinFunSpecBuilder = KotlinFunSpecBuilder.getterBuilder()
+    fun getterBuilder(block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpecBuilder = KotlinFunSpecBuilder.getterBuilder().also(block)
 
     /**
      * @see KotlinInterfaceSpecBuilder
      */
-    fun interfaceBuilder(className: ClassName) = KotlinInterfaceSpecBuilder.builder(className)
+    fun interfaceBuilder(className: ClassName, block: KotlinInterfaceSpecBuilderReceiver = {}) = KotlinInterfaceSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinInterfaceSpecBuilder
      */
-    fun interfaceBuilder(packageName: PackageName, simpleName: SimpleName) = interfaceBuilder(className(packageName, simpleName))
+    fun interfaceBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinInterfaceSpecBuilderReceiver = {}) = interfaceBuilder(className(packageName, simpleName), block)
 
     /**
      * @see KotlinObjectSpecBuilder
      */
-    fun objectBuilder(className: ClassName) = KotlinObjectSpecBuilder.builder(className)
+    fun objectBuilder(className: ClassName, block: KotlinObjectSpecBuilderReceiver = {}) = KotlinObjectSpecBuilder.builder(className).also(block)
 
     /**
      * @see KotlinObjectSpecBuilder
      */
-    fun objectBuilder(packageName: PackageName, simpleName: SimpleName) = objectBuilder(className(packageName, simpleName))
+    fun objectBuilder(packageName: PackageName, simpleName: SimpleName, block: KotlinObjectSpecBuilderReceiver = {}) = objectBuilder(className(packageName, simpleName), block)
 
     /**
      * @see KotlinParameterSpecBuilder
      */
-    fun parameterBuilder(name: ParameterName, type: TypeName) = KotlinParameterSpecBuilder.builder(name, type)
+    fun parameterBuilder(name: ParameterName, type: TypeName, block: KotlinParameterSpecBuilderReceiver = {}) = KotlinParameterSpecBuilder.builder(name, type).also(block)
 
     /**
      * @see KotlinParameterSpecBuilder
      */
-    fun parameterBuilder(name: ParameterName, type: KClass<*>) = parameterBuilder(name, type.asTypeName())
+    fun parameterBuilder(name: ParameterName, type: KClass<*>, block: KotlinParameterSpecBuilderReceiver = {}) = parameterBuilder(name, type.asTypeName(), block)
 
     /**
      * @see KotlinPropertySpecBuilder
      */
-    fun propertyBuilder(name: PropertyName, type: TypeName) = KotlinPropertySpecBuilder.builder(name, type)
+    fun propertyBuilder(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver = {}) = KotlinPropertySpecBuilder.builder(name, type).also(block)
 
     /**
      * @see KotlinPropertySpecBuilder
      */
-    fun propertyBuilder(name: PropertyName, type: KClass<*>) = propertyBuilder(name, type.asTypeName())
+    fun propertyBuilder(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver = {}) = propertyBuilder(name, type.asTypeName(), block)
 
     /**
      * @see KotlinFunSpecBuilder
      */
-    fun setterBuilder() = KotlinFunSpecBuilder.setterBuilder()
+    fun setterBuilder(block: KotlinFunSpecBuilderReceiver = {}): KotlinFunSpecBuilder = KotlinFunSpecBuilder.setterBuilder().also(block)
 
     /**
      * @see KotlinTypeAliasSpecBuilder
@@ -557,6 +563,11 @@ object KotlinCodeGeneration {
       classLoader: ClassLoader = defaultClassLoader(),
       filter: KotlinCodeGenerationSpiPredicate = spi.filter.all
     ) = KotlinCodeGenerationServiceLoader(classLoader)().filter(filter)
+  }
+
+  object codeBlock {
+    val CSV = codeBlock(", ")
+    val SPACE = codeBlock(" ")
   }
 
   /**

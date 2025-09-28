@@ -3,6 +3,7 @@ package io.toolisticon.kotlin.generation.spec
 import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration.codeBlock
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.format.FORMAT_STRING
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.functionName
 import io.toolisticon.kotlin.generation.KotlinCodeGeneration.name.propertyName
@@ -19,7 +20,10 @@ internal class KotlinClassTest {
 
     builder.addFunction(functionName("Hello World")) {
       returns(String::class)
-      addCode("return $FORMAT_STRING", "Hello World!")
+      addCode {
+        add("return ")
+        add(FORMAT_STRING, "Hello World!")
+      }
     }
 
     val spec = builder.spec()

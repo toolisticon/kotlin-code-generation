@@ -1,6 +1,5 @@
 package io.toolisticon.kotlin.generation.builder
 
-import com.squareup.kotlinpoet.Annotatable.Builder
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -19,7 +18,10 @@ import io.toolisticon.kotlin.generation.KotlinCodeGeneration.buildProperty
 import io.toolisticon.kotlin.generation.PropertyName
 import io.toolisticon.kotlin.generation.poet.AnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.poet.CodeBlockBuilder
+import io.toolisticon.kotlin.generation.poet.CodeBlockBuilderReceiver
+import io.toolisticon.kotlin.generation.poet.CodeBlockSupplier
 import io.toolisticon.kotlin.generation.poet.KDoc
+import io.toolisticon.kotlin.generation.poet.PoetAddCodeBlockBuilder
 import io.toolisticon.kotlin.generation.poet.TypeSpecBuilderReceiver
 import io.toolisticon.kotlin.generation.poet.TypeSpecSupplier
 import io.toolisticon.kotlin.generation.spec.*
@@ -106,6 +108,33 @@ interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
 }
 
 /**
+ * Everything related to code blocks.
+ */
+interface KotlinAddCodeBlockBuilder<SELF> {
+
+  /**
+   * Adds a [CodeBlock]. Must be implemented by the concrete builder.
+   */
+  fun addCode(codeBlock: CodeBlock): SELF
+
+  /**
+   * Formats the given [String] and arguments as [CodeBlock] and adds it.
+   */
+  fun addCode(format: String, vararg args: Any?): SELF = addCode(CodeBlockBuilder.builder().add(format, *args).build())
+
+  /**
+   * Add a [CodeBlock] by providing a supplier.
+   */
+  fun addCode(supplier: CodeBlockSupplier): SELF = addCode(supplier.get())
+
+  /**
+   * Receiver function for codeblock, use `builder.addCode { ... }` to add code.
+   */
+  fun addCode(block: CodeBlockBuilderReceiver): SELF = addCode(
+    CodeBlockBuilder.builder().also(block).build()
+  )
+}
+/**
  * Typesafe wrapper for [com.squareup.kotlinpoet.Documentable.Builder]. Marks anything that can have `kdoc` documentation.
  *
  * * `addKdoc`
@@ -121,7 +150,7 @@ interface KotlinDocumentableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
    * Wraps a codeBlock into a KDoc and adds it.
    * @see KotlinDocumentableBuilder.addKdoc
    */
-  fun addKDoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
+  fun addKdoc(kdoc: CodeBlock): SELF = addKdoc(KDoc(kdoc))
 
   /**
    * Wraps a single string and adds it.
@@ -175,9 +204,139 @@ interface KotlinModifiableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
   fun makeAbstract(): SELF = addModifiers(KModifier.ABSTRACT)
 
   /**
+   * Adds [KModifier#ACTUAL].
+   */
+  fun makeActual(): SELF = addModifiers(KModifier.ACTUAL)
+
+  /**
+   * Adds [KModifier#ANNOTATION].
+   */
+  fun makeAnnotation(): SELF = addModifiers(KModifier.ANNOTATION)
+
+  /**
+   * Adds [KModifier#COMPANION].
+   */
+  fun makeCompanion(): SELF = addModifiers(KModifier.COMPANION)
+
+  /**
+   * Adds [KModifier#CONST].
+   */
+  fun makeConst(): SELF = addModifiers(KModifier.CONST)
+
+  /**
+   * Adds [KModifier#CROSSINLINE].
+   */
+  fun makeCrossinline(): SELF = addModifiers(KModifier.CROSSINLINE)
+
+  /**
+   * Adds [KModifier#ENUM].
+   */
+  fun makeEnum(): SELF = addModifiers(KModifier.ENUM)
+
+  /**
+   * Adds [KModifier#EXPECT].
+   */
+  fun makeExpect(): SELF = addModifiers(KModifier.EXPECT)
+
+  /**
+   * Adds [KModifier#EXTERNAL].
+   */
+  fun makeExternal(): SELF = addModifiers(KModifier.EXTERNAL)
+
+  /**
+   * Adds [KModifier#FINAL].
+   */
+  fun makeFinal(): SELF = addModifiers(KModifier.FINAL)
+
+  /**
+   * Adds [KModifier#INFIX].
+   */
+  fun makeInfix(): SELF = addModifiers(KModifier.INFIX)
+
+  /**
+   * Adds [KModifier#INLINE].
+   */
+  fun makeInline(): SELF = addModifiers(KModifier.INLINE)
+
+  /**
+   * Adds [KModifier#INNER].
+   */
+  fun makeInner(): SELF = addModifiers(KModifier.INNER)
+
+  /**
+   * Adds [KModifier#INTERNAL].
+   */
+  fun makeInternal(): SELF = addModifiers(KModifier.INTERNAL)
+
+  /**
+   * Adds [KModifier#LATEINIT].
+   */
+  fun makeLateinit(): SELF = addModifiers(KModifier.LATEINIT)
+
+  /**
+   * Adds [KModifier#NOINLINE].
+   */
+  fun makeNoinline(): SELF = addModifiers(KModifier.NOINLINE)
+
+  /**
+   * Adds [KModifier#OPEN].
+   */
+  fun makeOpen(): SELF = addModifiers(KModifier.OPEN)
+
+  /**
+   * Adds [KModifier#OPERATOR].
+   */
+  fun makeOperator(): SELF = addModifiers(KModifier.OPERATOR)
+
+  /**
+   * Adds [KModifier#OUT].
+   */
+  fun makeOut(): SELF = addModifiers(KModifier.OUT)
+
+  /**
+   * Adds [KModifier#OVERRIDE].
+   */
+  fun makeOverride(): SELF = addModifiers(KModifier.OVERRIDE)
+
+  /**
    * Adds [KModifier#PRIVATE].
    */
   fun makePrivate(): SELF = addModifiers(KModifier.PRIVATE)
+
+  /**
+   * Adds [KModifier#PROTECTED].
+   */
+  fun makeProtected(): SELF = addModifiers(KModifier.PROTECTED)
+
+  /**
+   * Adds [KModifier#PUBLIC].
+   */
+  fun makePublic(): SELF = addModifiers(KModifier.PUBLIC)
+
+  /**
+   * Adds [KModifier#SEALED].
+   */
+  fun makeSealed(): SELF = addModifiers(KModifier.SEALED)
+
+  /**
+   * Adds [KModifier#SUSPEND].
+   */
+  fun makeSuspend(): SELF = addModifiers(KModifier.SUSPEND)
+
+  /**
+   * Adds [KModifier#TAILREC].
+   */
+  fun makeTailrec(): SELF = addModifiers(KModifier.TAILREC)
+
+  /**
+   * Adds [KModifier#VARARG].
+   */
+  fun makeVararg(): SELF = addModifiers(KModifier.VARARG)
+
+  /**
+   * Adds [KModifier#REIFIED].
+   */
+  fun makeReified(): SELF = addModifiers(KModifier.REIFIED)
 }
 
 /**

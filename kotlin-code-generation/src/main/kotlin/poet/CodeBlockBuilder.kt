@@ -19,7 +19,23 @@ class CodeBlockBuilder(
 
   fun add(format: String, vararg args: Any?): CodeBlockBuilder = apply { builder.add(format, *args) }
   fun add(codeBlock: CodeBlock): CodeBlockBuilder = apply { builder.add(codeBlock) }
+
+
   fun add(builder: CodeBlockBuilder): CodeBlockBuilder = add(builder.build())
+
+  /**
+   * Adds list of code blocks to current builder, using optional separator.
+   * @param blocks blocks to add.
+   * @return code block builder.
+   */
+  fun addAll(blocks: List<CodeBlock>, separator: CodeBlock? = null) = apply {
+    blocks.forEachIndexed { index, block ->
+      add(block)
+      if (separator != null && index < blocks.size - 1) {
+        add(separator)
+      }
+    }
+  }
   fun addNamed(format: String, arguments: Map<String, *>): CodeBlockBuilder = apply { builder.addNamed(format, arguments) }
   fun addStatement(format: String, vararg args: Any?): CodeBlockBuilder = apply { builder.addStatement(format, *args) }
   fun beginControlFlow(controlFlow: String, vararg args: Any?): CodeBlockBuilder = apply { builder.beginControlFlow(controlFlow, *args) }
@@ -36,3 +52,8 @@ class CodeBlockBuilder(
 
 interface CodeBlockSupplier : PoetSpecSupplier<CodeBlock>
 typealias CodeBlockBuilderReceiver = CodeBlockBuilder.() -> Unit
+
+/**
+ * Concatenates two code blocks.
+ */
+operator fun CodeBlock.plus(other: CodeBlock): CodeBlock = CodeBlock.builder().add(this).add(other).build()
