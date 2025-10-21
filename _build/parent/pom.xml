@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-root</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -15,13 +15,13 @@
   <packaging>pom</packaging>
 
   <properties>
-    <classgraph.version>4.8.181</classgraph.version>
+    <classgraph.version>4.8.184</classgraph.version>
     <kotlin-poet.version>2.2.0</kotlin-poet.version>
-    <kotlin-compile-testing.version>0.9.0</kotlin-compile-testing.version>
+    <kotlin-compile-testing.version>0.10.1</kotlin-compile-testing.version>
     <slf4j.version>2.0.17</slf4j.version>
 
     <!-- TEST -->
-    <logback.version>1.5.18</logback.version>
+    <logback.version>1.5.20</logback.version>
   </properties>
 
   <dependencyManagement>
@@ -79,10 +79,8 @@
     <!-- /KOTLIN -->
 
     <dependency>
-      <!-- FIXME: remove with 2025.9.2 -->
       <groupId>org.apiguardian</groupId>
       <artifactId>apiguardian-api</artifactId>
-      <version>1.1.2</version>
     </dependency>
 
     <dependency>

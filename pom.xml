@@ -5,13 +5,13 @@
   <parent>
     <groupId>io.toolisticon.maven.parent</groupId>
     <artifactId>maven-parent-kotlin-base</artifactId>
-    <version>2025.9.3</version>
+    <version>2025.10.1</version>
     <relativePath/>
   </parent>
 
   <groupId>io.toolisticon.kotlin.generation._</groupId>
   <artifactId>kotlin-code-generation-root</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2</version>
 
   <name>pom: kotlin-code-generation-root</name>
   <description>Root of kotlin-code-generation</description>
