@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-parent</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <relativePath>../_build/parent/pom.xml</relativePath>
   </parent>
 
@@ -42,8 +42,7 @@
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${logback.version}</version>
+      <artifactId>logback-classic</artifactId>
       <scope>compile</scope>
     </dependency>
 

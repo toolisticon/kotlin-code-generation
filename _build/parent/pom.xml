@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-root</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -18,10 +18,6 @@
     <classgraph.version>4.8.184</classgraph.version>
     <kotlin-poet.version>2.2.0</kotlin-poet.version>
     <kotlin-compile-testing.version>0.11.0</kotlin-compile-testing.version>
-    <slf4j.version>2.0.17</slf4j.version>
-
-    <!-- TEST -->
-    <logback.version>1.5.20</logback.version>
   </properties>
 
   <dependencyManagement>
@@ -50,13 +46,6 @@
         <artifactId>classgraph</artifactId>
         <version>${classgraph.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${logback.version}</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -81,12 +70,12 @@
     <dependency>
       <groupId>org.apiguardian</groupId>
       <artifactId>apiguardian-api</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>
   </dependencies>
 </project>
