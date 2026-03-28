@@ -16,7 +16,7 @@
 
   <properties>
     <classgraph.version>4.8.184</classgraph.version>
-    <kotlin-poet.version>2.2.0</kotlin-poet.version>
+    <kotlin-poet.version>2.3.0</kotlin-poet.version>
     <kotlin-compile-testing.version>0.12.1</kotlin-compile-testing.version>
   </properties>
 
