@@ -11,7 +11,7 @@
 
   <groupId>io.toolisticon.kotlin.generation._</groupId>
   <artifactId>kotlin-code-generation-root</artifactId>
-  <version>0.4.1-SNAPSHOT</version>
+  <version>0.5.0-SNAPSHOT</version>
 
   <name>pom: kotlin-code-generation-root</name>
   <description>Root of kotlin-code-generation</description>
