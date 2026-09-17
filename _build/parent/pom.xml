@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.toolisticon.kotlin.generation._</groupId>
     <artifactId>kotlin-code-generation-root</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -15,9 +15,9 @@
   <packaging>pom</packaging>
 
   <properties>
-    <classgraph.version>4.8.184</classgraph.version>
-    <kotlin-poet.version>2.3.0</kotlin-poet.version>
-    <kotlin-compile-testing.version>0.12.1</kotlin-compile-testing.version>
+    <classgraph.version>4.8.195</classgraph.version>
+    <kotlin-poet.version>2.4.0</kotlin-poet.version>
+    <kotlin-compile-testing.version>0.13.0</kotlin-compile-testing.version>
   </properties>
 
   <dependencyManagement>
