@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.poet.*
 import io.toolisticon.kotlin.generation.spec.KotlinAnnotationSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpec
+import io.toolisticon.kotlin.generation.spec.KotlinAnonymousClassSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinFunSpecSupplier
 import io.toolisticon.kotlin.generation.spec.KotlinPropertySpecSupplier
 import io.toolisticon.kotlin.generation.support.SUPPRESS_UNUSED
@@ -19,6 +20,7 @@ import kotlin.reflect.KClass
 class KotlinAnonymousClassSpecBuilder internal constructor(
   private val delegate: TypeSpecBuilder
 ) : KotlinGeneratorTypeSpecBuilder<KotlinAnonymousClassSpecBuilder, KotlinAnonymousClassSpec>,
+  KotlinAnonymousClassSpecSupplier,
   KotlinAnnotatableDocumentableModifiableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinContextReceivableBuilder<KotlinAnonymousClassSpecBuilder>,
   KotlinMemberSpecHolderBuilder<KotlinAnonymousClassSpecBuilder>,
@@ -50,6 +52,8 @@ class KotlinAnonymousClassSpecBuilder internal constructor(
   fun addInitializerBlock(block: CodeBlock) = builder { this.addInitializerBlock(block) }
 
   override fun build(): KotlinAnonymousClassSpec = KotlinAnonymousClassSpec(delegate.build())
+
+  override fun get(): TypeSpec = build().get()
 
   // region [overrides]
   override fun addAnnotation(spec: KotlinAnnotationSpecSupplier) = apply { delegate.addAnnotation(spec.get()) }
