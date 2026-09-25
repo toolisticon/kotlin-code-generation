@@ -2,6 +2,8 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
+import io.toolisticon.kotlin.generation.ParameterName
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FunSpecBuilderReceiver
@@ -99,6 +101,13 @@ class KotlinFunSpecBuilder internal constructor(
 
   fun addParameters(parameterSpecs: Iterable<ParameterSpec>) = builder { this.addParameters(parameterSpecs) }
   fun addParameter(parameterSpec: ParameterSpec) = builder { this.addParameter(parameterSpec) }
+  fun addParameter(name: String, type: TypeName, vararg modifiers: KModifier) = builder { this.addParameter(name, type, *modifiers) }
+  fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier) = builder { this.addParameter(name, type, *modifiers) }
+  fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
+  fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
+  fun addParameter(name: ParameterName, type: TypeName, block: KotlinParameterSpecBuilderReceiver = {}): KotlinFunSpecBuilder = addParameter(KotlinCodeGeneration.buildParameter(name, type, block))
+  fun addParameter(name: ParameterName, type: KClass<*>, block: KotlinParameterSpecBuilderReceiver = {}): KotlinFunSpecBuilder = addParameter(name, type.asTypeName(), block)
+
   fun callThisConstructor(args: List<CodeBlock>) = builder { this.callThisConstructor(args) }
 
   fun callThisConstructor(args: Iterable<CodeBlock>) = builder { this.callThisConstructor(args) }
@@ -108,10 +117,6 @@ class KotlinFunSpecBuilder internal constructor(
   fun callSuperConstructor(args: List<CodeBlock>) = builder { this.callSuperConstructor(args) }
   fun callSuperConstructor(vararg args: String) = builder { this.callSuperConstructor(*args) }
   fun callSuperConstructor(vararg args: CodeBlock = emptyArray()) = builder { this.callSuperConstructor(*args) }
-  fun addParameter(name: String, type: TypeName, vararg modifiers: KModifier) = builder { this.addParameter(name, type, *modifiers) }
-  fun addParameter(name: String, type: KClass<*>, vararg modifiers: KModifier) = builder { this.addParameter(name, type, *modifiers) }
-  fun addParameter(name: String, type: TypeName, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
-  fun addParameter(name: String, type: KClass<*>, modifiers: Iterable<KModifier>) = builder { this.addParameter(name, type, modifiers) }
 
   fun addNamedCode(format: String, args: Map<String, *>) = builder { this.addNamedCode(format, args) }
   override fun addCode(codeBlock: CodeBlock) = builder { this.addCode(codeBlock) }

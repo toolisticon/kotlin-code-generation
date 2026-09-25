@@ -97,6 +97,36 @@ internal class KotlinAnnotationTest {
       addEnumMembers("allowedTargets", AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FILE)
     }
 
-    println(annotation.code)
+    assertThat(annotation.code).isEqualTo("@kotlin.`annotation`.Target(allowedTargets = [kotlin.`annotation`.AnnotationTarget.ANNOTATION_CLASS, kotlin.`annotation`.AnnotationTarget.FILE])")
+  }
+
+  @Test
+  fun `addAnnotation without block to class`() {
+    val clazz = io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder("com.example", "MyClass") {
+      addAnnotation(Deprecated::class)
+    }.build()
+
+    assertThat(clazz.code.trim()).isEqualTo(
+      """
+      @kotlin.Deprecated
+      public class MyClass
+      """.trimIndent()
+    )
+  }
+
+  @Test
+  fun `addAnnotation with block to class`() {
+    val clazz = io.toolisticon.kotlin.generation.KotlinCodeGeneration.builder.classBuilder("com.example", "MyClass") {
+      addAnnotation(Deprecated::class) {
+        addMember("%S", "Use NewClass instead")
+      }
+    }.build()
+
+    assertThat(clazz.code.trim()).isEqualTo(
+      """
+      @kotlin.Deprecated("Use NewClass instead")
+      public class MyClass
+      """.trimIndent()
+    )
   }
 }

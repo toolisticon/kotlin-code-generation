@@ -4,6 +4,8 @@ package io.toolisticon.kotlin.generation.builder
 
 import com.squareup.kotlinpoet.*
 import io.toolisticon.kotlin.generation.BuilderSupplier
+import io.toolisticon.kotlin.generation.KotlinCodeGeneration
+import io.toolisticon.kotlin.generation.TypeAliasName
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilder
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilder.Companion.wrap
 import io.toolisticon.kotlin.generation.poet.FileSpecBuilderReceiver
@@ -84,6 +86,10 @@ class KotlinFileSpecBuilder internal constructor(
   fun addNamedCode(format: String, args: Map<String, *>) = builder { this.addNamedCode(format, args) }
   fun addStatement(format: String, vararg args: Any) = builder { this.addStatement(format, *args) }
   fun addTypeAlias(typeAliasSpec: TypeAliasSpecSupplier) = builder { this.addTypeAlias(typeAliasSpec.get()) }
+  fun addTypeAlias(name: TypeAliasName, type: TypeName, block: KotlinTypeAliasSpecBuilderReceiver = {}): KotlinFileSpecBuilder =
+    addTypeAlias(KotlinCodeGeneration.buildTypeAlias(name, type, block))
+  fun addTypeAlias(name: TypeAliasName, type: KClass<*>, block: KotlinTypeAliasSpecBuilderReceiver = {}): KotlinFileSpecBuilder =
+    addTypeAlias(name, type.asTypeName(), block)
   fun beginControlFlow(controlFlow: String, vararg args: Any) = builder { this.beginControlFlow(controlFlow, *args) }
   fun nextControlFlow(controlFlow: String, vararg args: Any) = builder { this.nextControlFlow(controlFlow, *args) }
   fun endControlFlow() = builder { this.endControlFlow() }

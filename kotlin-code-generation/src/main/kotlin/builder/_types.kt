@@ -92,13 +92,13 @@ interface KotlinAnnotatableBuilder<SELF> : KotlinTaggableBuilder<SELF> {
    * Add annotation.
    * @see `KotlinAnnotatableBuilder.addAnnotation(KotlinAnnotationSpecSupplier)`
    */
-  fun addAnnotation(annotation: ClassName): SELF = addAnnotation(buildAnnotation(annotation))
+  fun addAnnotation(annotation: ClassName, block: KotlinAnnotationSpecBuilderReceiver = {}): SELF = addAnnotation(buildAnnotation(annotation, block))
 
   /**
    * Add annotation.
    * @see `KotlinAnnotatableBuilder.addAnnotation(KotlinAnnotationSpecSupplier)`
    */
-  fun addAnnotation(annotation: KClass<*>): SELF = addAnnotation(annotation.asClassName())
+  fun addAnnotation(annotation: KClass<*>, block: KotlinAnnotationSpecBuilderReceiver = {}): SELF = addAnnotation(annotation.asClassName(), block)
 
   /**
    * Add annotation.
@@ -177,8 +177,8 @@ sealed interface KotlinMemberSpecHolderBuilder<SELF> : KotlinTaggableBuilder<SEL
   fun addFunction(name: FunctionName, block: KotlinFunSpecBuilderReceiver): SELF = addFunction(funSpec = buildFun(name, block))
 
   fun addProperty(propertySpec: KotlinPropertySpecSupplier): SELF
-  fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
-  fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+  fun addProperty(name: PropertyName, type: TypeName, block: KotlinPropertySpecBuilderReceiver = {}): SELF = addProperty(propertySpec = buildProperty(name, type, block))
+  fun addProperty(name: PropertyName, type: KClass<*>, block: KotlinPropertySpecBuilderReceiver = {}): SELF = addProperty(propertySpec = buildProperty(name, type, block))
 }
 
 /**
