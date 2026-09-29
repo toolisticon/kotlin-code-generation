@@ -285,6 +285,12 @@ object KotlinCodeGeneration {
   inline fun buildTypeAlias(name: TypeAliasName, type: TypeName, block: KotlinTypeAliasSpecBuilderReceiver = {}): KotlinTypeAliasSpec = typeAliasBuilder(name, type).also(block).build()
 
   /**
+   * Build [KotlinTypeAliasSpec].
+   * @see [KotlinTypeAliasSpecBuilder.builder]
+   */
+  inline fun buildTypeAlias(name: TypeAliasName, type: KClass<*>, block: KotlinTypeAliasSpecBuilderReceiver = {}): KotlinTypeAliasSpec = buildTypeAlias(name, type.asTypeName(), block)
+
+  /**
    * Build [KotlinValueClassSpec].
    * @see [KotlinValueClassSpecBuilder.builder]
    */
@@ -471,12 +477,12 @@ object KotlinCodeGeneration {
     /**
      * @see KotlinTypeAliasSpecBuilder
      */
-    fun typeAliasBuilder(name: TypeAliasName, type: TypeName) = KotlinTypeAliasSpecBuilder.builder(name, type)
+    fun typeAliasBuilder(name: TypeAliasName, type: TypeName, block: KotlinTypeAliasSpecBuilderReceiver = {}) = KotlinTypeAliasSpecBuilder.builder(name, type).also(block)
 
     /**
      * @see KotlinTypeAliasSpecBuilder
      */
-    fun typeAliasBuilder(name: String, type: KClass<*>) = KotlinTypeAliasSpecBuilder.builder(name, type)
+    fun typeAliasBuilder(name: String, type: KClass<*>, block: KotlinTypeAliasSpecBuilderReceiver = {}) = KotlinTypeAliasSpecBuilder.builder(name, type).also(block)
 
     /**
      * @see KotlinValueClassSpecBuilder
